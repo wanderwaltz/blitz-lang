@@ -23,6 +23,10 @@ final class ScannerTests: XCTestCase {
             "+-*/---+++**/+--///****",
             scanned_into: ["+","-","*","/","-","-","-","+","+","+","*","*","/","+","-","-","/","/","/","*","*","*","*"])
     }
+
+    func test__whitespaces() {
+        expect_source("    +   - *   /   ", scanned_into: ["+", "-", "*", "/"])
+    }
 }
 
 
@@ -30,9 +34,15 @@ private func expect_source(_ source: String,
                            scanned_into expectedDescriptions: [String],
                            file: StaticString = #file,
                            line: UInt = #line) {
-    let tokens = Scanner().process(source)
-    let types = tokens.map({ $0.type })
-    let descriptions = types.map({ $0.description })
 
-    XCTAssertEqual(descriptions, expectedDescriptions, file: file, line: line)
+    do {
+        let tokens = try Scanner().process(source)
+        let types = tokens.map({ $0.type })
+        let descriptions = types.map({ $0.description })
+
+        XCTAssertEqual(descriptions, expectedDescriptions, file: file, line: line)
+    }
+    catch let error {
+        XCTFail("scanner returned error: \(error)", file: file, line: line)
+    }
 }
