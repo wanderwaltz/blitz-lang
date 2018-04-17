@@ -1,37 +1,111 @@
 import XCTest
 @testable import Volt
 
-final class ScannerTests: XCTestCase {
-    func test__single_plus() {
-        expect_source("+", scanned_into: ["+"])
+final class ScannerTests: XCTestCase {}
+
+// MARK: - types
+extension ScannerTests {
+    func test__type__single_plus() {
+        expect_source("+", scanned_types: ["+"])
     }
 
-    func test__single_minus() {
-        expect_source("-", scanned_into: ["-"])
+    func test__type__single_minus() {
+        expect_source("-", scanned_types: ["-"])
     }
 
-    func test__single_star() {
-        expect_source("*", scanned_into: ["*"])
+    func test__type__single_star() {
+        expect_source("*", scanned_types: ["*"])
     }
 
-    func test__single_slash() {
-        expect_source("/", scanned_into: ["/"])
+    func test__type__single_slash() {
+        expect_source("/", scanned_types: ["/"])
     }
 
-    func test__mixed_plus_minus_star_slash() {
+    func test__type__mixed_plus_minus_star_slash() {
         expect_source(
             "+-*/---+++**/+--///****",
-            scanned_into: ["+","-","*","/","-","-","-","+","+","+","*","*","/","+","-","-","/","/","/","*","*","*","*"])
+            scanned_types: ["+","-","*","/","-","-","-","+","+","+","*","*","/","+","-","-","/","/","/","*","*","*","*"])
     }
 
-    func test__whitespaces() {
-        expect_source("    +   - *   /   ", scanned_into: ["+", "-", "*", "/"])
+    func test__type__whitespaces() {
+        expect_source("    +   - *   /   ", scanned_types: ["+", "-", "*", "/"])
+    }
+}
+
+
+// MARK: - lexemes
+extension ScannerTests {
+    func test__lexeme__single_plus() {
+        expect_source("+", scanned_lexemes: ["+"])
+    }
+
+    func test__lexeme__single_minus() {
+        expect_source("-", scanned_lexemes: ["-"])
+    }
+
+    func test__lexeme__single_star() {
+        expect_source("*", scanned_lexemes: ["*"])
+    }
+
+    func test__lexeme__single_slash() {
+        expect_source("/", scanned_lexemes: ["/"])
+    }
+
+    func test__lexeme__mixed_plus_minus_star_slash() {
+        expect_source(
+            "+-*/---+++**/+--///****",
+            scanned_lexemes: ["+","-","*","/","-","-","-","+","+","+","*","*","/","+","-","-","/","/","/","*","*","*","*"])
+    }
+
+    func test__lexeme__whitespaces() {
+        expect_source("    +   - *   /   ", scanned_lexemes: ["+", "-", "*", "/"])
+    }
+}
+
+
+// MARK: - errors
+extension ScannerTests {
+    func test__unexpected_token__error_code() {
+        expect_error_scanning("±") { error in
+            XCTAssertEqual(error.code, .unexpectedToken)
+        }
+    }
+
+    func test__unexpected_token__error_line__case_0() {
+        expect_error_scanning("±") { error in
+            XCTAssertEqual(error.line, 0)
+        }
+    }
+
+    func test__unexpected_token__error_line__case_1() {
+        expect_error_scanning("+\n±") { error in
+            XCTAssertEqual(error.line, 1)
+        }
+    }
+
+    func test__unexpected_token__error_position__case_0() {
+        expect_error_scanning("±") { error in
+            XCTAssertEqual(error.line, 0)
+        }
+    }
+
+    func test__unexpected_token__error_position__case_1() {
+        expect_error_scanning("+±") { error in
+            XCTAssertEqual(error.position, 1)
+        }
+    }
+
+    func test__unexpected_token__error_location() {
+        expect_error_scanning("+\n+±") { error in
+            XCTAssertEqual(error.line, 1)
+            XCTAssertEqual(error.position, 1)
+        }
     }
 }
 
 
 private func expect_source(_ source: String,
-                           scanned_into expectedDescriptions: [String],
+                           scanned_types expectedDescriptions: [String],
                            file: StaticString = #file,
                            line: UInt = #line) {
 
@@ -44,5 +118,39 @@ private func expect_source(_ source: String,
     }
     catch let error {
         XCTFail("scanner returned error: \(error)", file: file, line: line)
+    }
+}
+
+private func expect_source(_ source: String,
+                           scanned_lexemes expectedLexemes: [String],
+                           file: StaticString = #file,
+                           line: UInt = #line) {
+
+    do {
+        let tokens = try Scanner().process(source)
+        let lexemes = tokens.map({ $0.lexeme })
+
+        XCTAssertEqual(lexemes, expectedLexemes, file: file, line: line)
+    }
+    catch let error {
+        XCTFail("scanner returned error: \(error)", file: file, line: line)
+    }
+}
+
+private func expect_error_scanning(_ source: String,
+                                   file: StaticString = #file,
+                                   line: UInt = #line,
+                                   do block: (ScannerError) -> Void) {
+    do {
+        _ = try Scanner().process(source)
+        XCTFail("expected an error scanning source", file: file, line: line)
+    }
+    catch let error {
+        guard let scannerError = error as? ScannerError else {
+            XCTFail("expected a ScannerError", file: file, line: line)
+            return
+        }
+
+        block(scannerError)
     }
 }

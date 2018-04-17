@@ -1,6 +1,6 @@
 struct ScannerError: Error {
     enum Code: Int {
-    case unexpextedToken = 1
+    case unexpectedToken = 1
     }
 
     let code: Code
