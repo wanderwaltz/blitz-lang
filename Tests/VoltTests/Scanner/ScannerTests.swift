@@ -27,8 +27,16 @@ extension ScannerTests {
             scanned_types: ["+","-","*","/","-","-","-","+","+","+","*","*","/","+","-","-","/","/","/","*","*","*","*"])
     }
 
+    func test__type__single_integer_literal() {
+        expect_source("123", scanned_types: ["$num"])
+    }
+
+    func test__type__single_float_literal() {
+        expect_source("0.345", scanned_types: ["$num"])
+    }
+
     func test__type__whitespaces() {
-        expect_source("    +   - *   /   ", scanned_types: ["+", "-", "*", "/"])
+        expect_source("  98  +   - *   /   4.56  ", scanned_types: ["$num", "+", "-", "*", "/", "$num"])
     }
 }
 
@@ -57,8 +65,16 @@ extension ScannerTests {
             scanned_lexemes: ["+","-","*","/","-","-","-","+","+","+","*","*","/","+","-","-","/","/","/","*","*","*","*"])
     }
 
+    func test__lexeme__single_integer_literal() {
+        expect_source("123", scanned_lexemes: ["123"])
+    }
+
+    func test__lexeme__single_float_literal() {
+        expect_source("0.345", scanned_lexemes: ["0.345"])
+    }
+
     func test__lexeme__whitespaces() {
-        expect_source("    +   - *   /   ", scanned_lexemes: ["+", "-", "*", "/"])
+        expect_source("  98  +   - *   /   4.56  ", scanned_lexemes: ["98", "+", "-", "*", "/", "4.56"])
     }
 }
 

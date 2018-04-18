@@ -1,5 +1,3 @@
-import Foundation
-
 struct Scanner {
     func process(_ source: String) throws -> [Token] {
         guard !source.isEmpty else {
@@ -40,27 +38,75 @@ private final class ScannerImpl {
         case "-": addToken(.minus)
         case "*": addToken(.star)
         case "/": addToken(.slash)
-        case "\n":
+
+        case _ where character.isDigit:
+            try scanNumber()
+
+        case _ where character.isNewline:
             lineNumber += 1
             lineStart = currentIndex
 
-        case _ where isWhitespace(character): break
+        case _ where character.isWhitespace:
+            break
+
         default:
-            let characterIndex = source.index(before: currentIndex)
-            let position = source.distance(from: lineStart, to: characterIndex)
-            throw ScannerError(code: .unexpectedToken, line: lineNumber, position: position)
+            throw error(.unexpectedToken)
         }
+    }
+
+    private func scanNumber() throws {
+        while peek().isDigit {
+            advance()
+        }
+
+        // look for fractional part
+        if peek() == "." && peekNext().isDigit {
+            advance() // consume the "."
+
+            while peek().isDigit {
+                advance()
+            }
+        }
+
+        guard let value = Number(currentLexeme()) else {
+            throw error(.failedParsingNumberLiteral)
+        }
+
+        addNumberToken(value)
     }
 
     private func addToken(_ type: TokenType) {
         scannedTokens.append(.init(
             type: type,
-            lexeme: String(source[tokenStart..<currentIndex])
+            lexeme: currentLexeme()
         ))
     }
 
+    private func addNumberToken(_ number: Number) {
+        scannedTokens.append(.init(
+            literal: number,
+            lexeme: currentLexeme()
+        ))
+    }
+
+    private func currentLexeme() -> String {
+        return String(source[tokenStart..<currentIndex])
+    }
+
     private func peek() -> Character {
+        guard !isAtEnd else {
+            return "\0".first!
+        }
+
         return source[currentIndex]
+    }
+
+    private func peekNext() -> Character {
+        guard case let nextIndex = source.index(after: currentIndex), nextIndex < source.endIndex else {
+            return "\0".first!
+        }
+
+        return source[nextIndex]
     }
 
     @discardableResult
@@ -72,21 +118,15 @@ private final class ScannerImpl {
         return source[currentIndex]
     }
 
-    private func isWhitespace(_ character: Character) -> Bool {
-        for scalar in character.unicodeScalars {
-            if whitespaceCharacters.contains(scalar) {
-                return true
-            }
-        }
-
-        return false
+    private func error(_ code: ScannerError.Code) -> ScannerError {
+        let position = source.distance(from: lineStart, to: tokenStart)
+        return ScannerError(code: .unexpectedToken, line: lineNumber, position: position)
     }
 
     private var isAtEnd: Bool {
         return currentIndex == source.endIndex
     }
 
-    private let whitespaceCharacters = CharacterSet.whitespaces
     private let source: String
 
     private var tokenStart: String.Index
