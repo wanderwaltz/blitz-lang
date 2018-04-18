@@ -7,9 +7,14 @@ let package = Package(
     name: "Volt",
     products: [
         // Products define the executables and libraries produced by a package, and make them visible to other packages.
+        .executable(
+            name: "vsh",
+            targets: ["vsh"]
+        ),
         .library(
             name: "Volt",
-            targets: ["Volt"]),
+            targets: ["Volt"]
+        ),
     ],
     dependencies: [
         // Dependencies declare other packages that this package depends on.
@@ -20,9 +25,15 @@ let package = Package(
         // Targets can depend on other targets in this package, and on products in packages which this package depends on.
         .target(
             name: "Volt",
-            dependencies: []),
+            dependencies: []
+        ),
+        .target(
+            name: "vsh",
+            dependencies: ["Volt"]
+        ),
         .testTarget(
             name: "VoltTests",
-            dependencies: ["Volt"]),
+            dependencies: ["Volt"]
+        ),
     ]
 )

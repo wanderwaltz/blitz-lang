@@ -4,7 +4,7 @@ extension Token {
             return nil
         }
 
-        guard let value = literal as? Number else {
+        guard case let .some(.number(value)) = literal else {
             preconditionFailure("number token requires a literal value")
         }
 

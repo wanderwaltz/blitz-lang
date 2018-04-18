@@ -95,7 +95,7 @@ private final class ScannerImpl {
 
     private func peek() -> Character {
         guard !isAtEnd else {
-            return "\0".first!
+            return invalidCharacter
         }
 
         return source[currentIndex]
@@ -103,7 +103,7 @@ private final class ScannerImpl {
 
     private func peekNext() -> Character {
         guard case let nextIndex = source.index(after: currentIndex), nextIndex < source.endIndex else {
-            return "\0".first!
+            return invalidCharacter
         }
 
         return source[nextIndex]
@@ -128,6 +128,9 @@ private final class ScannerImpl {
     }
 
     private let source: String
+
+    // used in peek() and peekNext() when peeking outside of the source
+    private let invalidCharacter = "\0".first!
 
     private var tokenStart: String.Index
     private var currentIndex: String.Index

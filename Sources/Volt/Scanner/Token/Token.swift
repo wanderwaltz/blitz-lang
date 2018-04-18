@@ -1,7 +1,7 @@
 struct Token {
     let type: TokenType
     let lexeme: String
-    let literal: Any?
+    let literal: Literal?
 
     init(type: TokenType, lexeme: String) {
         precondition(type != .number, "number token requires a literal value")
@@ -10,9 +10,9 @@ struct Token {
         self.literal = nil
     }
 
-    init(literal: Number, lexeme: String) {
+    init(literal value: Number, lexeme: String) {
         self.type = .number
         self.lexeme = lexeme
-        self.literal = literal
+        self.literal = .number(value)
     }
 }
