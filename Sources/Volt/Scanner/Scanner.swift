@@ -58,6 +58,9 @@ private final class ScannerImpl {
         case _ where character.isDigit:
             try scanNumber()
 
+        case _ where character.isPermittedForFirstIdentifierSymbol:
+            scanIdentifierOrKeyword()
+
         // complex lexemes
         case "/":
             if match("/") {
@@ -124,6 +127,19 @@ private final class ScannerImpl {
         }
 
         addNumberToken(value)
+    }
+
+    private func scanIdentifierOrKeyword() {
+        while peek().isPermittedForIdentifier {
+            advance()
+        }
+
+        if let keyword = TokenType.keywords[currentLexeme()] {
+            addToken(keyword)
+        }
+        else {
+            addToken(.identifier)
+        }
     }
 
     private func addToken(_ type: TokenType) {

@@ -12,6 +12,14 @@ extension Character {
     var isDigit: Bool {
         return digitRange.contains(unicodeScalars.first!.value)
     }
+
+    var isPermittedForFirstIdentifierSymbol: Bool {
+        return isPermittedForIdentifier && !isDigit
+    }
+
+    var isPermittedForIdentifier: Bool {
+        return alphanumerics.contains(self) || self == "_"
+    }
 }
 
 private extension CharacterSet {
@@ -26,5 +34,6 @@ private extension CharacterSet {
     }
 }
 
+private let alphanumerics = CharacterSet.alphanumerics
 private let whitespaceCharacters = CharacterSet.whitespaces
 private let digitRange = "0".unicodeScalars.first!.value..."9".unicodeScalars.first!.value

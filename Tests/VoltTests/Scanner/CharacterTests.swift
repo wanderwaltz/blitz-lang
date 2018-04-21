@@ -24,4 +24,44 @@ final class CharacterTests: XCTestCase {
         XCTAssertFalse("\n".first!.isDigit)
         XCTAssertFalse("ё".first!.isDigit)
     }
+
+    func testThat__isWhitespace__returns_true__for_whitespace_characters() {
+        XCTAssertTrue(" ".first!.isWhitespace)
+        XCTAssertTrue("\t".first!.isWhitespace)
+    }
+
+    func testThat__isWhitespace__returns_false__for_non_whitespace_characters() {
+        XCTAssertFalse("\n".first!.isWhitespace)
+        XCTAssertFalse("a".first!.isWhitespace)
+        XCTAssertFalse("1".first!.isWhitespace)
+    }
+
+    func test__isNewline() {
+        XCTAssertTrue("\n".first!.isNewline)
+        XCTAssertFalse("\r".first!.isNewline)
+    }
+
+    func test__isPermittedForIdentifier() {
+        XCTAssertTrue("a".first!.isPermittedForIdentifier)
+        XCTAssertTrue("3".first!.isPermittedForIdentifier)
+        XCTAssertTrue("_".first!.isPermittedForIdentifier)
+
+        XCTAssertFalse(" ".first!.isPermittedForIdentifier)
+        XCTAssertFalse("\n".first!.isPermittedForIdentifier)
+        XCTAssertFalse("#".first!.isPermittedForIdentifier)
+        XCTAssertFalse("+".first!.isPermittedForIdentifier)
+        XCTAssertFalse("$".first!.isPermittedForIdentifier)
+    }
+
+    func test__isPermittedForFirstIdentifierSymbol() {
+        XCTAssertTrue("a".first!.isPermittedForFirstIdentifierSymbol)
+        XCTAssertTrue("_".first!.isPermittedForFirstIdentifierSymbol)
+
+        XCTAssertFalse("3".first!.isPermittedForFirstIdentifierSymbol)
+        XCTAssertFalse(" ".first!.isPermittedForFirstIdentifierSymbol)
+        XCTAssertFalse("\n".first!.isPermittedForFirstIdentifierSymbol)
+        XCTAssertFalse("#".first!.isPermittedForFirstIdentifierSymbol)
+        XCTAssertFalse("+".first!.isPermittedForFirstIdentifierSymbol)
+        XCTAssertFalse("$".first!.isPermittedForFirstIdentifierSymbol)
+    }
 }

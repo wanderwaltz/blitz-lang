@@ -101,6 +101,88 @@ extension ScannerTests {
     func test__type__whitespaces() {
         expect_source("  98  +   - *   /   4.56  ", scanned_types: ["$num", "+", "-", "*", "/", "$num"])
     }
+
+    // MARK: identifiers
+    func test__type__single_identifier_case_0() {
+        expect_source("qwerty", scanned_types: ["$id"])
+    }
+
+    func test__type__single_identifier_case_1() {
+        expect_source("q1wert2y345", scanned_types: ["$id"])
+    }
+
+    func test__type__single_identifier_case_2() {
+        expect_source("_qwerty", scanned_types: ["$id"])
+    }
+
+    // MARK: keywords
+    func test__type__single_keyword_and() {
+        expect_source("and", scanned_types: ["and"])
+    }
+
+    func test__type__single_keyword_class() {
+        expect_source("class", scanned_types: ["class"])
+    }
+
+    func test__type__single_keyword_else() {
+        expect_source("else", scanned_types: ["else"])
+    }
+
+    func test__type__single_keyword_false() {
+        expect_source("false", scanned_types: ["false"])
+    }
+
+    func test__type__single_keyword_func() {
+        expect_source("func", scanned_types: ["func"])
+    }
+
+    func test__type__single_keyword_for() {
+        expect_source("for", scanned_types: ["for"])
+    }
+
+    func test__type__single_keyword_if() {
+        expect_source("if", scanned_types: ["if"])
+    }
+
+    func test__type__single_keyword_nil() {
+        expect_source("nil", scanned_types: ["nil"])
+    }
+
+    func test__type__single_keyword_or() {
+        expect_source("or", scanned_types: ["or"])
+    }
+
+    func test__type__single_keyword_not() {
+        expect_source("not", scanned_types: ["not"])
+    }
+
+    func test__type__single_keyword_return() {
+        expect_source("return", scanned_types: ["return"])
+    }
+
+    func test__type__single_keyword_super() {
+        expect_source("super", scanned_types: ["super"])
+    }
+
+    func test__type__single_keyword_self() {
+        expect_source("self", scanned_types: ["self"])
+    }
+
+    func test__type__single_keyword_true() {
+        expect_source("true", scanned_types: ["true"])
+    }
+
+    func test__type__single_keyword_let() {
+        expect_source("let", scanned_types: ["let"])
+    }
+
+    func test__type__single_keyword_var() {
+        expect_source("var", scanned_types: ["var"])
+    }
+
+    func test__type__single_keyword_while() {
+        expect_source("while", scanned_types: ["while"])
+    }
 }
 
 
@@ -201,6 +283,88 @@ extension ScannerTests {
 
     func test__lexeme__whitespaces() {
         expect_source("  98  +   - *   /   4.56  ", scanned_lexemes: ["98", "+", "-", "*", "/", "4.56"])
+    }
+
+    // MARK: identifiers
+    func test__lexeme__single_identifier_case_0() {
+        expect_source("qwerty", scanned_lexemes: ["qwerty"])
+    }
+
+    func test__lexeme__single_identifier_case_1() {
+        expect_source("q1wert2y345", scanned_lexemes: ["q1wert2y345"])
+    }
+
+    func test__lexeme__single_identifier_case_2() {
+        expect_source("_qwerty", scanned_lexemes: ["_qwerty"])
+    }
+
+    // MARK: keywords
+    func test__lexeme__single_keyword_and() {
+        expect_source("and", scanned_lexemes: ["and"])
+    }
+
+    func test__lexeme__single_keyword_class() {
+        expect_source("class", scanned_lexemes: ["class"])
+    }
+
+    func test__lexeme__single_keyword_else() {
+        expect_source("else", scanned_lexemes: ["else"])
+    }
+
+    func test__lexeme__single_keyword_false() {
+        expect_source("false", scanned_lexemes: ["false"])
+    }
+
+    func test__lexeme__single_keyword_func() {
+        expect_source("func", scanned_lexemes: ["func"])
+    }
+
+    func test__lexeme__single_keyword_for() {
+        expect_source("for", scanned_lexemes: ["for"])
+    }
+
+    func test__lexeme__single_keyword_if() {
+        expect_source("if", scanned_lexemes: ["if"])
+    }
+
+    func test__lexeme__single_keyword_nil() {
+        expect_source("nil", scanned_lexemes: ["nil"])
+    }
+
+    func test__lexeme__single_keyword_or() {
+        expect_source("or", scanned_lexemes: ["or"])
+    }
+
+    func test__lexeme__single_keyword_not() {
+        expect_source("not", scanned_lexemes: ["not"])
+    }
+
+    func test__lexeme__single_keyword_return() {
+        expect_source("return", scanned_lexemes: ["return"])
+    }
+
+    func test__lexeme__single_keyword_super() {
+        expect_source("super", scanned_lexemes: ["super"])
+    }
+
+    func test__lexeme__single_keyword_self() {
+        expect_source("self", scanned_lexemes: ["self"])
+    }
+
+    func test__lexeme__single_keyword_true() {
+        expect_source("true", scanned_lexemes: ["true"])
+    }
+
+    func test__lexeme__single_keyword_let() {
+        expect_source("let", scanned_lexemes: ["let"])
+    }
+
+    func test__lexeme__single_keyword_var() {
+        expect_source("var", scanned_lexemes: ["var"])
+    }
+
+    func test__lexeme__single_keyword_while() {
+        expect_source("while", scanned_lexemes: ["while"])
     }
 }
 
