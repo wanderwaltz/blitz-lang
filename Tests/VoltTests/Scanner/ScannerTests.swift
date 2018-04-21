@@ -5,6 +5,31 @@ final class ScannerTests: XCTestCase {}
 
 // MARK: - types
 extension ScannerTests {
+    // MARK: single-character tokens
+    func test__type__single_left_paren() {
+        expect_source("(", scanned_types: ["("])
+    }
+
+    func test__type__single_right_paren() {
+        expect_source(")", scanned_types: [")"])
+    }
+
+    func test__type__single_left_brace() {
+        expect_source("{", scanned_types: ["{"])
+    }
+
+    func test__type__single_right_brace() {
+        expect_source("}", scanned_types: ["}"])
+    }
+
+    func test__type__single_comma() {
+        expect_source(",", scanned_types: [","])
+    }
+
+    func test__type__single_dot() {
+        expect_source(".", scanned_types: ["."])
+    }
+
     func test__type__single_plus() {
         expect_source("+", scanned_types: ["+"])
     }
@@ -23,16 +48,54 @@ extension ScannerTests {
 
     func test__type__mixed_plus_minus_star_slash() {
         expect_source(
-            "+-*/---+++**/+--///****",
+            "+-*/---+++**/+--/ / /****",
             scanned_types: ["+","-","*","/","-","-","-","+","+","+","*","*","/","+","-","-","/","/","/","*","*","*","*"])
     }
 
+    // MARK: one or two character tokens
+    func test__type__single_bang() {
+        expect_source("!", scanned_types: ["!"])
+    }
+
+    func test__type__single_bangEqual() {
+        expect_source("!=", scanned_types: ["!="])
+    }
+
+    func test__type__single_equal() {
+        expect_source("=", scanned_types: ["="])
+    }
+
+    func test__type__single_equalEqual() {
+        expect_source("==", scanned_types: ["=="])
+    }
+
+    func test__type__single_greater() {
+        expect_source(">", scanned_types: [">"])
+    }
+
+    func test__type__single_greaterEqual() {
+        expect_source(">=", scanned_types: [">="])
+    }
+
+    func test__type__single_less() {
+        expect_source("<", scanned_types: ["<"])
+    }
+
+    func test__type__single_lessEqual() {
+        expect_source("<=", scanned_types: ["<="])
+    }
+
+    // MARK: literals
     func test__type__single_integer_literal() {
         expect_source("123", scanned_types: ["$num"])
     }
 
     func test__type__single_float_literal() {
         expect_source("0.345", scanned_types: ["$num"])
+    }
+
+    func test__type__single_string_literal() {
+        expect_source("\"qwerty\"", scanned_types: ["$str"])
     }
 
     func test__type__whitespaces() {
@@ -43,6 +106,31 @@ extension ScannerTests {
 
 // MARK: - lexemes
 extension ScannerTests {
+    // MARK: single-character tokens
+    func test__lexeme__single_left_paren() {
+        expect_source("(", scanned_lexemes: ["("])
+    }
+
+    func test__lexeme__single_right_paren() {
+        expect_source(")", scanned_lexemes: [")"])
+    }
+
+    func test__lexeme__single_left_brace() {
+        expect_source("{", scanned_lexemes: ["{"])
+    }
+
+    func test__lexeme__single_right_brace() {
+        expect_source("}", scanned_lexemes: ["}"])
+    }
+
+    func test__lexeme__single_comma() {
+        expect_source(",", scanned_lexemes: [","])
+    }
+
+    func test__lexeme__single_dot() {
+        expect_source(".", scanned_lexemes: ["."])
+    }
+
     func test__lexeme__single_plus() {
         expect_source("+", scanned_lexemes: ["+"])
     }
@@ -61,10 +149,44 @@ extension ScannerTests {
 
     func test__lexeme__mixed_plus_minus_star_slash() {
         expect_source(
-            "+-*/---+++**/+--///****",
+            "+-*/---+++**/+--/ / /****",
             scanned_lexemes: ["+","-","*","/","-","-","-","+","+","+","*","*","/","+","-","-","/","/","/","*","*","*","*"])
     }
 
+    // MARK: one or two character tokens
+    func test__lexeme__single_bang() {
+        expect_source("!", scanned_lexemes: ["!"])
+    }
+
+    func test__lexeme__single_bangEqual() {
+        expect_source("!=", scanned_lexemes: ["!="])
+    }
+
+    func test__lexeme__single_equal() {
+        expect_source("=", scanned_lexemes: ["="])
+    }
+
+    func test__lexeme__single_equalEqual() {
+        expect_source("==", scanned_lexemes: ["=="])
+    }
+
+    func test__lexeme__single_greater() {
+        expect_source(">", scanned_lexemes: [">"])
+    }
+
+    func test__lexeme__single_greaterEqual() {
+        expect_source(">=", scanned_lexemes: [">="])
+    }
+
+    func test__lexeme__single_less() {
+        expect_source("<", scanned_lexemes: ["<"])
+    }
+
+    func test__lexeme__single_lessEqual() {
+        expect_source("<=", scanned_lexemes: ["<="])
+    }
+
+    // MARK: literals
     func test__lexeme__single_integer_literal() {
         expect_source("123", scanned_lexemes: ["123"])
     }
@@ -73,8 +195,36 @@ extension ScannerTests {
         expect_source("0.345", scanned_lexemes: ["0.345"])
     }
 
+    func test__lexeme__single_string_literal() {
+        expect_source("\"qwerty\"", scanned_lexemes: ["\"qwerty\""])
+    }
+
     func test__lexeme__whitespaces() {
         expect_source("  98  +   - *   /   4.56  ", scanned_lexemes: ["98", "+", "-", "*", "/", "4.56"])
+    }
+}
+
+
+// MARK: - literal values
+extension ScannerTests {
+    func test__number_literal__integer_value() {
+        XCTAssertEqual(scan("123.456").first?.numberValue, 123.456)
+    }
+
+    func test__number_literal__string_value() {
+        XCTAssertEqual(scan("123.456").first?.stringValue, "123.456")
+    }
+
+    func test__string_literal__string_value() {
+        XCTAssertEqual(scan("\"qwerty\"").first?.stringValue, "qwerty")
+    }
+
+    func test__string_literal__number_value_valid() {
+        XCTAssertEqual(scan("\"123.456\"").first?.numberValue, 123.456)
+    }
+
+    func test__string_literal__number_value_invalid() {
+        XCTAssertNil(scan("\"qwerty\"").first?.numberValue)
     }
 }
 
@@ -119,6 +269,17 @@ extension ScannerTests {
     }
 }
 
+
+private func scan(_ source: String, file: StaticString = #file, line: UInt = #line) -> [Token] {
+    do {
+        let tokens = try Scanner().process(source)
+        return tokens
+    }
+    catch let error {
+        XCTFail("scanner returned error: \(error)", file: file, line: line)
+        return []
+    }
+}
 
 private func expect_source(_ source: String,
                            scanned_types expectedDescriptions: [String],

@@ -34,17 +34,45 @@ private final class ScannerImpl {
         let character = advance()
 
         switch character {
-        case "+": addToken(.plus)
+        // single-character tokens
+        case "(": addToken(.leftParen)
+        case ")": addToken(.rightParen)
+        case "{": addToken(.leftBrace)
+        case "}": addToken(.rightBrace)
+        case ",": addToken(.comma)
+        case ".": addToken(.dot)
         case "-": addToken(.minus)
+        case "+": addToken(.plus)
         case "*": addToken(.star)
-        case "/": addToken(.slash)
+
+        // one or two character tokens
+        case "!": addToken(match("=") ? .bangEqual : .bang)
+        case "=": addToken(match("=") ? .equalEqual : .equal)
+        case "<": addToken(match("=") ? .lessEqual : .less)
+        case ">": addToken(match("=") ? .greaterEqual : .greater)
+
+        // literals
+        case "\"":
+            try scanString()
 
         case _ where character.isDigit:
             try scanNumber()
 
+        // complex lexemes
+        case "/":
+            if match("/") {
+                // a single-line comment goes until the end of the line.
+                while (peek() != "\n" && !isAtEnd) {
+                    advance()
+                }
+            }
+            else {
+                addToken(.slash)
+            }
+
+        // whitespace
         case _ where character.isNewline:
-            lineNumber += 1
-            lineStart = currentIndex
+            markNewline()
 
         case _ where character.isWhitespace:
             break
@@ -52,6 +80,29 @@ private final class ScannerImpl {
         default:
             throw error(.unexpectedToken)
         }
+    }
+
+    private func scanString() throws {
+        while peek() != "\"" && !isAtEnd {
+            if peek().isNewline {
+                markNewline()
+            }
+
+            advance()
+        }
+
+        // unterminated string
+        if isAtEnd {
+            throw error(.unterminatedString)
+        }
+
+        // the closing "
+        advance()
+
+        // trim the surrounding quotes.
+        let value = String(currentLexeme().dropFirst().dropLast())
+
+        addStringToken(value)
     }
 
     private func scanNumber() throws {
@@ -89,6 +140,13 @@ private final class ScannerImpl {
         ))
     }
 
+    private func addStringToken(_ string: String) {
+        scannedTokens.append(.init(
+            literal: string,
+            lexeme: currentLexeme()
+        ))
+    }
+
     private func currentLexeme() -> String {
         return String(source[tokenStart..<currentIndex])
     }
@@ -109,6 +167,19 @@ private final class ScannerImpl {
         return source[nextIndex]
     }
 
+    private func match(_ expected: Character) -> Bool {
+        guard !isAtEnd else {
+            return false
+        }
+
+        guard peek() == expected else {
+            return false
+        }
+
+        advance()
+        return true
+    }
+
     @discardableResult
     private func advance() -> Character {
         defer {
@@ -116,6 +187,11 @@ private final class ScannerImpl {
         }
 
         return source[currentIndex]
+    }
+
+    private func markNewline() {
+        lineNumber += 1
+        lineStart = currentIndex
     }
 
     private func error(_ code: ScannerError.Code) -> ScannerError {
