@@ -9,9 +9,9 @@ public final class VM {
         do {
             let tokens = try Scanner().process(source)
             let ast = try Parser().parse(tokens)
-            let printer = ASTPrinter()
+            let interpreter = ASTInterpreter()
 
-            print(printer.print(ast))
+            print(interpreter.evaluate(ast))
         }
         catch let error {
             print(error)
