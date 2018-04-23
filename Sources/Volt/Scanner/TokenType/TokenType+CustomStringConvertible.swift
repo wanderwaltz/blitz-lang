@@ -46,6 +46,8 @@ extension TokenType: CustomStringConvertible {
         case .`let`: return "let"
         case .`var`: return "var"
         case .`while`: return "while"
+
+        case .eof: return "eof"
         }
     }
 }

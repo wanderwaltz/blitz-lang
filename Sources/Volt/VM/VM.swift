@@ -2,12 +2,19 @@ public final class VM {
     public init() {}
 
     public func run() {
-        let left = LiteralExpression(literal: .number(123))
-        let op = Token(type: .plus, lexeme: "+")
-        let right = LiteralExpression(literal: .number(456))
-        let binary = BinaryExpression(left: left, op: op, right: right)
-        let printer = ASTPrinter()
+        let source = """
+            (1 + 2) * 3 / 4 - 123 - 456
+        """
 
-        print(printer.print(binary))
+        do {
+            let tokens = try Scanner().process(source)
+            let ast = try Parser().parse(tokens)
+            let printer = ASTPrinter()
+
+            print(printer.print(ast))
+        }
+        catch let error {
+            print(error)
+        }
     }
 }

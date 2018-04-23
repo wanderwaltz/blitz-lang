@@ -9,7 +9,7 @@ extension Literal: CustomStringConvertible {
     var description: String {
         switch self {
         case let .number(value): return String(describing: value)
-        case let .string(value): return value
+        case let .string(value): return "\"\(value)\""
         }
     }
 }

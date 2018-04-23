@@ -23,3 +23,8 @@ struct Token {
         self.literal = .string(value)
     }
 }
+
+
+extension Token {
+    static let eof = Token(type: .eof, lexeme: "")
+}

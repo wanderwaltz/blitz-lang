@@ -44,4 +44,6 @@ case `true`
 case `let`
 case `var`
 case `while`
+
+case eof
 }
