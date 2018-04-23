@@ -66,27 +66,27 @@ private final class ParserImpl {
     }
 
     private func parseUnary() throws -> Expression {
-        // if match(.bang, .minus) {
-        //     let op = previous()
-        //     let right = parseUnary()
-        //     return UnaryExpression(op, right)
-        // }
+        if match(.bang, .minus, .not) {
+            let op = previous()
+            let expr = try parseUnary()
+            return UnaryExpression(op: op, expression: expr)
+        }
 
         return try parsePrimary()
     }
 
     private func parsePrimary() throws -> Expression {
-        // if match(.false) {
-        //     return LiteralExpression(false)
-        // }
-        //
-        // if match(.true) {
-        //     return LiteralExpression(true)
-        // }
-        //
-        // if match(.nil) {
-        //     return LiteralExpression.nil
-        // }
+        if match(.nil) {
+            return LiteralExpression.nil
+        }
+
+        if match(.false) {
+            return LiteralExpression.false
+        }
+
+        if match(.true) {
+            return LiteralExpression.true
+        }
 
         if match(.number, .string) {
             guard let literal = previous().literal else {

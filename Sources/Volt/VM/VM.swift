@@ -3,7 +3,7 @@ public final class VM {
 
     public func run() {
         let source = """
-            (1 + 2) * 3 / 4 - 123 - 456
+            not true
         """
 
         do {

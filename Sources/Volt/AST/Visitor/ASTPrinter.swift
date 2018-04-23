@@ -20,6 +20,10 @@ extension ASTPrinter: ASTVisitor {
         return parenthesize("(", print(expression.expression) ,")")
     }
 
+    func visitUnaryExpression(_ expression: UnaryExpression) -> String {
+        return parenthesize(expression.op, expression.expression)
+    }
+
     private func parenthesize(_ args: Any...) -> String {
         let argDescriptions = args.map({ arg -> String in
             if let visitable = arg as? ASTVisitable {
