@@ -8,6 +8,11 @@ extension InterpreterTests {
         expect_source("123", yields: 123)
         expect_source("-456", yields: -456)
         expect_source("0", yields: 0)
+        expect_source("0 - 5", yields: -5)
+        expect_source("1 + 2", yields: 3)
+        expect_source("-5 + 6", yields: 1)
+        expect_source("8 / 2", yields: 4)
+        expect_source("5 * 6", yields: 30)
     }
 
     func test__bools() {
@@ -20,8 +25,29 @@ extension InterpreterTests {
         expect_source("not true", yields: false)
     }
 
+    func test__number_comparisons() {
+        expect_source("1 < 2", yields: true)
+        expect_source("1 <= 2", yields: true)
+        expect_source("1 > 2", yields: false)
+        expect_source("1 >= 2", yields: false)
+
+        expect_source("1 <= 1", yields: true)
+        expect_source("1 <= 0", yields: false)
+
+        expect_source("1 >= 1", yields: true)
+        expect_source("1 >= 0", yields: true)
+
+        expect_source("1 > -1", yields: true)
+
+        expect_source("1 == 1", yields: true)
+        expect_source("1 == 0.5 + 0.5", yields: true)
+        
+        expect_source("1 != 2", yields: true)
+    }
+
     func test__strings() {
         expect_source("\"qwerty\"", yields: "qwerty")
+        expect_source("\"qwerty\" + \"asdfg\"", yields: "qwertyasdfg")
     }
 
     func test__nil() {

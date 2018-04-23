@@ -9,7 +9,44 @@ extension ASTInterpreter: ASTVisitor {
     typealias ReturnValue = ASTInterpreterResult
 
     func visitBinaryExpression(_ expression: BinaryExpression) -> ASTInterpreterResult {
-        fatalError("not implemented")
+        return evaluate(expression.left).flatMap({ left in
+            evaluate(expression.right).flatMap({ right in
+                switch expression.op.type {
+                case .plus:
+                    return left + right
+
+                case .minus:
+                    return left - right
+
+                case .star:
+                    return left * right
+
+                case .slash:
+                    return left / right
+
+                case .greater:
+                    return left > right
+
+                case .greaterEqual:
+                    return left >= right
+
+                case .less:
+                    return left < right
+
+                case .lessEqual:
+                    return left <= right
+
+                case .equalEqual:
+                    return .value(.bool(left == right))
+
+                case .bangEqual:
+                    return .value(.bool(left != right))
+
+                default:
+                    preconditionFailure("unimplemented binary operator: \(expression.op)")
+                }
+            })
+        })
     }
 
     func visitLiteralExpression(_ expression: LiteralExpression) -> ASTInterpreterResult {
@@ -21,15 +58,17 @@ extension ASTInterpreter: ASTVisitor {
     }
 
     func visitUnaryExpression(_ expression: UnaryExpression) -> ASTInterpreterResult {
-        switch expression.op.type {
-        case .minus:
-            return evaluate(expression.expression).flatMap({ $0.numericNegated })
+        return evaluate(expression.expression).flatMap({ value in
+            switch expression.op.type {
+            case .minus:
+                return -value
 
-        case .bang, .not:
-            return evaluate(expression.expression).flatMap({ $0.booleanNegated })
+            case .bang, .not:
+                return !value
 
-        default:
-            preconditionFailure("unimplemented unary operator: \(expression.op)")
-        }
+            default:
+                preconditionFailure("unimplemented unary operator: \(expression.op)")
+            }
+        })
     }
 }
