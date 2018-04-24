@@ -53,6 +53,40 @@ extension InterpreterTests {
     func test__nil() {
         expect_source_yields_nil("nil")
     }
+
+    func test__variable_definitions() {
+        expect_source("var x = 123", yields: 123)
+        expect_source("let x = 123", yields: 123)
+    }
+
+    func test__variable_reading() {
+        expect_source(
+            """
+            var x = 123
+            x
+            """,
+            yields: 123
+        )
+
+        expect_source(
+            """
+            let x = 123
+            x
+            """,
+            yields: 123
+        )
+    }
+
+    func test__variable_assignment() {
+        expect_source(
+            """
+            var x = 123
+            x = 456
+            x
+            """,
+            yields: 456
+        )
+    }
 }
 
 
