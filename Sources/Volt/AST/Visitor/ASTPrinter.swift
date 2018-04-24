@@ -1,4 +1,8 @@
 struct ASTPrinter {
+    func print(_ ast: [ASTVisitable]) -> String {
+        return ast.map(print).joined(separator: "\n")
+    }
+
     func print(_ ast: ASTVisitable) -> String {
         return ast.accept(self)
     }
@@ -13,7 +17,7 @@ extension ASTPrinter: ASTVisitor {
     }
 
     func visitLiteralExpression(_ expression: LiteralExpression) -> String {
-        return String(describing: expression)
+        return parenthesize(String(describing: expression))
     }
 
     func visitGroupingExpression(_ expression: GroupingExpression) -> String {
@@ -22,6 +26,14 @@ extension ASTPrinter: ASTVisitor {
 
     func visitUnaryExpression(_ expression: UnaryExpression) -> String {
         return parenthesize(expression.op, expression.expression)
+    }
+
+    func visitExpressionStatement(_ statement: ExpressionStatement) -> String {
+        return print(statement.expression)
+    }
+
+    func visitVarDeclarationStatement(_ statement: VarDeclarationStatement) -> String {
+        return parenthesize(statement.keyword, statement.identifier, "=", print(statement.initializer))
     }
 
     private func parenthesize(_ args: Any...) -> String {

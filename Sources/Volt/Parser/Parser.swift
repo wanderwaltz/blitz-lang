@@ -1,5 +1,5 @@
 struct Parser {
-    func parse(_ tokens: [Token]) throws -> Expression {
+    func parse(_ tokens: [Token]) throws -> [Statement] {
         return try ParserImpl(tokens).parse()
     }
 }
@@ -9,8 +9,43 @@ private final class ParserImpl {
         self.tokens = tokens
     }
 
-    func parse() throws -> Expression {
-        return try parseExpression()
+    func parse() throws -> [Statement] {
+        var statements: [Statement] = []
+
+        while !isAtEnd {
+            statements.append(try parseDeclaration())
+        }
+
+        return statements
+    }
+
+    private func parseDeclaration() throws -> Statement {
+        if match(.var, .let) {
+            return try parseVarDeclaration()
+        }
+
+        return try parseStatement()
+    }
+
+    private func parseVarDeclaration() throws -> Statement {
+        let keyword = previous()
+        let name = try consume(.identifier, "expected an identifier")
+        var initializer: Expression = LiteralExpression.nil
+
+        if match(.equal) {
+            initializer = try parseExpression()
+        }
+
+        return VarDeclarationStatement(keyword: keyword, identifier: name, initializer: initializer)
+    }
+
+    private func parseStatement() throws -> Statement {
+        return try parseExpressionStatement()
+    }
+
+    private func parseExpressionStatement() throws -> ExpressionStatement {
+        let expression = try parseExpression()
+        return ExpressionStatement(expression: expression)
     }
 
     private func parseExpression() throws -> Expression {

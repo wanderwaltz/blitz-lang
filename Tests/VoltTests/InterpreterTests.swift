@@ -41,7 +41,7 @@ extension InterpreterTests {
 
         expect_source("1 == 1", yields: true)
         expect_source("1 == 0.5 + 0.5", yields: true)
-        
+
         expect_source("1 != 2", yields: true)
     }
 
@@ -148,7 +148,7 @@ extension InterpreterTests {
             let tokens = try Scanner().process(source)
             let ast = try Parser().parse(tokens)
             let interpreter = ASTInterpreter()
-            block(interpreter.evaluate(ast))
+            block(interpreter.execute(ast))
         }
         catch let error {
             XCTFail("Unexpected error: \(error)", file: file, line: line)

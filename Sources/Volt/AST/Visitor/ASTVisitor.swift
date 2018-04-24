@@ -9,4 +9,7 @@ protocol ASTVisitor {
     func visitGroupingExpression(_ expression: GroupingExpression) -> ReturnValue
     func visitLiteralExpression(_ expression: LiteralExpression) -> ReturnValue
     func visitUnaryExpression(_ expression: UnaryExpression) -> ReturnValue
+
+    func visitExpressionStatement(_ statement: ExpressionStatement) -> ReturnValue
+    func visitVarDeclarationStatement(_ statement: VarDeclarationStatement) -> ReturnValue
 }
