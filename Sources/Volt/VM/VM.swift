@@ -3,8 +3,8 @@ public final class VM {
 
     public func run() {
         let source = """
-            var x = 1
-            let y = true
+            x = 456
+            x
         """
 
         do {

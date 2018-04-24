@@ -12,6 +12,10 @@ struct ASTPrinter {
 extension ASTPrinter: ASTVisitor {
     typealias ReturnValue = String
 
+    func visitAssignmentExpression(_ expression: AssignmentExpression) -> String {
+        return parenthesize(expression.identifier, "=", print(expression.value))
+    }
+
     func visitBinaryExpression(_ expression: BinaryExpression) -> String {
         return parenthesize(expression.left, expression.op, expression.right)
     }
@@ -28,11 +32,15 @@ extension ASTPrinter: ASTVisitor {
         return parenthesize(expression.op, expression.expression)
     }
 
+    func visitVariableExpression(_ expression: VariableExpression) -> String {
+        return parenthesize(expression.identifier.lexeme)
+    }
+
     func visitExpressionStatement(_ statement: ExpressionStatement) -> String {
         return print(statement.expression)
     }
 
-    func visitVarDeclarationStatement(_ statement: VarDeclarationStatement) -> String {
+    func visitVariableDeclarationStatement(_ statement: VariableDeclarationStatement) -> String {
         return parenthesize(statement.keyword, statement.identifier, "=", print(statement.initializer))
     }
 

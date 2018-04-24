@@ -36,7 +36,7 @@ private final class ParserImpl {
             initializer = try parseExpression()
         }
 
-        return VarDeclarationStatement(keyword: keyword, identifier: name, initializer: initializer)
+        return VariableDeclarationStatement(keyword: keyword, identifier: name, initializer: initializer)
     }
 
     private func parseStatement() throws -> Statement {
@@ -49,7 +49,24 @@ private final class ParserImpl {
     }
 
     private func parseExpression() throws -> Expression {
-        return try parseEquality()
+        return try parseAssignment()
+    }
+
+    private func parseAssignment() throws -> Expression {
+        let expression = try parseEquality()
+
+        if match(.equal) {
+            let value = try parseAssignment()
+
+            if let variableExpression = expression as? VariableExpression {
+                let name = variableExpression.identifier
+                return AssignmentExpression(identifier: name, value: value)
+            }
+
+            throw error("invalid assignment")
+        }
+
+        return expression
     }
 
     private func parseEquality() throws -> Expression {
@@ -131,13 +148,17 @@ private final class ParserImpl {
             return LiteralExpression(literal: literal)
         }
 
+        if match(.identifier) {
+            return VariableExpression(identifier: previous())
+        }
+
         if match(.leftParen) {
             let expr = try parseExpression()
-            try consume(.rightParen, "Expected ')' after expression.")
+            try consume(.rightParen, "expected ')' after expression")
             return GroupingExpression(expression: expr)
         }
 
-        throw error("Expected expression.")
+        throw error("expected expression")
     }
 
     @discardableResult

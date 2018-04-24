@@ -1,6 +1,9 @@
 struct ASTInterpreter {
-    func execute(_ program: [Statement]) -> ASTInterpreterResult {
-        var result: ASTInterpreterResult = .value(.nil)
+    typealias Result = ASTInterpreterResult
+    typealias RuntimeError = ASTIntepreterRuntimeError
+
+    func execute(_ program: [Statement]) -> Result {
+        var result: Result = .value(.nil)
 
         for statement in program {
             result = result.flatMap({ _ in statement.accept(self) })
@@ -16,13 +19,23 @@ struct ASTInterpreter {
     private func evaluate(_ ast: ASTVisitable) throws -> Value {
         return try unwrap(ast.accept(self))
     }
+
+    private let environment = ASTInterpreterEnvironment()
 }
 
 
 extension ASTInterpreter: ASTVisitor {
-    typealias ReturnValue = ASTInterpreterResult
+    typealias ReturnValue = Result
 
-    func visitBinaryExpression(_ expression: BinaryExpression) -> ASTInterpreterResult {
+    func visitAssignmentExpression(_ expression: AssignmentExpression) -> Result {
+        return captureValue {
+            let value = try evaluate(expression.value)
+            
+            return try environment.set(expression.identifier, value: value)
+        }
+    }
+
+    func visitBinaryExpression(_ expression: BinaryExpression) -> Result {
         return captureResult {
             let left = try evaluate(expression.left)
             let right = try evaluate(expression.right)
@@ -64,15 +77,15 @@ extension ASTInterpreter: ASTVisitor {
         }
     }
 
-    func visitLiteralExpression(_ expression: LiteralExpression) -> ASTInterpreterResult {
+    func visitLiteralExpression(_ expression: LiteralExpression) -> Result {
         return captureValue { expression.literal.value }
     }
 
-    func visitGroupingExpression(_ expression: GroupingExpression) -> ASTInterpreterResult {
+    func visitGroupingExpression(_ expression: GroupingExpression) -> Result {
         return captureValue { try evaluate(expression.expression) }
     }
 
-    func visitUnaryExpression(_ expression: UnaryExpression) -> ASTInterpreterResult {
+    func visitUnaryExpression(_ expression: UnaryExpression) -> Result {
         return captureResult {
             let value = try evaluate(expression.expression)
 
@@ -89,26 +102,39 @@ extension ASTInterpreter: ASTVisitor {
         }
     }
 
-    func visitExpressionStatement(_ statement: ExpressionStatement) -> ASTInterpreterResult {
+    func visitVariableExpression(_ expression: VariableExpression) -> Result {
+        return captureValue {
+            try environment.get(expression.identifier)
+        }
+    }
+
+    func visitExpressionStatement(_ statement: ExpressionStatement) -> Result {
         return captureValue { try evaluate(statement.expression) }
     }
 
-    func visitVarDeclarationStatement(_ statement: VarDeclarationStatement) -> ASTInterpreterResult {
+    func visitVariableDeclarationStatement(_ statement: VariableDeclarationStatement) -> Result {
         return captureValue {
-            // TODO: actually declare the var
-            try evaluate(statement.initializer)
+            let value = try evaluate(statement.initializer)
+
+            try environment.defineVariable(
+                named: statement.identifier,
+                value: value,
+                isMutable: statement.keyword.type == .var
+            )
+
+            return value
         }
     }
 
-    private func captureValue(of block: () throws -> Value) -> ASTInterpreterResult {
+    private func captureValue(of block: () throws -> Value) -> Result {
         return captureResult(of: { .value(try block()) })
     }
 
-    private func captureResult(of block: () throws -> ASTInterpreterResult) -> ASTInterpreterResult {
+    private func captureResult(of block: () throws -> Result) -> Result {
         do {
             return try block()
         }
-        catch let error as ASTIntepreterRuntimeError {
+        catch let error as RuntimeError {
             return .runtimeError(error)
         }
         catch let error {
@@ -116,7 +142,7 @@ extension ASTInterpreter: ASTVisitor {
         }
     }
 
-    private func unwrap(_ result: ASTInterpreterResult) throws -> Value {
+    private func unwrap(_ result: Result) throws -> Value {
         switch result {
         case let .value(value): return value
         case let .runtimeError(error): throw error

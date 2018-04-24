@@ -1,4 +1,4 @@
-struct VarDeclarationStatement: Statement {
+struct VariableDeclarationStatement: Statement {
     let keyword: Token
     let identifier: Token
     let initializer: Expression
@@ -11,6 +11,6 @@ struct VarDeclarationStatement: Statement {
     }
 
     func accept<Visitor: ASTVisitor>(_ visitor: Visitor) -> Visitor.ReturnValue {
-        return visitor.visitVarDeclarationStatement(self)
+        return visitor.visitVariableDeclarationStatement(self)
     }
 }
