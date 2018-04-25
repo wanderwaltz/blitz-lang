@@ -37,6 +37,7 @@ case `if`
 case `nil`
 case `or`
 case `not`
+case print
 case `return`
 case `super`
 case `self`

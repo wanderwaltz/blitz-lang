@@ -11,6 +11,7 @@ extension TokenType {
             .`nil`,
             .`or`,
             .`not`,
+            .print,
             .`return`,
             .`super`,
             .`self`,

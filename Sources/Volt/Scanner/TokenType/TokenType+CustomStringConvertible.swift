@@ -39,6 +39,7 @@ extension TokenType: CustomStringConvertible {
         case .`nil`: return "nil"
         case .`or`: return "or"
         case .`not`: return "not"
+        case .print: return "print"
         case .`return`: return "return"
         case .`super`: return "super"
         case .`self`: return "self"

@@ -1,4 +1,4 @@
-struct ASTPrinter {
+final class ASTPrinter {
     func print(_ ast: [ASTVisitable]) -> String {
         return ast.map(print).joined(separator: "\n")
     }
@@ -6,6 +6,8 @@ struct ASTPrinter {
     func print(_ ast: ASTVisitable) -> String {
         return ast.accept(self)
     }
+
+    private var indentation = ""
 }
 
 
@@ -36,8 +38,21 @@ extension ASTPrinter: ASTVisitor {
         return parenthesize(expression.identifier.lexeme)
     }
 
+    func visitBlockStatement(_ statement: BlockStatement) -> String {
+        let statements = statement.statements.map({ print($0) }).joined(separator: "\n")
+        let oldIndentation = indentation
+        indentation += "    "
+        let indentedStatements = indent(statements)
+        indentation = oldIndentation
+        return parenthesize("{\n", indentedStatements, "\n}")
+    }
+
     func visitExpressionStatement(_ statement: ExpressionStatement) -> String {
         return print(statement.expression)
+    }
+
+    func visitPrintStatement(_ statement: PrintStatement) -> String {
+        return parenthesize("print", print(statement.expression))
     }
 
     func visitVariableDeclarationStatement(_ statement: VariableDeclarationStatement) -> String {
@@ -57,5 +72,11 @@ extension ASTPrinter: ASTVisitor {
         let argsJoined = argDescriptions.joined(separator: " ")
 
         return ["〈", argsJoined, "〉"].joined(separator: "")
+    }
+
+    private func indent(_ string: String) -> String {
+        let components = string.components(separatedBy: "\n")
+        let indentedComponents = components.map({ indentation + $0 })
+        return indentedComponents.joined(separator: "\n")
     }
 }

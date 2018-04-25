@@ -3,6 +3,11 @@ final class ASTInterpreterEnvironment {
     typealias RuntimeError = ASTIntepreterRuntimeError
     typealias RuntimeValue = ASTInterpteterRuntimeValue
 
+    init(parent: ASTInterpreterEnvironment? = nil) {
+        self.parent = parent
+    }
+
+    private let parent: ASTInterpreterEnvironment?
     private var values: [String:RuntimeValue] = [:]
 }
 
@@ -17,15 +22,23 @@ extension ASTInterpreterEnvironment {
     }
 
     func get(_ name: Token) throws -> Value {
-        guard let value = values[name.lexeme] else {
-            throw error(.unknownIdentifier, "unknown identifier '\(name)'")
+        if let value = values[name.lexeme] {
+            return value.value
         }
 
-        return value.value
+        if let parent = parent {
+            return try parent.get(name)
+        }
+
+        throw error(.unknownIdentifier, "unknown identifier '\(name)'")
     }
 
     func set(_ name: Token, value newValue: Value) throws -> Value {
         guard let value = values[name.lexeme] else {
+            if let parent = parent {
+                return try parent.set(name, value: newValue)
+            }
+
             throw error(.unknownIdentifier, "unknown identifier '\(name)'")
         }
 

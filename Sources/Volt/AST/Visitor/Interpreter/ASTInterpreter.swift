@@ -1,11 +1,24 @@
-struct ASTInterpreter {
+final class ASTInterpreter {
     typealias Result = ASTInterpreterResult
     typealias RuntimeError = ASTIntepreterRuntimeError
+    typealias Environment = ASTInterpreterEnvironment
 
+    @discardableResult
     func execute(_ program: [Statement]) -> Result {
+        return executeBlock(program, environment: environment)
+    }
+
+    private func executeBlock(_ statements: [Statement], environment: Environment) -> Result {
+        let previousEnvironment = self.environment
+        defer {
+            self.environment = previousEnvironment
+        }
+
+        self.environment = environment
+
         var result: Result = .value(.nil)
 
-        for statement in program {
+        for statement in statements {
             result = result.flatMap({ _ in statement.accept(self) })
 
             if case .runtimeError = result {
@@ -20,7 +33,7 @@ struct ASTInterpreter {
         return try unwrap(ast.accept(self))
     }
 
-    private let environment = ASTInterpreterEnvironment()
+    private var environment = Environment()
 }
 
 
@@ -30,7 +43,7 @@ extension ASTInterpreter: ASTVisitor {
     func visitAssignmentExpression(_ expression: AssignmentExpression) -> Result {
         return captureValue {
             let value = try evaluate(expression.value)
-            
+
             return try environment.set(expression.identifier, value: value)
         }
     }
@@ -108,8 +121,20 @@ extension ASTInterpreter: ASTVisitor {
         }
     }
 
+    func visitBlockStatement(_ statement: BlockStatement) -> Result {
+        return executeBlock(statement.statements, environment: Environment(parent: environment))
+    }
+
     func visitExpressionStatement(_ statement: ExpressionStatement) -> Result {
         return captureValue { try evaluate(statement.expression) }
+    }
+
+    func visitPrintStatement(_ statement: PrintStatement) -> Result {
+        return captureResult {
+            let value = try evaluate(statement.expression)
+            print(value)
+            return .value(value)
+        }
     }
 
     func visitVariableDeclarationStatement(_ statement: VariableDeclarationStatement) -> Result {

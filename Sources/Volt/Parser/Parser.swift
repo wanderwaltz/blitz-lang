@@ -40,7 +40,31 @@ private final class ParserImpl {
     }
 
     private func parseStatement() throws -> Statement {
+        if match(.print) {
+            return try parsePrintStatement()
+        }
+
+        if match(.leftBrace) {
+            return try parseBlockStatement()
+        }
+
         return try parseExpressionStatement()
+    }
+
+    private func parsePrintStatement() throws -> Statement {
+        let expression = try parseExpression()
+        return PrintStatement(expression: expression)
+    }
+
+    private func parseBlockStatement() throws -> Statement {
+        var statements: [Statement] = []
+
+        while !check(.rightBrace) && !isAtEnd {
+            statements.append(try parseDeclaration())
+        }
+
+        try consume(.rightBrace, "expected }")
+        return BlockStatement(statements: statements)
     }
 
     private func parseExpressionStatement() throws -> ExpressionStatement {

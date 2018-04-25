@@ -3,8 +3,19 @@ public final class VM {
 
     public func run() {
         let source = """
-            x = 456
-            x
+            let x = 456
+            {
+                var x = 768
+                {
+                    let x = "qqq"
+                    {
+                        let q = x
+                        print q
+                    }
+                }
+                print x
+            }
+            print x
         """
 
         do {
@@ -14,7 +25,7 @@ public final class VM {
             let interpreter = ASTInterpreter()
 
             print(printer.print(ast))
-            print(interpreter.execute(ast))
+            interpreter.execute(ast)
         }
         catch let error {
             print(error)
