@@ -3,7 +3,12 @@ import sample_module
 let x = 123
 
 {
-    var x = 456
+    if x {
+        print "truthy"
+    }
+    else {
+        print "falsey"
+    }
 }
 
 print x

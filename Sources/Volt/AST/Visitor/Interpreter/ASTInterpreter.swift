@@ -140,6 +140,23 @@ extension ASTInterpreter: ASTVisitor {
         return captureValue { try evaluate(statement.expression) }
     }
 
+    func visitIfStatement(_ statement: IfStatement) -> Result {
+        return captureValue {
+            var result: Value = .nil
+
+            let condition = try evaluate(statement.condition)
+
+            if condition.boolValue {
+                result = try evaluate(statement.thenStatement)
+            }
+            else if let elseStatement = statement.elseStatement {
+                result = try evaluate(elseStatement)
+            }
+
+            return result
+        }
+    }
+
     func visitImportStatement(_ statement: ImportStatement) -> Result {
         return captureValue {
             let moduleName = statement.identifier.lexeme

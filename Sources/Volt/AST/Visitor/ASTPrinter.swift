@@ -51,6 +51,34 @@ extension ASTPrinter: ASTVisitor {
         return print(statement.expression)
     }
 
+    func visitIfStatement(_ statement: IfStatement) -> String {
+        // var content: [String] = ["if", print(statement.condition)]
+        //
+        // let oldIndentation = indentation
+        // indentation += "    "
+        // content.append(indent(print(statement.thenStatement)))
+        // indentation = oldIndentation
+        //
+        // if let elseStatement = statement.elseStatement {
+        //     content.append("else")
+        //     let oldIndentation = indentation
+        //     indentation += "    "
+        //     content.append(indent(print(elseStatement)))
+        //     indentation = oldIndentation
+        //     content.append("}")
+        // }
+        //
+        // return parenthesize(content.joined(separator: " "))
+        var components: [String] = ["if", print(statement.condition), print(statement.thenStatement)]
+
+        if let elseStatement = statement.elseStatement {
+            components.append("else")
+            components.append(print(elseStatement))
+        }
+
+        return parenthesize(components.joined(separator: " "))
+    }
+
     func visitImportStatement(_ statement: ImportStatement) -> String {
         return parenthesize("import", statement.identifier.lexeme)
     }

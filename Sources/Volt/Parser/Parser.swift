@@ -49,6 +49,10 @@ private final class ParserImpl {
     }
 
     private func parseStatement() throws -> Statement {
+        if match(.if) {
+            return try parseIfStatement()
+        }
+
         if match(.print) {
             return try parsePrintStatement()
         }
@@ -58,6 +62,20 @@ private final class ParserImpl {
         }
 
         return try parseExpressionStatement()
+    }
+
+    private func parseIfStatement() throws -> Statement {
+        let condition = try parseExpression()
+        try consume(.leftBrace, "expected { after if condition")
+        let thenStatement = try parseBlockStatement()
+        var elseStatement: Statement?
+
+        if match(.else) {
+            try consume(.leftBrace, "expected { after else")
+            elseStatement = try parseBlockStatement()
+        }
+
+        return IfStatement(condition: condition, thenStatement: thenStatement, elseStatement: elseStatement)
     }
 
     private func parsePrintStatement() throws -> Statement {
