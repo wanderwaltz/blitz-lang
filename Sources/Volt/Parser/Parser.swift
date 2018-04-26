@@ -109,7 +109,7 @@ private final class ParserImpl {
     }
 
     private func parseAssignment() throws -> Expression {
-        let expression = try parseEquality()
+        let expression = try parseOr()
 
         if match(.equal) {
             let value = try parseAssignment()
@@ -123,6 +123,30 @@ private final class ParserImpl {
         }
 
         return expression
+    }
+
+    private func parseOr() throws -> Expression {
+        var expr = try parseAnd()
+
+        while match(.or) {
+            let op = previous()
+            let right = try parseAnd()
+            expr = LogicalExpression(left: expr, op: op, right: right)
+        }
+
+        return expr
+    }
+
+    private func parseAnd() throws -> Expression {
+        var expr = try parseEquality()
+
+        while match(.and) {
+            let op = previous()
+            let right = try parseEquality()
+            expr = LogicalExpression(left: expr, op: op, right: right)
+        }
+
+        return expr
     }
 
     private func parseEquality() throws -> Expression {

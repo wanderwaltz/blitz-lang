@@ -105,6 +105,33 @@ extension ASTInterpreter: ASTVisitor {
         return captureValue { expression.literal.value }
     }
 
+    func visitLogicalExpression(_ expression: LogicalExpression) -> Result {
+        return captureValue {
+            let left = try evaluate(expression.left)
+
+            switch expression.op.type {
+            case .or:
+                if left.boolValue {
+                    return .bool(true)
+                }
+                else {
+                    return .bool(try evaluate(expression.right).boolValue)
+                }
+
+            case .and:
+                if !left.boolValue {
+                    return .bool(false)
+                }
+                else {
+                    return .bool(try evaluate(expression.right).boolValue)
+                }
+
+            default:
+                preconditionFailure("unimplemented logical operator: \(expression.op)")
+            }
+        }
+    }
+
     func visitGroupingExpression(_ expression: GroupingExpression) -> Result {
         return captureValue { try evaluate(expression.expression) }
     }

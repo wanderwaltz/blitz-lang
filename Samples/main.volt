@@ -16,3 +16,5 @@ let x = 123
 
 print x
 print y
+
+print true and not true

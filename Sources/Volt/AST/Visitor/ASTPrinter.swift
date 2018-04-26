@@ -26,6 +26,10 @@ extension ASTPrinter: ASTVisitor {
         return parenthesize(String(describing: expression))
     }
 
+    func visitLogicalExpression(_ expression: LogicalExpression) -> String {
+        return parenthesize(expression.left, expression.op, expression.right)
+    }
+
     func visitGroupingExpression(_ expression: GroupingExpression) -> String {
         return parenthesize("(", print(expression.expression) ,")")
     }
@@ -52,23 +56,6 @@ extension ASTPrinter: ASTVisitor {
     }
 
     func visitIfStatement(_ statement: IfStatement) -> String {
-        // var content: [String] = ["if", print(statement.condition)]
-        //
-        // let oldIndentation = indentation
-        // indentation += "    "
-        // content.append(indent(print(statement.thenStatement)))
-        // indentation = oldIndentation
-        //
-        // if let elseStatement = statement.elseStatement {
-        //     content.append("else")
-        //     let oldIndentation = indentation
-        //     indentation += "    "
-        //     content.append(indent(print(elseStatement)))
-        //     indentation = oldIndentation
-        //     content.append("}")
-        // }
-        //
-        // return parenthesize(content.joined(separator: " "))
         var components: [String] = ["if", print(statement.condition), print(statement.thenStatement)]
 
         if let elseStatement = statement.elseStatement {
