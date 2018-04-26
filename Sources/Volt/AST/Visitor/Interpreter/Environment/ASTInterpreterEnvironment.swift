@@ -12,6 +12,7 @@ final class ASTInterpreterEnvironment {
 }
 
 
+// MARK: - working with variables
 extension ASTInterpreterEnvironment {
     func defineVariable(named name: Token, value: Value, isMutable: Bool) throws {
         guard values[name.lexeme] == nil else {
@@ -53,6 +54,7 @@ extension ASTInterpreterEnvironment {
 }
 
 
+// MARK: - errors
 extension ASTInterpreterEnvironment {
     private func error(_ code: RuntimeError.Code, _ message: String) -> RuntimeError {
         return RuntimeError(code: code, message: message)

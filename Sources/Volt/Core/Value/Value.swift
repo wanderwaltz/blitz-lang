@@ -1,4 +1,4 @@
-enum Value {
+public enum Value {
 case `nil`
 case bool(Bool)
 case number(Number)

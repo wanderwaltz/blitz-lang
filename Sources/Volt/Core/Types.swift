@@ -1,1 +1,1 @@
-typealias Number = Double
+public typealias Number = Double

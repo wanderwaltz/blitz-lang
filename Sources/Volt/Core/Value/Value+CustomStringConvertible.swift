@@ -1,5 +1,5 @@
 extension Value: CustomStringConvertible {
-    var description: String {
+    public var description: String {
         switch self {
         case .nil: return "nil"
         case let .bool(value): return String(describing: value)

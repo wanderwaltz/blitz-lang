@@ -87,6 +87,32 @@ extension InterpreterTests {
             yields: 456
         )
     }
+
+    func test__scopes_1() {
+        expect_source(
+            """
+            var x = 123
+            {
+                var x = 456
+            }
+            x
+            """,
+            yields: 123
+        )
+    }
+
+    func test__scopes_2() {
+        expect_source(
+            """
+            var x = 123
+            {
+                x = 456
+            }
+            x
+            """,
+            yields: 456
+        )
+    }
 }
 
 

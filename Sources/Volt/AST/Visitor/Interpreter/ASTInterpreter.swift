@@ -1,11 +1,16 @@
+// MARK: - ASTInterpreter
 final class ASTInterpreter {
     typealias Result = ASTInterpreterResult
     typealias RuntimeError = ASTIntepreterRuntimeError
     typealias Environment = ASTInterpreterEnvironment
 
+    init() {
+        environment = rootEnvironment
+    }
+
     @discardableResult
     func execute(_ program: [Statement]) -> Result {
-        return executeBlock(program, environment: environment)
+        return executeBlock(program, environment: rootEnvironment)
     }
 
     private func executeBlock(_ statements: [Statement], environment: Environment) -> Result {
@@ -33,10 +38,14 @@ final class ASTInterpreter {
         return try unwrap(ast.accept(self))
     }
 
-    private var environment = Environment()
+    private let rootEnvironment = Environment()
+    private var environment: Environment
 }
 
 
+
+
+// MARK: - ASTVisitor
 extension ASTInterpreter: ASTVisitor {
     typealias ReturnValue = Result
 
@@ -150,7 +159,13 @@ extension ASTInterpreter: ASTVisitor {
             return value
         }
     }
+}
 
+
+
+
+// MARK: - utility methods
+extension ASTInterpreter {
     private func captureValue(of block: () throws -> Value) -> Result {
         return captureResult(of: { .value(try block()) })
     }

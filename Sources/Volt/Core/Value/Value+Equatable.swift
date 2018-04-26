@@ -1,5 +1,5 @@
 extension Value: Equatable {
-    static func == (left: Value, right: Value) -> Bool {
+    public static func == (left: Value, right: Value) -> Bool {
         switch (left, right) {
         case (.nil, .nil): return true
         case let (.bool(lb), .bool(rb)): return lb == rb

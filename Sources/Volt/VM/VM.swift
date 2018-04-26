@@ -1,34 +1,25 @@
 public final class VM {
     public init() {}
 
-    public func run() {
-        let source = """
-            let x = 456
-            {
-                var x = 768
-                {
-                    let x = "qqq"
-                    {
-                        let q = x
-                        print q
-                    }
-                }
-                print x
-            }
-            print x
-        """
+    @discardableResult
+    public func run(_ source: String) throws -> Value {
+        let program = try parse(source)
+        return try execute(program)
+    }
 
-        do {
-            let tokens = try Scanner().process(source)
-            let ast = try Parser().parse(tokens)
-            let printer = ASTPrinter()
-            let interpreter = ASTInterpreter()
+    public func parse(_ source: String) throws -> Program {
+        let tokens = try Scanner().process(source)
+        let statements = try Parser().parse(tokens)
+        return Program(statements: statements)
+    }
 
-            print(printer.print(ast))
-            interpreter.execute(ast)
-        }
-        catch let error {
-            print(error)
+    @discardableResult
+    public func execute(_ program: Program) throws -> Value {
+        switch interpreter.execute(program.statements) {
+        case let .value(value): return value
+        case let .runtimeError(error): throw error
         }
     }
+
+    private let interpreter = ASTInterpreter()
 }
