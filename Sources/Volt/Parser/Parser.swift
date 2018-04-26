@@ -71,8 +71,13 @@ private final class ParserImpl {
         var elseStatement: Statement?
 
         if match(.else) {
-            try consume(.leftBrace, "expected { after else")
-            elseStatement = try parseBlockStatement()
+            if match(.if) {
+                elseStatement = try parseIfStatement()
+            }
+            else {
+                try consume(.leftBrace, "expected { or if after else")
+                elseStatement = try parseBlockStatement()
+            }
         }
 
         return IfStatement(condition: condition, thenStatement: thenStatement, elseStatement: elseStatement)

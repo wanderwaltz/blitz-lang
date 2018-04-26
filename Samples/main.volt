@@ -3,11 +3,14 @@ import sample_module
 let x = 123
 
 {
-    if x {
-        print "truthy"
+    if x > 1000 {
+        print "> 1000"
+    }
+    else if x > 100 {
+        print "> 100"
     }
     else {
-        print "falsey"
+        print("else")
     }
 }
 
