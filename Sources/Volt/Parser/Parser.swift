@@ -20,11 +20,20 @@ private final class ParserImpl {
     }
 
     private func parseDeclaration() throws -> Statement {
+        if match(.import) {
+            return try parseImportStatement()
+        }
+
         if match(.var, .let) {
             return try parseVarDeclaration()
         }
 
         return try parseStatement()
+    }
+
+    private func parseImportStatement() throws -> Statement {
+        let name = try consume(.identifier, "expected module name")
+        return ImportStatement(identifier: name)
     }
 
     private func parseVarDeclaration() throws -> Statement {

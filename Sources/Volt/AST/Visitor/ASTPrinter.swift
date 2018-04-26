@@ -51,6 +51,10 @@ extension ASTPrinter: ASTVisitor {
         return print(statement.expression)
     }
 
+    func visitImportStatement(_ statement: ImportStatement) -> String {
+        return parenthesize("import", statement.identifier.lexeme)
+    }
+
     func visitPrintStatement(_ statement: PrintStatement) -> String {
         return parenthesize("print", print(statement.expression))
     }

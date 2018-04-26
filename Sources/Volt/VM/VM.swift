@@ -1,5 +1,17 @@
 public final class VM {
-    public init() {}
+    public var importedModulesSourceProvider: ImportedModulesSourceProvider {
+        get {
+            return importedModulesProvider.sourceProvider
+        }
+
+        set {
+            importedModulesProvider.sourceProvider = newValue
+        }
+    }
+
+    public init() {
+        interpreter.delegate = self
+    }
 
     @discardableResult
     public func run(_ source: String) throws -> Value {
@@ -22,4 +34,13 @@ public final class VM {
     }
 
     private let interpreter = ASTInterpreter()
+    private let importedModulesProvider = ImportedModulesProvider()
+}
+
+
+extension VM: ASTInterpreterDelegate {
+    func interpreter(_ interpreter: ASTInterpreter, importModuleNamed name: String) throws
+        -> ImportedModulesProvider.Result {
+            return try importedModulesProvider.importModule(named: name)
+    }
 }

@@ -11,6 +11,7 @@ do {
     let source = try String(contentsOf: URL(fileURLWithPath: sourceFileName), encoding: .utf8)
 
     let vm = VM()
+    vm.importedModulesSourceProvider = FileSystemImportedModulesSourceProvider(prefix: "Samples")
 
     let program = try vm.parse(source)
 

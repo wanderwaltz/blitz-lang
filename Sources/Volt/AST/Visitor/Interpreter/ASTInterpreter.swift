@@ -4,6 +4,8 @@ final class ASTInterpreter {
     typealias RuntimeError = ASTIntepreterRuntimeError
     typealias Environment = ASTInterpreterEnvironment
 
+    weak var delegate: ASTInterpreterDelegate?
+
     init() {
         environment = rootEnvironment
     }
@@ -136,6 +138,29 @@ extension ASTInterpreter: ASTVisitor {
 
     func visitExpressionStatement(_ statement: ExpressionStatement) -> Result {
         return captureValue { try evaluate(statement.expression) }
+    }
+
+    func visitImportStatement(_ statement: ImportStatement) -> Result {
+        return captureValue {
+            let moduleName = statement.identifier.lexeme
+
+            guard let delegate = delegate else {
+                throw RuntimeError(
+                    code: .cannotImportModule,
+                    message: "cannot import module '\(moduleName)': interpeter delegate is not set"
+                )
+            }
+
+            switch try delegate.interpreter(self, importModuleNamed: moduleName) {
+            case let .new(program):
+                return try unwrap(execute(program.statements))
+
+            case .alreadyImported: // modules are imported only once
+                break
+            }
+
+            return .nil
+        }
     }
 
     func visitPrintStatement(_ statement: PrintStatement) -> Result {

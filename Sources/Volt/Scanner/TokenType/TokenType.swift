@@ -1,13 +1,13 @@
 enum TokenType: Int {
 // single-character tokens
-case leftParen
-case rightParen
-case leftBrace
-case rightBrace
 case comma
 case dot
+case leftBrace
+case leftParen
 case minus
 case plus
+case rightBrace
+case rightParen
 case slash
 case star
 
@@ -23,26 +23,27 @@ case lessEqual
 
 // literals
 case identifier
-case string
 case number
+case string
 
 // keywords
-case and
+case `and`
 case `class`
 case `else`
 case `false`
-case `func`
 case `for`
+case `func`
 case `if`
-case `nil`
-case `or`
-case `not`
-case print
-case `return`
-case `super`
-case `self`
-case `true`
+case `import`
 case `let`
+case `nil`
+case `not`
+case `or`
+case `print`
+case `return`
+case `self`
+case `super`
+case `true`
 case `var`
 case `while`
 

@@ -4,6 +4,7 @@ struct ASTIntepreterRuntimeError: Error {
     case invalidRedefenition = 2
     case unknownIdentifier = 3
     case settingImmutableValue = 4
+    case cannotImportModule = 5
     }
 
     let code: Code

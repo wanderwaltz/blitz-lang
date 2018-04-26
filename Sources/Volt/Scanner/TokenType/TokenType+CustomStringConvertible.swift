@@ -1,15 +1,15 @@
 extension TokenType: CustomStringConvertible {
     var description: String {
         switch self {
-            // single-character tokens
-        case .leftParen: return "("
-        case .rightParen: return ")"
-        case .leftBrace: return "{"
-        case .rightBrace: return "}"
+        // single-character tokens
         case .comma: return ","
         case .dot: return "."
+        case .leftBrace: return "{"
+        case .leftParen: return "("
         case .minus: return "-"
         case .plus: return "+"
+        case .rightBrace: return "}"
+        case .rightParen: return ")"
         case .slash: return "/"
         case .star: return "*"
 
@@ -25,26 +25,27 @@ extension TokenType: CustomStringConvertible {
 
         // literals
         case .identifier: return "$id"
-        case .string: return "$str"
         case .number: return "$num"
+        case .string: return "$str"
 
         // keywords
-        case .and: return "and"
+        case .`and`: return "and"
         case .`class`: return "class"
         case .`else`: return "else"
         case .`false`: return "false"
-        case .`func`: return "func"
         case .`for`: return "for"
+        case .`func`: return "func"
         case .`if`: return "if"
-        case .`nil`: return "nil"
-        case .`or`: return "or"
-        case .`not`: return "not"
-        case .print: return "print"
-        case .`return`: return "return"
-        case .`super`: return "super"
-        case .`self`: return "self"
-        case .`true`: return "true"
+        case .`import`: return "import"
         case .`let`: return "let"
+        case .`nil`: return "nil"
+        case .`not`: return "not"
+        case .`or`: return "or"
+        case .`print`: return "print"
+        case .`return`: return "return"
+        case .`self`: return "self"
+        case .`super`: return "super"
+        case .`true`: return "true"
         case .`var`: return "var"
         case .`while`: return "while"
 
