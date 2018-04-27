@@ -236,6 +236,21 @@ extension ASTInterpreter: ASTVisitor {
             return value
         }
     }
+
+    func visitWhileStatement(_ statement: WhileStatement) -> Result {
+        return captureValue {
+            var value: Value = .nil
+
+            var condition = try evaluate(statement.condition)
+
+            while condition.boolValue {
+                value = try evaluate(statement.body)
+                condition = try evaluate(statement.condition)
+            }
+
+            return value
+        }
+    }
 }
 
 

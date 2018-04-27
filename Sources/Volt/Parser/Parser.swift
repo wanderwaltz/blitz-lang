@@ -57,6 +57,10 @@ private final class ParserImpl {
             return try parsePrintStatement()
         }
 
+        if match(.while) {
+            return try parseWhileStatement()
+        }
+
         if match(.leftBrace) {
             return try parseBlockStatement()
         }
@@ -86,6 +90,13 @@ private final class ParserImpl {
     private func parsePrintStatement() throws -> Statement {
         let expression = try parseExpression()
         return PrintStatement(expression: expression)
+    }
+
+    private func parseWhileStatement() throws -> Statement {
+        let condition = try parseExpression()
+        try consume(.leftBrace, "expected { after while")
+        let body = try parseBlockStatement()
+        return WhileStatement(condition: condition, body: body)
     }
 
     private func parseBlockStatement() throws -> Statement {

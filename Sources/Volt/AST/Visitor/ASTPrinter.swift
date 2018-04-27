@@ -78,6 +78,10 @@ extension ASTPrinter: ASTVisitor {
         return parenthesize(statement.keyword, statement.identifier, "=", print(statement.initializer))
     }
 
+    func visitWhileStatement(_ statement: WhileStatement) -> String {
+        return parenthesize("while", print(statement.condition), print(statement.body))
+    }
+
     private func parenthesize(_ args: Any...) -> String {
         let argDescriptions = args.map({ arg -> String in
             if let visitable = arg as? ASTVisitable {
