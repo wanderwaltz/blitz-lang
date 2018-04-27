@@ -22,6 +22,7 @@ extension TokenType: CustomStringConvertible {
         case .greaterEqual: return ">="
         case .less: return "<"
         case .lessEqual: return "<="
+        case .questionQuestion: return "??"
 
         // literals
         case .identifier: return "$id"

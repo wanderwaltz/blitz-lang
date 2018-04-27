@@ -126,6 +126,14 @@ extension ASTInterpreter: ASTVisitor {
                     return .bool(try evaluate(expression.right).boolValue)
                 }
 
+            case .questionQuestion:
+                if left.boolValue {
+                    return left
+                }
+                else {
+                    return try evaluate(expression.right)
+                }
+
             default:
                 preconditionFailure("unimplemented logical operator: \(expression.op)")
             }

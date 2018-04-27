@@ -186,12 +186,24 @@ private final class ParserImpl {
     }
 
     private func parseMultiplication() throws -> Expression {
-        var expr = try parseUnary()
+        var expr = try parseQuestionQuestionOperator()
 
         while match(.slash, .star) {
             let op = previous()
-            let right = try parseUnary()
+            let right = try parseQuestionQuestionOperator()
             expr = BinaryExpression(left: expr, op: op, right: right)
+        }
+
+        return expr
+    }
+
+    private func parseQuestionQuestionOperator() throws -> Expression {
+        var expr = try parseUnary()
+
+        while match(.questionQuestion) {
+            let op = previous()
+            let right = try parseUnary()
+            expr = LogicalExpression(left: expr, op: op, right: right)
         }
 
         return expr

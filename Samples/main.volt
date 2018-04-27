@@ -17,4 +17,6 @@ let x = 123
 print x
 print y
 
-print true and not true
+print nil or "yes"
+
+print 1 + false ?? 2

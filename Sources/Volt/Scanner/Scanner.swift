@@ -50,6 +50,12 @@ private final class ScannerImpl {
         case "=": addToken(match("=") ? .equalEqual : .equal)
         case "<": addToken(match("=") ? .lessEqual : .less)
         case ">": addToken(match("=") ? .greaterEqual : .greater)
+        case "?":
+            guard match("?") else {
+                throw error(.unexpectedToken)
+            }
+
+            addToken(.questionQuestion)
 
         // literals
         case "\"":
