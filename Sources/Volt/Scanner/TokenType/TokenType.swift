@@ -4,13 +4,9 @@ case comma
 case dot
 case leftBrace
 case leftParen
-case minus
-case plus
 case rightBrace
 case rightParen
 case semicolon
-case slash
-case star
 
 // one or two character tokens
 case bang
@@ -21,7 +17,15 @@ case greater
 case greaterEqual
 case less
 case lessEqual
+case minus
+case minusEqual
+case plus
+case plusEqual
 case questionQuestion
+case slash
+case slashEqual
+case star
+case starEqual
 
 // literals
 case identifier

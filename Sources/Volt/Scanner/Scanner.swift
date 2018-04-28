@@ -41,22 +41,23 @@ private final class ScannerImpl {
         case "}": addToken(.rightBrace)
         case ",": addToken(.comma)
         case ".": addToken(.dot)
-        case "-": addToken(.minus)
-        case "+": addToken(.plus)
-        case "*": addToken(.star)
         case ";": addToken(.semicolon)
 
         // one or two character tokens
         case "!": addToken(match("=") ? .bangEqual : .bang)
         case "=": addToken(match("=") ? .equalEqual : .equal)
-        case "<": addToken(match("=") ? .lessEqual : .less)
         case ">": addToken(match("=") ? .greaterEqual : .greater)
+        case "<": addToken(match("=") ? .lessEqual : .less)
+        case "-": addToken(match("=") ? .minusEqual : .minus)
+        case "+": addToken(match("=") ? .plusEqual : .plus)
         case "?":
             guard match("?") else {
                 throw error(.unexpectedToken)
             }
 
             addToken(.questionQuestion)
+
+        case "*": addToken(match("=") ? .starEqual : .star)
 
         // literals
         case "\"":
@@ -75,6 +76,9 @@ private final class ScannerImpl {
                 while (peek() != "\n" && !isAtEnd) {
                     advance()
                 }
+            }
+            else if match("=") {
+                addToken(.slashEqual)
             }
             else {
                 addToken(.slash)

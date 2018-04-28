@@ -6,13 +6,9 @@ extension TokenType: CustomStringConvertible {
         case .dot: return "."
         case .leftBrace: return "{"
         case .leftParen: return "("
-        case .minus: return "-"
-        case .plus: return "+"
         case .rightBrace: return "}"
         case .rightParen: return ")"
         case .semicolon: return ";"
-        case .slash: return "/"
-        case .star: return "*"
 
         // one or two character tokens
         case .bang: return "!"
@@ -23,7 +19,15 @@ extension TokenType: CustomStringConvertible {
         case .greaterEqual: return ">="
         case .less: return "<"
         case .lessEqual: return "<="
+        case .minus: return "-"
+        case .minusEqual: return "-="
+        case .plus: return "+"
+        case .plusEqual: return "+="
         case .questionQuestion: return "??"
+        case .slash: return "/"
+        case .slashEqual: return "/="
+        case .star: return "*"
+        case .starEqual: return "*="
 
         // literals
         case .identifier: return "$id"

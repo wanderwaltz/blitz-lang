@@ -53,7 +53,30 @@ extension ASTInterpreter: ASTVisitor {
 
     func visitAssignmentExpression(_ expression: AssignmentExpression) -> Result {
         return captureValue {
-            let value = try evaluate(expression.value)
+            var value = try evaluate(expression.value)
+
+            if expression.op.type == .equal {
+                return try environment.set(expression.identifier, value: value)
+            }
+
+            let existingValue = try environment.get(expression.identifier)
+
+            switch expression.op.type {
+            case .minusEqual:
+                value = try unwrap(existingValue - value)
+
+            case .plusEqual:
+                value = try unwrap(existingValue + value)
+
+            case .slashEqual:
+                value = try unwrap(existingValue / value)
+
+            case .starEqual:
+                value = try unwrap(existingValue * value)
+
+            default:
+                preconditionFailure("unimplemented assignment operator \(expression.op)")
+            }
 
             return try environment.set(expression.identifier, value: value)
         }

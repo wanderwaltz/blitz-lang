@@ -15,7 +15,7 @@ extension ASTPrinter: ASTVisitor {
     typealias ReturnValue = String
 
     func visitAssignmentExpression(_ expression: AssignmentExpression) -> String {
-        return parenthesize(expression.identifier, "=", print(expression.value))
+        return parenthesize(expression.identifier, expression.op, print(expression.value))
     }
 
     func visitBinaryExpression(_ expression: BinaryExpression) -> String {

@@ -35,6 +35,27 @@ while i > 0 {
 
 print "testing for statement"
 
-for (var i = 0; i < 10; i = i + 1) {
+for (var i = 0; i < 10; i += 1) {
     print i
 }
+
+print "testing arithmetic-assignment operators"
+
+var q = 5
+
+q += 1
+
+print q
+
+q -= 1
+
+print q
+
+q *= 2
+
+print q
+
+let w = q /= 2
+
+print q
+print w

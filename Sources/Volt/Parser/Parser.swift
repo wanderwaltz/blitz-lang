@@ -192,12 +192,13 @@ private final class ParserImpl {
     private func parseAssignment() throws -> Expression {
         let expression = try parseOr()
 
-        if match(.equal) {
+        if match(.equal, .minusEqual, .plusEqual, .slashEqual, .starEqual) {
+            let op = previous()
             let value = try parseAssignment()
 
             if let variableExpression = expression as? VariableExpression {
                 let name = variableExpression.identifier
-                return AssignmentExpression(identifier: name, value: value)
+                return AssignmentExpression(identifier: name, op: op, value: value)
             }
 
             throw error("invalid assignment")
