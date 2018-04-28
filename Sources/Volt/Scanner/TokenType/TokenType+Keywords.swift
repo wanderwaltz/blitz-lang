@@ -2,6 +2,7 @@ extension TokenType {
     static let keywords: [String:TokenType] = {
         let keywordTokens: [TokenType] = [
             .`and`,
+            .`break`,
             .`class`,
             .`else`,
             .`false`,

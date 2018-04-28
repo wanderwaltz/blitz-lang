@@ -8,6 +8,7 @@ case minus
 case plus
 case rightBrace
 case rightParen
+case semicolon
 case slash
 case star
 
@@ -29,6 +30,7 @@ case string
 
 // keywords
 case `and`
+case `break`
 case `class`
 case `else`
 case `false`

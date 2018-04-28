@@ -74,6 +74,10 @@ extension ASTPrinter: ASTVisitor {
         return parenthesize("print", print(statement.expression))
     }
 
+    func visitSingleKeywordStatement(_ statement: SingleKeywordStatement) -> String {
+        return parenthesize(statement.keyword)
+    }
+
     func visitVariableDeclarationStatement(_ statement: VariableDeclarationStatement) -> String {
         return parenthesize(statement.keyword, statement.identifier, "=", print(statement.initializer))
     }

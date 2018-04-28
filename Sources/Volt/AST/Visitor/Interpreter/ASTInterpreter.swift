@@ -223,6 +223,18 @@ extension ASTInterpreter: ASTVisitor {
         }
     }
 
+    func visitSingleKeywordStatement(_ statement: SingleKeywordStatement) -> Result {
+        return captureValue {
+            switch statement.keyword.type {
+            case .break:
+                throw ASTIntepreterRuntimeError(code: .break, message: "")
+
+            default:
+                preconditionFailure("unimplemented \(statement.keyword) statement")
+            }
+        }
+    }
+
     func visitVariableDeclarationStatement(_ statement: VariableDeclarationStatement) -> Result {
         return captureValue {
             let value = try evaluate(statement.initializer)
@@ -242,9 +254,29 @@ extension ASTInterpreter: ASTVisitor {
             var value: Value = .nil
 
             var condition = try evaluate(statement.condition)
+            var breakFromLoop = false
 
             while condition.boolValue {
-                value = try evaluate(statement.body)
+                do {
+                    value = try evaluate(statement.body)
+                }
+                catch let error as RuntimeError {
+                    switch error.code {
+                    case .break:
+                        breakFromLoop = true
+
+                    default:
+                        throw error
+                    }
+                }
+                catch let error {
+                    throw error
+                }
+
+                if breakFromLoop {
+                    break
+                }
+
                 condition = try evaluate(statement.condition)
             }
 

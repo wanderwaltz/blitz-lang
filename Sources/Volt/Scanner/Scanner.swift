@@ -44,6 +44,7 @@ private final class ScannerImpl {
         case "-": addToken(.minus)
         case "+": addToken(.plus)
         case "*": addToken(.star)
+        case ";": addToken(.semicolon)
 
         // one or two character tokens
         case "!": addToken(match("=") ? .bangEqual : .bang)

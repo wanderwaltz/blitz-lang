@@ -49,6 +49,10 @@ private final class ParserImpl {
     }
 
     private func parseStatement() throws -> Statement {
+        if match(.break) {
+            return SingleKeywordStatement(keyword: previous())
+        }
+
         if match(.if) {
             return try parseIfStatement()
         }
@@ -59,6 +63,10 @@ private final class ParserImpl {
 
         if match(.while) {
             return try parseWhileStatement()
+        }
+
+        if match(.for) {
+            return try parseForStatement()
         }
 
         if match(.leftBrace) {
@@ -97,6 +105,68 @@ private final class ParserImpl {
         try consume(.leftBrace, "expected { after while")
         let body = try parseBlockStatement()
         return WhileStatement(condition: condition, body: body)
+    }
+
+    private func parseForStatement() throws -> Statement {
+        try consume(.leftParen, "expected ( after for")
+
+        var initializer: Statement?
+
+        if check(.semicolon) {
+            // no initializer
+        }
+        else if match(.var) {
+            initializer = try parseVarDeclaration()
+        }
+        else {
+            initializer = try parseExpressionStatement()
+        }
+
+        try consume(.semicolon, "expected ; after loop initializer")
+
+        var condition: Expression?
+
+        if !check(.semicolon) {
+            condition = try parseExpression()
+        }
+
+        try consume(.semicolon, "expected ; after loop condition")
+
+        var increment: Expression?
+
+        if !check(.rightParen) {
+            increment = try parseExpression()
+        }
+
+        try consume(.rightParen, "expected ) after for clauses")
+        try consume(.leftBrace, "expected { after for clauses")
+
+        var body = try parseBlockStatement()
+
+        if let increment = increment {
+            body = BlockStatement(
+                statements: [
+                    body,
+                    ExpressionStatement(expression: increment)
+                ]
+            )
+        }
+
+        body = WhileStatement(
+            condition: condition ?? LiteralExpression(literal: .true),
+            body: body
+        )
+
+        if let initializer = initializer {
+            body = BlockStatement(
+                statements: [
+                    initializer,
+                    body
+                ]
+            )
+        }
+
+        return body
     }
 
     private func parseBlockStatement() throws -> Statement {

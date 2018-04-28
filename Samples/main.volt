@@ -26,4 +26,15 @@ var i = 10
 while i > 0 {
     print i
     i = i - 1
+
+    if i == 5 {
+        print "break here"
+        break
+    }
+}
+
+print "testing for statement"
+
+for (var i = 0; i < 10; i = i + 1) {
+    print i
 }

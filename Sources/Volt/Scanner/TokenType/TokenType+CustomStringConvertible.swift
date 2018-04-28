@@ -10,6 +10,7 @@ extension TokenType: CustomStringConvertible {
         case .plus: return "+"
         case .rightBrace: return "}"
         case .rightParen: return ")"
+        case .semicolon: return ";"
         case .slash: return "/"
         case .star: return "*"
 
@@ -31,6 +32,7 @@ extension TokenType: CustomStringConvertible {
 
         // keywords
         case .`and`: return "and"
+        case .`break`: return "break"
         case .`class`: return "class"
         case .`else`: return "else"
         case .`false`: return "false"
