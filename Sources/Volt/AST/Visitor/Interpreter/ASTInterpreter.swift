@@ -36,7 +36,12 @@ final class ASTInterpreter {
 
         // atExit statements are executed even in case of error
         for statement in block.atExit {
-            _ = statement.accept(self)
+            let r = statement.accept(self)
+
+            switch r {
+            case .value: break
+            case .runtimeError: result = r
+            }
         }
 
         return result

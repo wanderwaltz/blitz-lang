@@ -86,7 +86,7 @@ print "testing defer"
 print "testing defer in for loop"
 
 for (var i = 0; i < 10; i += 1) {
-    defer {
+    defer { sdsfsdf
         print "deferred " + i
     }
 
