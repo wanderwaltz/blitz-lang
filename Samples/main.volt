@@ -87,12 +87,12 @@ print "testing defer in for loop"
 
 for (var i = 0; i < 10; i += 1) {
     defer {
-        print i
+        print "deferred " + i
     }
 
     if i == 5 {
         continue
     }
 
-    print "---"
+    print i
 }

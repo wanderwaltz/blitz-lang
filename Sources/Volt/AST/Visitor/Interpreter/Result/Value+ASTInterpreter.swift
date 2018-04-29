@@ -7,6 +7,10 @@ extension Value {
         case let .string(value): return !value.isEmpty
         }
     }
+
+    var stringValue: String {
+        return description
+    }
 }
 
 prefix func ! (value: Value) -> ASTInterpreterResult {
@@ -26,7 +30,8 @@ prefix func - (value: Value) -> ASTInterpreterResult {
 func + (left: Value, right: Value) -> ASTInterpreterResult {
     switch (left, right) {
     case let (.number(ln), .number(rn)): return .value(.number(ln + rn))
-    case let (.string(ls), .string(rs)): return .value(.string(ls + rs))
+    case let (.string(ls), _): return .value(.string(ls + right.stringValue))
+    case let (_, .string(rs)): return .value(.string(left.stringValue + rs))
     default:
         return binaryOperator("+", isNotApplicableTo: left.typeName, and: right.typeName)
     }
