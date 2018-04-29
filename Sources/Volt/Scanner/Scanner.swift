@@ -222,8 +222,14 @@ private final class ScannerImpl {
     }
 
     private func error(_ code: ScannerError.Code) -> ScannerError {
-        let position = source.distance(from: lineStart, to: tokenStart)
-        return ScannerError(code: .unexpectedToken, line: lineNumber, position: position)
+        return ScannerError(code: .unexpectedToken, location: currentSourceLocation)
+    }
+
+    private var currentSourceLocation: SourceLocation {
+        return .init(
+            line: lineNumber,
+            offset: source.distance(from: lineStart, to: tokenStart)
+        )
     }
 
     private var isAtEnd: Bool {

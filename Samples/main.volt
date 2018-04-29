@@ -1,6 +1,6 @@
 import sample_module
 
-let x = 123
+let x = 123 $
 
 {
     if x > 1000 {

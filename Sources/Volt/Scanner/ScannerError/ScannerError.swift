@@ -6,6 +6,5 @@ struct ScannerError: Error {
     }
 
     let code: Code
-    let line: Int
-    let position: Int
+    let location: SourceLocation
 }

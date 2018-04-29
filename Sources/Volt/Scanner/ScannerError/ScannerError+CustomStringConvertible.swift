@@ -13,6 +13,6 @@ extension ScannerError: CustomStringConvertible {
     }
 
     private var at: String {
-        return "at line \(line):\(position)"
+        return "at line \(location)"
     }
 }

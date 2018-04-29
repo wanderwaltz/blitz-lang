@@ -403,32 +403,32 @@ extension ScannerTests {
 
     func test__unexpected_token__error_line__case_0() {
         expect_error_scanning("±") { error in
-            XCTAssertEqual(error.line, 0)
+            XCTAssertEqual(error.location.line, 0)
         }
     }
 
     func test__unexpected_token__error_line__case_1() {
         expect_error_scanning("+\n±") { error in
-            XCTAssertEqual(error.line, 1)
+            XCTAssertEqual(error.location.line, 1)
         }
     }
 
     func test__unexpected_token__error_position__case_0() {
         expect_error_scanning("±") { error in
-            XCTAssertEqual(error.line, 0)
+            XCTAssertEqual(error.location.line, 0)
         }
     }
 
     func test__unexpected_token__error_position__case_1() {
         expect_error_scanning("+±") { error in
-            XCTAssertEqual(error.position, 1)
+            XCTAssertEqual(error.location.offset, 1)
         }
     }
 
     func test__unexpected_token__error_location() {
         expect_error_scanning("+\n+±") { error in
-            XCTAssertEqual(error.line, 1)
-            XCTAssertEqual(error.position, 1)
+            XCTAssertEqual(error.location.line, 1)
+            XCTAssertEqual(error.location.offset, 1)
         }
     }
 }
