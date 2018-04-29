@@ -36,6 +36,7 @@ case string
 case `and`
 case `break`
 case `class`
+case `continue`
 case `else`
 case `false`
 case `for`

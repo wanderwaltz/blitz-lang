@@ -12,10 +12,11 @@ final class ASTInterpreter {
 
     @discardableResult
     func execute(_ program: [Statement]) -> Result {
-        return executeBlock(program, environment: rootEnvironment)
+        let block = BlockStatement(statements: program)
+        return executeBlock(block, environment: rootEnvironment)
     }
 
-    private func executeBlock(_ statements: [Statement], environment: Environment) -> Result {
+    private func executeBlock(_ block: BlockStatement, environment: Environment) -> Result {
         let previousEnvironment = self.environment
         defer {
             self.environment = previousEnvironment
@@ -25,12 +26,17 @@ final class ASTInterpreter {
 
         var result: Result = .value(.nil)
 
-        for statement in statements {
+        for statement in block.statements {
             result = result.flatMap({ _ in statement.accept(self) })
 
             if case .runtimeError = result {
                 break
             }
+        }
+
+        // atExit statements are executed even in case of error
+        for statement in block.atExit {
+            _ = statement.accept(self)
         }
 
         return result
@@ -191,7 +197,7 @@ extension ASTInterpreter: ASTVisitor {
     }
 
     func visitBlockStatement(_ statement: BlockStatement) -> Result {
-        return executeBlock(statement.statements, environment: Environment(parent: environment))
+        return executeBlock(statement, environment: Environment(parent: environment))
     }
 
     func visitExpressionStatement(_ statement: ExpressionStatement) -> Result {
@@ -252,6 +258,9 @@ extension ASTInterpreter: ASTVisitor {
             case .break:
                 throw ASTIntepreterRuntimeError(code: .break, message: "")
 
+            case .continue:
+                throw ASTIntepreterRuntimeError(code: .continue, message: "")
+
             default:
                 preconditionFailure("unimplemented \(statement.keyword) statement")
             }
@@ -287,6 +296,9 @@ extension ASTInterpreter: ASTVisitor {
                     switch error.code {
                     case .break:
                         breakFromLoop = true
+
+                    case .continue:
+                        continue
 
                     default:
                         throw error

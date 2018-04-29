@@ -35,7 +35,13 @@ while i > 0 {
 
 print "testing for statement"
 
+print "testing continue in for loop"
+
 for (var i = 0; i < 10; i += 1) {
+    if i == 5 {
+        continue
+    }
+
     print i
 }
 

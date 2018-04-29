@@ -4,6 +4,7 @@ extension TokenType {
             .`and`,
             .`break`,
             .`class`,
+            .`continue`,
             .`else`,
             .`false`,
             .`for`,

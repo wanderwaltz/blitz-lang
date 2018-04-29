@@ -43,12 +43,24 @@ extension ASTPrinter: ASTVisitor {
     }
 
     func visitBlockStatement(_ statement: BlockStatement) -> String {
-        let statements = statement.statements.map({ print($0) }).joined(separator: "\n")
+        var components: [String] = ["{\n", indentedStatements(statement.statements), "\n}"]
+
+        if !statement.atExit.isEmpty {
+            components.append("atExit {\n")
+            components.append(indentedStatements(statement.atExit))
+            components.append("\n}")
+        }
+
+        return parenthesize(components.joined(separator: " "))
+    }
+
+    private func indentedStatements(_ statements: [Statement]) -> String {
+        let printedStatements = statements.map({ print($0) }).joined(separator: "\n")
         let oldIndentation = indentation
         indentation += "    "
-        let indentedStatements = indent(statements)
+        let indentedStatements = indent(printedStatements)
         indentation = oldIndentation
-        return parenthesize("{\n", indentedStatements, "\n}")
+        return indentedStatements
     }
 
     func visitExpressionStatement(_ statement: ExpressionStatement) -> String {

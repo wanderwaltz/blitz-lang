@@ -6,6 +6,7 @@ struct ASTIntepreterRuntimeError: Error {
     case settingImmutableValue = 4
     case cannotImportModule = 5
     case `break` = 6
+    case `continue` = 7
     }
 
     let code: Code

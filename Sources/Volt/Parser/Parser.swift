@@ -49,7 +49,7 @@ private final class ParserImpl {
     }
 
     private func parseStatement() throws -> Statement {
-        if match(.break) {
+        if match(.break, .continue) {
             return SingleKeywordStatement(keyword: previous())
         }
 
@@ -108,6 +108,8 @@ private final class ParserImpl {
     }
 
     private func parseForStatement() throws -> Statement {
+        // `for` loop is transformed into `while` loop during parsing
+        // so that we don't need another statement class for it
         try consume(.leftParen, "expected ( after for")
 
         var initializer: Statement?
@@ -146,7 +148,9 @@ private final class ParserImpl {
         if let increment = increment {
             body = BlockStatement(
                 statements: [
-                    body,
+                    body
+                ],
+                atExit: [
                     ExpressionStatement(expression: increment)
                 ]
             )
