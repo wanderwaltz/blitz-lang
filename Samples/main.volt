@@ -65,3 +65,34 @@ let w = q /= 2
 
 print q
 print w
+
+print "testing defer"
+{
+    print "block 1"
+
+    defer {
+        print "first defer 1"
+        print "first defer 2"
+    }
+
+    defer {
+        print "second defer 1"
+        print "second defer 2"
+    }
+
+    print "block 2"
+}
+
+print "testing defer in for loop"
+
+for (var i = 0; i < 10; i += 1) {
+    defer {
+        print i
+    }
+
+    if i == 5 {
+        continue
+    }
+
+    print "---"
+}

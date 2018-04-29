@@ -175,13 +175,29 @@ private final class ParserImpl {
 
     private func parseBlockStatement() throws -> Statement {
         var statements: [Statement] = []
+        var atExit: [Statement] = []
 
         while !check(.rightBrace) && !isAtEnd {
+            // parse deferred statements for block
+            if match(.defer) {
+                try consume(.leftBrace, "expected { after defer")
+                var deferredStatements: [Statement] = []
+
+                while !check(.rightBrace) && !isAtEnd {
+                    deferredStatements.append(try parseDeclaration())
+                }
+
+                try consume(.rightBrace, "expected } after defer")
+
+                atExit = deferredStatements + atExit
+                continue
+            }
+
             statements.append(try parseDeclaration())
         }
 
-        try consume(.rightBrace, "expected }")
-        return BlockStatement(statements: statements)
+        try consume(.rightBrace, "expected } after block")
+        return BlockStatement(statements: statements, atExit: atExit)
     }
 
     private func parseExpressionStatement() throws -> ExpressionStatement {

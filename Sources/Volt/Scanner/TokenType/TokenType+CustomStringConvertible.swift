@@ -39,6 +39,7 @@ extension TokenType: CustomStringConvertible {
         case .`break`: return "break"
         case .`class`: return "class"
         case .`continue`: return "continue"
+        case .`defer`: return "defer"
         case .`else`: return "else"
         case .`false`: return "false"
         case .`for`: return "for"

@@ -5,6 +5,7 @@ extension TokenType {
             .`break`,
             .`class`,
             .`continue`,
+            .`defer`,
             .`else`,
             .`false`,
             .`for`,

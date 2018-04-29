@@ -37,6 +37,7 @@ case `and`
 case `break`
 case `class`
 case `continue`
+case `defer`
 case `else`
 case `false`
 case `for`
