@@ -1,6 +1,8 @@
 import XCTest
 @testable import Volt
 
+let FLOAT_TOLERANCE = 1e-7
+
 func expect_source(_ source: String,
                    yields boolValue: Bool,
                    file: StaticString = #file,
@@ -45,6 +47,7 @@ func expect_source(_ source: String,
 
 func expect_source(_ source: String,
                    yields numberValue: Number,
+                   tolerance: Double = 0.0,
                    file: StaticString = #file,
                    line: UInt = #line) {
     with_result_of_interpreting(source, do: { result in
@@ -52,7 +55,7 @@ func expect_source(_ source: String,
         case let .value(value):
             switch value {
             case let .number(result):
-                XCTAssertEqual(result, numberValue, file: file, line: line)
+                XCTAssertEqual(result, numberValue, accuracy: tolerance, file: file, line: line)
 
             default:
                 XCTFail("Type mismatch: expected \(Number.self), got \(value)", file: file, line: line)
