@@ -1,4 +1,4 @@
-struct SourceLocation {
-    let line: Int
-    let offset: Int
+public struct SourceLocation {
+    public let line: Int
+    public let offset: Int
 }

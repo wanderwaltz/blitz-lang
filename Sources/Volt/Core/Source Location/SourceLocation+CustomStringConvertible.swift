@@ -1,5 +1,5 @@
 extension SourceLocation: CustomStringConvertible {
-    var description: String {
+    public var description: String {
         return "\(line):\(offset)"
     }
 }

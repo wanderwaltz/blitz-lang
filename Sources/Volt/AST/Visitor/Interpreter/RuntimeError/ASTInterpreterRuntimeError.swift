@@ -1,5 +1,5 @@
-struct ASTIntepreterRuntimeError: Error {
-    enum Code: Int {
+public struct ASTIntepreterRuntimeError: Error {
+    public enum Code: Int {
     case typeError = 1
     case invalidRedefenition = 2
     case unknownIdentifier = 3
@@ -9,7 +9,7 @@ struct ASTIntepreterRuntimeError: Error {
     case `continue` = 7
     }
 
-    let code: Code
-    let message: String
-    let location: SourceLocation
+    public let code: Code
+    public let message: String
+    public let location: SourceLocation
 }
