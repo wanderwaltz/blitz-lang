@@ -1,5 +1,5 @@
 extension ParserError: CustomStringConvertible {
-    var description: String {
+    public var description: String {
         return message
     }
 }

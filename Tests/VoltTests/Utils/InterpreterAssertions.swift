@@ -107,6 +107,25 @@ func expect_source(_ source: String,
     })
 }
 
+func expect_source(_ source: String,
+                   yields_parse_error expectedMessage: String,
+                   file: StaticString = #file,
+                   line: UInt = #line) {
+     do {
+         let tokens = try Scanner().process(source)
+         let ast = try Parser().parse(tokens)
+         let interpreter = ASTInterpreter()
+         let result = interpreter.execute(ast)
+         XCTFail("Unexpected result received: \(result) (expected a compile-time error)", file: file, line: line)
+     }
+     catch let parserError as ParserError {
+         XCTAssertEqual(parserError.message, expectedMessage, file: file, line: line)
+     }
+     catch let error {
+         XCTFail("Unexpected error: \(error)", file: file, line: line)
+     }
+}
+
 func with_result_of_interpreting(_ source: String,
                                  do block: (ASTInterpreterResult) -> Void,
                                  file: StaticString = #file,

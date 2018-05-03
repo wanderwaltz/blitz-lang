@@ -1,3 +1,3 @@
-struct ParserError: Error {
-    let message: String
+public struct ParserError: Error {
+    public let message: String
 }
