@@ -11,4 +11,5 @@ struct ASTIntepreterRuntimeError: Error {
 
     let code: Code
     let message: String
+    let location: SourceLocation
 }

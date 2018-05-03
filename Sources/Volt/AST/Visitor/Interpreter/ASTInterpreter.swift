@@ -71,19 +71,20 @@ extension ASTInterpreter: ASTVisitor {
             }
 
             let existingValue = try environment.get(expression.identifier)
+            let location = expression.op.location
 
             switch expression.op.type {
             case .minusEqual:
-                value = try unwrap(existingValue - value)
+                value = try unwrap(existingValue.subtracting(value, at: location))
 
             case .plusEqual:
-                value = try unwrap(existingValue + value)
+                value = try unwrap(existingValue.adding(value, at: location))
 
             case .slashEqual:
-                value = try unwrap(existingValue / value)
+                value = try unwrap(existingValue.dividing(by: value, at: location))
 
             case .starEqual:
-                value = try unwrap(existingValue * value)
+                value = try unwrap(existingValue.multiplying(by: value, at: location))
 
             default:
                 preconditionFailure("unimplemented assignment operator \(expression.op)")
@@ -97,31 +98,32 @@ extension ASTInterpreter: ASTVisitor {
         return captureResult {
             let left = try evaluate(expression.left)
             let right = try evaluate(expression.right)
+            let location = expression.op.location
 
             switch expression.op.type {
             case .plus:
-                return left + right
+                return left.adding(right, at: location)
 
             case .minus:
-                return left - right
+                return left.subtracting(right, at: location)
 
             case .star:
-                return left * right
+                return left.multiplying(by: right, at: location)
 
             case .slash:
-                return left / right
+                return left.dividing(by: right, at: location)
 
             case .greater:
-                return left > right
+                return left.isGreater(than: right, at: location)
 
             case .greaterEqual:
-                return left >= right
+                return left.isNotLess(than: right, at: location)
 
             case .less:
-                return left < right
+                return left.isLess(than: right, at: location)
 
             case .lessEqual:
-                return left <= right
+                return left.isNotGreater(than: right, at: location)
 
             case .equalEqual:
                 return .value(.bool(left == right))
@@ -181,13 +183,14 @@ extension ASTInterpreter: ASTVisitor {
     func visitUnaryExpression(_ expression: UnaryExpression) -> Result {
         return captureResult {
             let value = try evaluate(expression.expression)
+            let location = expression.op.location
 
             switch expression.op.type {
             case .minus:
-                return -value
+                return value.arithmeticalNegated(at: location)
 
             case .bang, .not:
-                return !value
+                return value.logicalNegated
 
             default:
                 preconditionFailure("unimplemented unary operator: \(expression.op)")
@@ -233,7 +236,8 @@ extension ASTInterpreter: ASTVisitor {
             guard let delegate = delegate else {
                 throw RuntimeError(
                     code: .cannotImportModule,
-                    message: "cannot import module '\(moduleName)': interpeter delegate is not set"
+                    message: "cannot import module '\(moduleName)': interpeter delegate is not set",
+                    location: statement.identifier.location
                 )
             }
 
@@ -258,13 +262,15 @@ extension ASTInterpreter: ASTVisitor {
     }
 
     func visitSingleKeywordStatement(_ statement: SingleKeywordStatement) -> Result {
+        let location = statement.keyword.location
+
         return captureValue {
             switch statement.keyword.type {
             case .break:
-                throw ASTIntepreterRuntimeError(code: .break, message: "")
+                throw ASTIntepreterRuntimeError(code: .break, message: "", location: location)
 
             case .continue:
-                throw ASTIntepreterRuntimeError(code: .continue, message: "")
+                throw ASTIntepreterRuntimeError(code: .continue, message: "", location: location)
 
             default:
                 preconditionFailure("unimplemented \(statement.keyword) statement")

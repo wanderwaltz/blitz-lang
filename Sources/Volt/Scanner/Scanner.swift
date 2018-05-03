@@ -156,21 +156,24 @@ private final class ScannerImpl {
     private func addToken(_ type: TokenType) {
         scannedTokens.append(.init(
             type: type,
-            lexeme: currentLexeme()
+            lexeme: currentLexeme(),
+            location: currentSourceLocation
         ))
     }
 
     private func addNumberToken(_ number: Number) {
         scannedTokens.append(.init(
             literal: number,
-            lexeme: currentLexeme()
+            lexeme: currentLexeme(),
+            location: currentSourceLocation
         ))
     }
 
     private func addStringToken(_ string: String) {
         scannedTokens.append(.init(
             literal: string,
-            lexeme: currentLexeme()
+            lexeme: currentLexeme(),
+            location: currentSourceLocation
         ))
     }
 

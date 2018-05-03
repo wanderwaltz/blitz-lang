@@ -1,5 +1,5 @@
 extension ASTIntepreterRuntimeError: CustomStringConvertible {
     var description: String {
-        return "[\(code.rawValue)]: \(message)"
+        return "[\(code.rawValue)] line \(location): \(message)"
     }
 }

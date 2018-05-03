@@ -1,6 +1,6 @@
 import sample_module
 
-let x = 123 $
+let x = 123
 
 {
     if x > 1000 {
@@ -86,7 +86,7 @@ print "testing defer"
 print "testing defer in for loop"
 
 for (var i = 0; i < 10; i += 1) {
-    defer { sdsfsdf
+    defer {
         print "deferred " + i
     }
 
