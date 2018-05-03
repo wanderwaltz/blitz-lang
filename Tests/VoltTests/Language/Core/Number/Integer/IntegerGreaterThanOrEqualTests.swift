@@ -16,5 +16,7 @@ final class IntegerGreaterThanOrEqualTests: XCTestCase {
     func test__integer_greater_than_or_equal__type_errors() {
         expect_source("5 >= \"4\"", yields: .typeError)
         expect_source("5 >= nil", yields: .typeError)
+        expect_source("5 >= true", yields: .typeError)
+        expect_source("5 >= false", yields: .typeError)
     }
 }
