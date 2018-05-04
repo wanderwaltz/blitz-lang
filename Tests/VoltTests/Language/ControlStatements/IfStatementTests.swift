@@ -325,48 +325,51 @@ final class IfStatementTests: XCTestCase {
         )
     }
 
-    func testThat__it_evaluates_then_body_in_containing_scope() {
+    func testThat__it_creates_a_scope_for_then_body() {
         expect_source(
             """
-            let a = 123
+            var a = 123
             if true {
-                a + 1
+                var a = 1
             }
+            a
             """,
-            yields: 124
+            yields: 123
         )
     }
 
-    func testThat__it_evaluates_else_body_in_containing_scope() {
+    func testThat__it_creates_a_scope_for_else_body() {
         expect_source(
             """
-            let a = 123
+            var a = 123
             if false {
-                a + 1
+                var a = 1
             }
             else {
-                a + 2
+                var a = 2
             }
+            a
             """,
-            yields: 125
+            yields: 123
         )
     }
 
-    func testThat__it_evaluates_else_if_body_in_containing_scope() {
+    func testThat__it_creates_a_scope_for_else_if_body() {
         expect_source(
             """
-            let a = 123
+            var a = 123
             if false {
-                a + 1
+                var a = 1
             }
             else if true {
-                a + 2
+                var a = 2
             }
             else {
-                a + 3
+                var a = 3
             }
+            a
             """,
-            yields: 125
+            yields: 123
         )
     }
 }
