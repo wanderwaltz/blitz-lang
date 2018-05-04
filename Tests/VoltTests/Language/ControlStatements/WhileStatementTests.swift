@@ -137,7 +137,7 @@ final class WhileStatementTests: XCTestCase {
         )
     }
 
-    func testThat__it_skips_to_then_end_of_the_body_with_continue() {
+    func testThat__it_skips_to_the_end_of_the_body_with_continue() {
         expect_source(
             """
             var i = 0

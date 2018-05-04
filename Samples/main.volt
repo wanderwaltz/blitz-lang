@@ -96,3 +96,18 @@ for (var i = 0; i < 10; i += 1) {
 
     print i
 }
+
+
+print "testing breaking out of for"
+
+var qq = 0
+for (var i = 0; i < 10; i += 1) {
+    print "-- (for-before) i: " + i + " qq: " + qq
+    qq += 1
+    if i > 5 {
+        break
+    }
+    print "(for-after) i: " + i + " qq: " + qq
+}
+
+print "after loop qq: " + qq
