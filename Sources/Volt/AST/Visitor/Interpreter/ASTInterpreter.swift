@@ -241,7 +241,11 @@ extension ASTInterpreter: ASTVisitor {
 
     func visitFunctionDeclarationStatement(_ statement: FunctionDeclarationStatement) -> Result {
         return captureValue {
-            let function = Function(declaration: statement)
+            let function = Function(
+                declaration: statement,
+                closure: environment
+            )
+            
             let value: Value = .object(function)
             try environment.defineVariable(named: statement.name, value: value, isMutable: false)
             return value

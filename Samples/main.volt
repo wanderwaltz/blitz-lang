@@ -1,8 +1,13 @@
-func fibonacci(n) {
-    if (n <= 1) {
-        return n
+func makeCounter() {
+    var i = 0
+    func count() {
+        i = i + 1
+        print i
     }
-    return fibonacci(n - 2) + fibonacci(n - 1)
+
+    return count
 }
 
-print fibonacci(7)
+var counter = makeCounter()
+counter() // "1".
+counter() // "2".

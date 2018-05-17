@@ -4,7 +4,7 @@ extension Function: Callable {
             throw InternalError.invalidNumberOfArguments(expected: arity, got: arguments.count)
         }
 
-        let environment = ASTInterpreterEnvironment(parent: interpreter.rootEnvironment)
+        let environment = ASTInterpreterEnvironment(parent: closure)
 
         for i in 0..<arity {
             let parameter = declaration.parameters[i]

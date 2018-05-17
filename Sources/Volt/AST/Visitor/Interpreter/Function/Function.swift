@@ -1,5 +1,6 @@
 struct Function {
     let declaration: FunctionDeclarationStatement
+    let closure: ASTInterpreterEnvironment
 }
 
 extension Function {
