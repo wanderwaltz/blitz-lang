@@ -6,6 +6,8 @@ final class ASTInterpreter {
 
     weak var delegate: ASTInterpreterDelegate?
 
+    let rootEnvironment = Environment()
+
     init() {
         environment = rootEnvironment
     }
@@ -16,7 +18,7 @@ final class ASTInterpreter {
         return executeBlock(block, environment: rootEnvironment)
     }
 
-    private func executeBlock(_ block: BlockStatement, environment: Environment) -> Result {
+    func executeBlock(_ block: BlockStatement, environment: Environment) -> Result {
         let previousEnvironment = self.environment
         defer {
             self.environment = previousEnvironment
@@ -51,7 +53,6 @@ final class ASTInterpreter {
         return try unwrap(ast.accept(self))
     }
 
-    private let rootEnvironment = Environment()
     private var environment: Environment
 }
 
@@ -146,7 +147,7 @@ extension ASTInterpreter: ASTVisitor {
             })
 
             do {
-                return try callable.call(arguments: arguments)
+                return try callable.call(interpreter: self, arguments: arguments)
             }
             catch let internalError as InternalError {
                 switch internalError {
@@ -234,6 +235,15 @@ extension ASTInterpreter: ASTVisitor {
 
     func visitExpressionStatement(_ statement: ExpressionStatement) -> Result {
         return captureValue { try evaluate(statement.expression) }
+    }
+
+    func visitFunctionDeclarationStatement(_ statement: FunctionDeclarationStatement) -> Result {
+        return captureValue {
+            let function = Function(declaration: statement)
+            let value: Value = .object(function)
+            try environment.defineVariable(named: statement.name, value: value, isMutable: false)
+            return value
+        }
     }
 
     func visitIfStatement(_ statement: IfStatement) -> Result {
@@ -389,13 +399,18 @@ extension ASTInterpreter {
 // MARK: - call support
 extension ASTInterpreter {
     private func getCallable(for callee: Expression, at location: SourceLocation) throws -> Callable {
-        return AnyCallable({ args in
-            .string(args.map({ String(describing: $0)}).joined(separator: " "))
-        })
-        // throw ASTIntepreterRuntimeError(
-        //     code: .invalidCallee,
-        //     message: "cannot call \(callee)",
-        //     location: location
-        // )
+        let calleeValue = try evaluate(callee)
+
+        switch calleeValue {
+        case let .object(callable as Callable):
+            return callable
+
+        default:
+            throw ASTIntepreterRuntimeError(
+                code: .invalidCallee,
+                message: "cannot call \(callee)",
+                location: location
+            )
+        }
     }
 }

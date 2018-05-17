@@ -72,6 +72,19 @@ extension ASTPrinter: ASTVisitor {
         return print(statement.expression)
     }
 
+    func visitFunctionDeclarationStatement(_ statement: FunctionDeclarationStatement) -> String {
+        let components: [String] = [
+            "func",
+            statement.name.lexeme,
+            "(",
+            statement.parameters.map({ $0.lexeme }).joined(separator: ", "),
+            ")",
+            print(statement.body)
+        ]
+
+        return parenthesize(components.joined(separator: " "))
+    }
+
     func visitIfStatement(_ statement: IfStatement) -> String {
         var components: [String] = ["if", print(statement.condition), print(statement.thenStatement)]
 

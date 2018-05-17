@@ -1,3 +1,3 @@
 protocol Callable {
-    func call(arguments: [Value]) throws -> Value
+    func call(interpreter: ASTInterpreter, arguments: [Value]) throws -> Value
 }

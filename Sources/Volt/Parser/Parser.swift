@@ -24,6 +24,10 @@ private final class ParserImpl {
             return try parseImportStatement()
         }
 
+        if match(.func) {
+            return try parseFunctionDeclaration(kind: "function")
+        }
+
         if match(.var, .let) {
             return try parseVarDeclaration()
         }
@@ -34,6 +38,31 @@ private final class ParserImpl {
     private func parseImportStatement() throws -> Statement {
         let name = try consume(.identifier, "expected module name")
         return ImportStatement(identifier: name)
+    }
+
+    private func parseFunctionDeclaration(kind: String) throws -> Statement {
+        let name = try consume(.identifier, "expected \(kind) name")
+
+        try consume(.leftParen, "expecred ( after \(kind) name")
+
+        var parameters: [Token] = []
+
+        if !check(.rightParen) {
+            repeat {
+                parameters.append(try consume(.identifier, "expected parameter name"))
+            } while match(.comma)
+        }
+
+        try consume(.rightParen, "expected ) after \(kind) parameter list")
+        try consume(.leftBrace, "expected { before \(kind) body")
+
+        let body = try parseBlockStatement()
+
+        return FunctionDeclarationStatement(
+            name: name,
+            parameters: parameters,
+            body: body
+        )
     }
 
     private func parseVarDeclaration() throws -> Statement {
@@ -143,7 +172,7 @@ private final class ParserImpl {
         try consume(.rightParen, "expected ) after for clauses")
         try consume(.leftBrace, "expected { after for clauses")
 
-        var body = try parseBlockStatement()
+        var body: Statement = try parseBlockStatement()
 
         if let increment = increment {
             body = BlockStatement(
@@ -173,7 +202,7 @@ private final class ParserImpl {
         return body
     }
 
-    private func parseBlockStatement() throws -> Statement {
+    private func parseBlockStatement() throws -> BlockStatement {
         var statements: [Statement] = []
         var atExit: [Statement] = []
 
