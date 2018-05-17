@@ -318,7 +318,40 @@ private final class ParserImpl {
             return UnaryExpression(op: op, expression: expr)
         }
 
-        return try parsePrimary()
+        return try parseCall()
+    }
+
+    private func parseCall() throws -> Expression {
+        var expr = try parsePrimary()
+
+        while true {
+            if match(.leftParen) {
+                expr = try parseCallCompletion(expr)
+            }
+            else {
+                break
+            }
+        }
+
+        return expr
+    }
+
+    private func parseCallCompletion(_ callee: Expression) throws -> Expression {
+        var arguments: [Expression] = []
+
+        if !check(.rightParen) {
+            repeat {
+                arguments.append(try parseExpression())
+            } while match(.comma)
+        }
+
+        let paren = try consume(.rightParen, "expected ) after call arguments")
+
+        return CallExpression(
+            callee: callee,
+            paren: paren,
+            arguments: arguments
+        )
     }
 
     private func parsePrimary() throws -> Expression {

@@ -137,6 +137,30 @@ extension ASTInterpreter: ASTVisitor {
         }
     }
 
+    func visitCallExpression(_ expression: CallExpression) -> Result {
+        return captureValue {
+            let location = expression.paren.location
+            let callable = try getCallable(for: expression.callee, at: location)
+            let arguments = try expression.arguments.map({ arg in
+                try evaluate(arg)
+            })
+
+            do {
+                return try callable.call(arguments: arguments)
+            }
+            catch let internalError as InternalError {
+                switch internalError {
+                case let .invalidNumberOfArguments(expected, got):
+                    throw ASTIntepreterRuntimeError(
+                        code: .invalidNumberOfArguments,
+                        message: "invalid number of arguments: expected \(expected), got: \(got)",
+                        location: location
+                    )
+                }
+            }
+        }
+    }
+
     func visitLiteralExpression(_ expression: LiteralExpression) -> Result {
         return captureValue { expression.literal.value }
     }
@@ -357,5 +381,21 @@ extension ASTInterpreter {
         case let .value(value): return value
         case let .runtimeError(error): throw error
         }
+    }
+}
+
+
+
+// MARK: - call support
+extension ASTInterpreter {
+    private func getCallable(for callee: Expression, at location: SourceLocation) throws -> Callable {
+        return AnyCallable({ args in
+            .string(args.map({ String(describing: $0)}).joined(separator: " "))
+        })
+        // throw ASTIntepreterRuntimeError(
+        //     code: .invalidCallee,
+        //     message: "cannot call \(callee)",
+        //     location: location
+        // )
     }
 }

@@ -22,6 +22,11 @@ extension ASTPrinter: ASTVisitor {
         return parenthesize(expression.left, expression.op, expression.right)
     }
 
+    func visitCallExpression(_ expression: CallExpression) -> String {
+        let arguments = expression.arguments.map({ print($0) }).joined(separator: ", ")
+        return parenthesize("call", print(expression.callee), "arguments: [", arguments, "]")
+    }
+
     func visitLiteralExpression(_ expression: LiteralExpression) -> String {
         return parenthesize(String(describing: expression))
     }
