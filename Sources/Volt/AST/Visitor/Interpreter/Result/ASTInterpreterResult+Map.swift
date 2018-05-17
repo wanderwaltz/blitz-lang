@@ -4,7 +4,7 @@ extension ASTInterpreterResult {
         case let .value(value):
             return mapping(value)
 
-        case .runtimeError:
+        case .runtimeError, .throwable:
             return self
         }
     }

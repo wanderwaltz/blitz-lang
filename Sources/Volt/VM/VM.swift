@@ -30,6 +30,9 @@ public final class VM {
         switch interpreter.execute(program.statements) {
         case let .value(value): return value
         case let .runtimeError(error): throw error
+
+        // TODO: make unhandled throwable command a separate error
+        case let .throwable(command): throw command
         }
     }
 

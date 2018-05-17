@@ -2,6 +2,7 @@
 final class ASTInterpreter {
     typealias Result = ASTInterpreterResult
     typealias RuntimeError = ASTIntepreterRuntimeError
+    typealias ThrowableCommand = ASTInterpreterThrowableCommand
     typealias Environment = ASTInterpreterEnvironment
 
     weak var delegate: ASTInterpreterDelegate?
@@ -43,6 +44,7 @@ final class ASTInterpreter {
             switch r {
             case .value: break
             case .runtimeError: result = r
+            case .throwable: result = r
             }
         }
 
@@ -295,16 +297,20 @@ extension ASTInterpreter: ASTVisitor {
         }
     }
 
-    func visitSingleKeywordStatement(_ statement: SingleKeywordStatement) -> Result {
-        let location = statement.keyword.location
+    func visitReturnStatement(_ statement: ReturnStatement) -> Result {
+        return captureResult {
+            throw ThrowableCommand.return(try evaluate(statement.value))
+        }
+    }
 
+    func visitSingleKeywordStatement(_ statement: SingleKeywordStatement) -> Result {
         return captureValue {
             switch statement.keyword.type {
             case .break:
-                throw ASTIntepreterRuntimeError(code: .break, message: "", location: location)
+                throw ThrowableCommand.break
 
             case .continue:
-                throw ASTIntepreterRuntimeError(code: .continue, message: "", location: location)
+                throw ThrowableCommand.continue
 
             default:
                 preconditionFailure("unimplemented \(statement.keyword) statement")
@@ -337,16 +343,16 @@ extension ASTInterpreter: ASTVisitor {
                 do {
                     value = try evaluate(statement.body)
                 }
-                catch let error as RuntimeError {
-                    switch error.code {
+                catch let command as ThrowableCommand {
+                    switch command {
                     case .break:
                         breakFromLoop = true
 
                     case .continue:
                         continue
 
-                    default:
-                        throw error
+                    case .return:
+                        throw command
                     }
                 }
                 catch let error {
@@ -381,6 +387,9 @@ extension ASTInterpreter {
         catch let error as RuntimeError {
             return .runtimeError(error)
         }
+        catch let command as ThrowableCommand {
+            return .throwable(command)
+        }
         catch let error {
             preconditionFailure("unexpected error received: \(error)")
         }
@@ -390,6 +399,7 @@ extension ASTInterpreter {
         switch result {
         case let .value(value): return value
         case let .runtimeError(error): throw error
+        case let .throwable(command): throw command
         }
     }
 }

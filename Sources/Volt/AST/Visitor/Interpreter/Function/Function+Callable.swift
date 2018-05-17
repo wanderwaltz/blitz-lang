@@ -18,6 +18,14 @@ extension Function: Callable {
         switch result {
         case let .value(value): return value
         case let .runtimeError(error): throw error
+        case let .throwable(command):
+            switch command {
+            case let .return(value):
+                return value
+
+            default:
+                throw command
+            }
         }
     }
 }

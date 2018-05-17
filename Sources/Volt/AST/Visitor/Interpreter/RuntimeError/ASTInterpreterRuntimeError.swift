@@ -7,8 +7,6 @@ public struct ASTIntepreterRuntimeError: Error {
     case cannotImportModule
     case invalidCallee
     case invalidNumberOfArguments
-    case `break`
-    case `continue`
     }
 
     public let code: Code

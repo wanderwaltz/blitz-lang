@@ -20,6 +20,7 @@ protocol ASTVisitor {
     func visitIfStatement(_ statement: IfStatement) -> ReturnValue
     func visitImportStatement(_ statement: ImportStatement) -> ReturnValue
     func visitPrintStatement(_ statement: PrintStatement) -> ReturnValue
+    func visitReturnStatement(_ statement: ReturnStatement) -> ReturnValue
     func visitSingleKeywordStatement(_ statement: SingleKeywordStatement) -> ReturnValue
     func visitVariableDeclarationStatement(_ statement: VariableDeclarationStatement) -> ReturnValue
     func visitWhileStatement(_ statement: WhileStatement) -> ReturnValue

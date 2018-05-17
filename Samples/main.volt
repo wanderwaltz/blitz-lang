@@ -1,6 +1,8 @@
-func qwerty(a, b) {
-    print "asdfg"
-    a + b
+func fibonacci(n) {
+    if (n <= 1) {
+        return n
+    }
+    return fibonacci(n - 2) + fibonacci(n - 1)
 }
 
-print qwerty(123, 456)
+print fibonacci(7)

@@ -90,6 +90,10 @@ private final class ParserImpl {
             return try parsePrintStatement()
         }
 
+        if match(.return) {
+            return try parseReturnStatement()
+        }
+
         if match(.while) {
             return try parseWhileStatement()
         }
@@ -232,6 +236,20 @@ private final class ParserImpl {
     private func parseExpressionStatement() throws -> ExpressionStatement {
         let expression = try parseExpression()
         return ExpressionStatement(expression: expression)
+    }
+
+    private func parseReturnStatement() throws -> Statement {
+        let keyword = previous()
+        var value: Expression = LiteralExpression(literal: .nil)
+
+        if !check(.rightBrace) {
+            value = try parseExpression()
+        }
+
+        return ReturnStatement(
+            keyword: keyword,
+            value: value
+        )
     }
 
     private func parseExpression() throws -> Expression {

@@ -104,6 +104,10 @@ extension ASTPrinter: ASTVisitor {
         return parenthesize("print", print(statement.expression))
     }
 
+    func visitReturnStatement(_ statement: ReturnStatement) -> String {
+        return parenthesize("return", print(statement.value))
+    }
+
     func visitSingleKeywordStatement(_ statement: SingleKeywordStatement) -> String {
         return parenthesize(statement.keyword)
     }
