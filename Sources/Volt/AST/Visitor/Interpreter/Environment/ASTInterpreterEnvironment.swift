@@ -8,7 +8,7 @@ final class ASTInterpreterEnvironment {
     }
 
     private let parent: ASTInterpreterEnvironment?
-    private var values: [String:RuntimeValue] = [:]
+    private(set) var values: [String:RuntimeValue] = [:]
 }
 
 
@@ -34,6 +34,19 @@ extension ASTInterpreterEnvironment {
         throw error(.unknownIdentifier, "unknown identifier '\(name)'", name.location)
     }
 
+    func get(at depth: Int, _ name: Token) throws -> Value {
+        if let ancestor = self.ancestor(depth: depth) {
+            return try ancestor.get(name)
+        }
+        else {
+            throw error(
+                .unknownIdentifier,
+                "invalid environment depth \(depth) for identifier '\(name)'",
+                name.location
+            )
+        }
+    }
+
     func set(_ name: Token, value newValue: Value) throws -> Value {
         guard let value = values[name.lexeme] else {
             if let parent = parent {
@@ -50,6 +63,32 @@ extension ASTInterpreterEnvironment {
         values[name.lexeme] = RuntimeValue(value: newValue, isMutable: value.isMutable)
 
         return newValue
+    }
+
+    func set(at depth: Int, _ name: Token, value newValue: Value) throws -> Value {
+        if let ancestor = self.ancestor(depth: depth) {
+            return try ancestor.set(name, value: newValue)
+        }
+        else {
+            throw error(
+                .unknownIdentifier,
+                "invalid environment depth \(depth) for identifier '\(name)'",
+                name.location
+            )
+        }
+    }
+}
+
+
+extension ASTInterpreterEnvironment {
+    private func ancestor(depth: Int) -> ASTInterpreterEnvironment? {
+        var result: ASTInterpreterEnvironment? = self
+
+        for _ in 0..<depth {
+            result = result?.parent
+        }
+
+        return result
     }
 }
 

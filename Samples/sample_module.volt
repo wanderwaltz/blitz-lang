@@ -1,1 +1,11 @@
-let y = "string from sample_module"
+var a = "global"
+
+{
+    func printA() {
+        print a
+    }
+
+    printA()
+    var a = "block"
+    printA()
+}

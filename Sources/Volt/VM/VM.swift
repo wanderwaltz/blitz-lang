@@ -10,6 +10,8 @@ public final class VM {
     }
 
     public init() {
+        interpreter = ASTInterpreter()
+        resolver = ASTResolver(interpreter: interpreter)
         interpreter.delegate = self
     }
 
@@ -27,6 +29,8 @@ public final class VM {
 
     @discardableResult
     public func execute(_ program: Program) throws -> Value {
+        try resolver.resolve(program.statements)
+
         switch interpreter.execute(program.statements) {
         case let .value(value): return value
         case let .runtimeError(error): throw error
@@ -36,7 +40,8 @@ public final class VM {
         }
     }
 
-    private let interpreter = ASTInterpreter()
+    private let resolver: ASTResolver
+    private let interpreter: ASTInterpreter
     private let importedModulesProvider = ImportedModulesProvider()
 }
 
@@ -44,6 +49,12 @@ public final class VM {
 extension VM: ASTInterpreterDelegate {
     func interpreter(_ interpreter: ASTInterpreter, importModuleNamed name: String) throws
         -> ImportedModulesProvider.Result {
-            return try importedModulesProvider.importModule(named: name)
+            let result = try importedModulesProvider.importModule(named: name)
+
+            if case let .new(program) = result {
+                try resolver.resolve(program.statements)
+            }
+
+            return result
     }
 }

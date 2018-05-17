@@ -55,7 +55,10 @@ final class ASTInterpreter {
         return try unwrap(ast.accept(self))
     }
 
+    private typealias Depth = Int
+
     private var environment: Environment
+    private var locals: [SourceLocation: Depth] = [:]
 }
 
 
@@ -70,10 +73,10 @@ extension ASTInterpreter: ASTVisitor {
             var value = try evaluate(expression.value)
 
             if expression.op.type == .equal {
-                return try environment.set(expression.identifier, value: value)
+                return try setVariable(named: expression.identifier, value: value)
             }
 
-            let existingValue = try environment.get(expression.identifier)
+            let existingValue = try lookupVariable(named: expression.identifier)
             let location = expression.op.location
 
             switch expression.op.type {
@@ -93,7 +96,7 @@ extension ASTInterpreter: ASTVisitor {
                 preconditionFailure("unimplemented assignment operator \(expression.op)")
             }
 
-            return try environment.set(expression.identifier, value: value)
+            return try setVariable(named: expression.identifier, value: value)
         }
     }
 
@@ -227,7 +230,7 @@ extension ASTInterpreter: ASTVisitor {
 
     func visitVariableExpression(_ expression: VariableExpression) -> Result {
         return captureValue {
-            try environment.get(expression.identifier)
+            try lookupVariable(named: expression.identifier)
         }
     }
 
@@ -245,7 +248,7 @@ extension ASTInterpreter: ASTVisitor {
                 declaration: statement,
                 closure: environment
             )
-            
+
             let value: Value = .object(function)
             try environment.defineVariable(named: statement.name, value: value, isMutable: false)
             return value
@@ -425,6 +428,32 @@ extension ASTInterpreter {
                 message: "cannot call \(callee)",
                 location: location
             )
+        }
+    }
+}
+
+
+// MARK: - resolver support
+extension ASTInterpreter {
+    func resolve(_ name: Token, depth: Int) {
+        locals[name.location] = depth
+    }
+
+    private func lookupVariable(named name: Token) throws -> Value {
+        if let depth = locals[name.location] {
+            return try environment.get(at: depth, name)
+        }
+        else {
+            return try rootEnvironment.get(name)
+        }
+    }
+
+    private func setVariable(named name: Token, value: Value) throws -> Value {
+        if let depth = locals[name.location] {
+            return try environment.set(at: depth, name, value: value)
+        }
+        else {
+            return try rootEnvironment.set(name, value: value)
         }
     }
 }

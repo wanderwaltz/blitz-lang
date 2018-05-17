@@ -130,6 +130,8 @@ func expect_source(_ source: String,
          let tokens = try Scanner().process(source)
          let ast = try Parser().parse(tokens)
          let interpreter = ASTInterpreter()
+         let resolver = ASTResolver(interpreter: interpreter)
+         try resolver.resolve(ast)
          let result = interpreter.execute(ast)
          XCTFail("Unexpected result received: \(result) (expected a compile-time error)", file: file, line: line)
      }
@@ -149,6 +151,8 @@ func with_result_of_interpreting(_ source: String,
         let tokens = try Scanner().process(source)
         let ast = try Parser().parse(tokens)
         let interpreter = ASTInterpreter()
+        let resolver = ASTResolver(interpreter: interpreter)
+        try resolver.resolve(ast)
         block(interpreter.execute(ast))
     }
     catch let error {
