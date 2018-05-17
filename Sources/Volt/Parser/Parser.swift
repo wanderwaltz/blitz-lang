@@ -438,7 +438,7 @@ private final class ParserImpl {
     }
 
     private func error(_ message: String) -> ParserError {
-        return ParserError(message: message)
+        return ParserError(message: message, location: tokens[currentIndex].location)
     }
 
     private var isAtEnd: Bool {
