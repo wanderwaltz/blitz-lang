@@ -20,6 +20,9 @@ func expect_source(_ source: String,
 
         case let .runtimeError(error):
             XCTFail("Runtime error occurred: \(error)", file: file, line: line)
+
+        case let .throwable(command):
+            XCTFail("Unhandled throwable command: \(command)", file: file, line: line)
         }
     })
 }
@@ -41,6 +44,9 @@ func expect_source(_ source: String,
 
         case let .runtimeError(error):
             XCTFail("Runtime error occurred: \(error)", file: file, line: line)
+
+        case let .throwable(command):
+            XCTFail("Unhandled throwable command: \(command)", file: file, line: line)
         }
     })
 }
@@ -63,6 +69,9 @@ func expect_source(_ source: String,
 
         case let .runtimeError(error):
             XCTFail("Runtime error occurred: \(error)", file: file, line: line)
+
+        case let .throwable(command):
+            XCTFail("Unhandled throwable command: \(command)", file: file, line: line)
         }
     })
 }
@@ -83,6 +92,9 @@ func expect_source_yields_nil(_ source: String,
 
         case let .runtimeError(error):
             XCTFail("Runtime error occurred: \(error)", file: file, line: line)
+
+        case let .throwable(command):
+            XCTFail("Unhandled throwable command: \(command)", file: file, line: line)
         }
     })
 }
@@ -103,6 +115,9 @@ func expect_source(_ source: String,
                 file: file,
                 line: line
             )
+
+        case let .throwable(command):
+            XCTFail("Unhandled throwable command: \(command)", file: file, line: line)
         }
     })
 }
