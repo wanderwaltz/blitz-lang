@@ -7,7 +7,7 @@ func expect_source(_ source: String,
                    yields boolValue: Bool,
                    file: StaticString = #file,
                    line: UInt = #line) {
-    with_result_of_interpreting(source, do: { result in
+    with_result_of_interpreting(source, do: { result, _ in
         switch result {
         case let .value(value):
             switch value {
@@ -31,7 +31,7 @@ func expect_source(_ source: String,
                    yields stringValue: String,
                    file: StaticString = #file,
                    line: UInt = #line) {
-    with_result_of_interpreting(source, do: { result in
+    with_result_of_interpreting(source, do: { result, _ in
         switch result {
         case let .value(value):
             switch value {
@@ -56,7 +56,7 @@ func expect_source(_ source: String,
                    tolerance: Double = 0.0,
                    file: StaticString = #file,
                    line: UInt = #line) {
-    with_result_of_interpreting(source, do: { result in
+    with_result_of_interpreting(source, do: { result, _ in
         switch result {
         case let .value(value):
             switch value {
@@ -79,7 +79,7 @@ func expect_source(_ source: String,
 func expect_source_yields_nil(_ source: String,
                               file: StaticString = #file,
                               line: UInt = #line) {
-    with_result_of_interpreting(source, do: { result in
+    with_result_of_interpreting(source, do: { result, _ in
         switch result {
         case let .value(value):
             switch value {
@@ -100,10 +100,29 @@ func expect_source_yields_nil(_ source: String,
 }
 
 func expect_source(_ source: String,
+                   prints expectedStrings: [String],
+                   file: StaticString = #file,
+                   line: UInt = #line) {
+    with_result_of_interpreting(source, do: { result, delegate in
+        switch result {
+        case .value:
+            let printedStrings = delegate.printedValues.map({ String(describing: $0) })
+            XCTAssertEqual(expectedStrings, printedStrings, file: file, line: line)
+
+        case let .runtimeError(error):
+            XCTFail("Runtime error occurred: \(error)", file: file, line: line)
+
+        case let .throwable(command):
+            XCTFail("Unhandled throwable command: \(command)", file: file, line: line)
+        }
+    })
+}
+
+func expect_source(_ source: String,
                    yields runtimeErrorCode: RuntimeError.Code,
                    file: StaticString = #file,
                    line: UInt = #line) {
-    with_result_of_interpreting(source, do: { result in
+    with_result_of_interpreting(source, do: { result, _ in
         switch result {
         case let .value(value):
             XCTFail("Unexpected value returned: \(value), expected runtime error", file: file, line: line)
@@ -144,16 +163,18 @@ func expect_source(_ source: String,
 }
 
 func with_result_of_interpreting(_ source: String,
-                                 do block: (ASTInterpreterResult) -> Void,
+                                 do block: (ASTInterpreterResult, MockInterpreterDelegate) -> Void,
                                  file: StaticString = #file,
                                  line: UInt = #line) {
     do {
         let tokens = try Scanner().process(source)
         let ast = try Parser().parse(tokens)
         let interpreter = ASTInterpreter()
+        let delegate = MockInterpreterDelegate()
+        interpreter.delegate = delegate
         let resolver = ASTResolver(interpreter: interpreter)
         try resolver.resolve(ast)
-        block(interpreter.execute(ast))
+        block(interpreter.execute(ast), delegate)
     }
     catch let error {
         XCTFail("Unexpected error: \(error)", file: file, line: line)
