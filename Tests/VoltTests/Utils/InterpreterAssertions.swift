@@ -100,7 +100,7 @@ func expect_source_yields_nil(_ source: String,
 }
 
 func expect_source(_ source: String,
-                   yields runtimeErrorCode: ASTIntepreterRuntimeError.Code,
+                   yields runtimeErrorCode: RuntimeError.Code,
                    file: StaticString = #file,
                    line: UInt = #line) {
     with_result_of_interpreting(source, do: { result in
@@ -133,7 +133,7 @@ func expect_source(_ source: String,
          let resolver = ASTResolver(interpreter: interpreter)
          try resolver.resolve(ast)
          let result = interpreter.execute(ast)
-         XCTFail("Unexpected result received: \(result) (expected a compile-time error)", file: file, line: line)
+         XCTFail("Unexpected result received: \(result) (expected a parser error)", file: file, line: line)
      }
      catch let parserError as ParserError {
          XCTAssertEqual(parserError.message, expectedMessage, file: file, line: line)
