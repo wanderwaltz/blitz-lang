@@ -2,6 +2,7 @@
 final class ASTResolver {
     typealias Interpreter = ASTInterpreter
     typealias Scope = ASTResolverScope
+    typealias ScopeType = ASTResolverScopeType
     typealias Result = ASTResolverResult
 
     init(interpreter: Interpreter) {
@@ -9,7 +10,7 @@ final class ASTResolver {
     }
 
     private let interpreter: Interpreter
-    private var scopes: [Scope] = []
+    private var scopes: [Scope] = [.init(type: .global)]
 }
 
 
@@ -57,8 +58,8 @@ extension ASTResolver {
 
 // MARK: - private utility methods
 extension ASTResolver {
-    private func beginScope() {
-        scopes.append(.init())
+    private func beginScope(type: ScopeType) {
+        scopes.append(.init(type: type))
     }
 
     private func endScope() {
@@ -85,7 +86,7 @@ extension ASTResolver {
     }
 
     private func resolveFunction(_ function: FunctionDeclarationStatement) throws {
-        beginScope()
+        beginScope(type: .function)
         for param in function.parameters {
             declare(param)
             define(param)
@@ -161,7 +162,7 @@ extension ASTResolver: ASTVisitor {
 
     func visitBlockStatement(_ statement: BlockStatement) -> Result {
         return captureResult {
-            beginScope()
+            beginScope(type: .default)
             try resolve(statement.statements)
             try resolve(statement.atExit)
             endScope()
@@ -193,7 +194,15 @@ extension ASTResolver: ASTVisitor {
     }
 
     func visitImportStatement(_ statement: ImportStatement) -> Result {
-        return .ok
+        return captureResult {
+            guard scopes.count == 1, scopes.last?.type == .global else {
+                throw ResolverError(
+                    code: .cannotImportAtNonGlobalScope,
+                    message: "import statement is allowed only at global scope",
+                    location: statement.identifier.location
+                )
+            }
+        }
     }
 
     func visitPrintStatement(_ statement: PrintStatement) -> Result {
@@ -204,6 +213,17 @@ extension ASTResolver: ASTVisitor {
 
     func visitReturnStatement(_ statement: ReturnStatement) -> Result {
         return captureResult {
+            let returnStatementIsAllowed: Bool =
+                scopes.reversed().reduce(false, { $0 || $1.type.allowsReturnStatement })
+
+            guard returnStatementIsAllowed else {
+                throw ResolverError(
+                    code: .returnStatementNotAllowed,
+                    message: "cannot return from top-level code",
+                    location: statement.keyword.location
+                )
+            }
+
             try resolve(statement.value)
         }
     }

@@ -1,6 +1,12 @@
 final class ASTResolverScope {
     typealias VariableStatus = ASTResolverScopeVariableStatus
 
+    let type: ASTResolverScopeType
+
+    init(type: ASTResolverScopeType) {
+        self.type = type
+    }
+
     private(set) var defined: [String: VariableStatus] = [:]
 }
 
