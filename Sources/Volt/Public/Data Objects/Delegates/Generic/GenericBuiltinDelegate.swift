@@ -1,6 +1,4 @@
 public final class GenericBuiltinDelegate<T: DefaultBindingsProviding> {
-    public typealias Getter = (T) -> Value
-
     init() {
         T.registerDefaultBindings(using: self)
     }
@@ -11,6 +9,10 @@ public final class GenericBuiltinDelegate<T: DefaultBindingsProviding> {
 
 extension GenericBuiltinDelegate: BuiltinDelegate {
     public typealias Object = T
+
+    public func getterForProperty(named name: String) -> Getter? {
+        return getters[name]
+    }
 
     public func registerProperty(named name: String, getter: @escaping (_ object: T) -> Value) {
         getters[name] = getter
