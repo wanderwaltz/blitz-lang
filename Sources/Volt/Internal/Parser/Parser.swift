@@ -129,8 +129,9 @@ private final class ParserImpl {
     }
 
     private func parsePrintStatement() throws -> Statement {
+        let keyword = previous()
         let expression = try parseExpression()
-        return PrintStatement(expression: expression)
+        return PrintStatement(keyword: keyword, expression: expression)
     }
 
     private func parseWhileStatement() throws -> Statement {

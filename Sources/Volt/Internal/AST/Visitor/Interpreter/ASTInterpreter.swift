@@ -298,7 +298,17 @@ extension ASTInterpreter: ASTVisitor {
     func visitPrintStatement(_ statement: PrintStatement) -> Result {
         return captureResult {
             let value = try evaluate(statement.expression)
-            print(value)
+
+            guard let delegate = delegate else {
+                throw RuntimeError(
+                    code: .cannotPrint,
+                    message: "cannot print '\(value)': interpeter delegate is not set",
+                    location: statement.keyword.location
+                )
+            }
+
+            delegate.interpreter(self, print: value)
+
             return .value(value)
         }
     }
