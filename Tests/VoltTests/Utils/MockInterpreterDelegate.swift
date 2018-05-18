@@ -6,6 +6,8 @@ final class MockInterpreterDelegate {
     var `import`: (String) throws -> ImportedModulesProvider.Result = { _ in
         throw RuntimeError(code: .cannotImportModule, message: "not implemented", location: .unknown)
     }
+
+    let stringDelegate = StringDelegate()
 }
 
 extension MockInterpreterDelegate: ASTInterpreterDelegate {
@@ -16,5 +18,9 @@ extension MockInterpreterDelegate: ASTInterpreterDelegate {
 
     func interpreter(_ interpreter: ASTInterpreter, print value: Value) {
         printedValues.append(value)
+    }
+
+    func stringDelegateForInterpreter(_ interpreter: ASTInterpreter) -> StringDelegate {
+        return stringDelegate
     }
 }

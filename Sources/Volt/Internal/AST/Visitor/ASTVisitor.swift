@@ -8,6 +8,7 @@ protocol ASTVisitor {
     func visitAssignmentExpression(_ expression: AssignmentExpression) -> ReturnValue
     func visitBinaryExpression(_ expression: BinaryExpression) -> ReturnValue
     func visitCallExpression(_ expression: CallExpression) -> ReturnValue
+    func visitGetExpression(_ expression: GetExpression) -> ReturnValue
     func visitGroupingExpression(_ expression: GroupingExpression) -> ReturnValue
     func visitLiteralExpression(_ expression: LiteralExpression) -> ReturnValue
     func visitLogicalExpression(_ expression: LogicalExpression) -> ReturnValue

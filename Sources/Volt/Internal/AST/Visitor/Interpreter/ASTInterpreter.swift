@@ -145,7 +145,7 @@ extension ASTInterpreter: ASTVisitor {
     func visitCallExpression(_ expression: CallExpression) -> Result {
         return captureValue {
             let location = expression.paren.location
-            let callable = try getCallable(for: expression.callee, at: location)
+            let callable = try lookupCallable(for: expression.callee, at: location)
             let arguments = try expression.arguments.map({ arg in
                 try evaluate(arg)
             })
@@ -154,14 +154,7 @@ extension ASTInterpreter: ASTVisitor {
                 return try callable.call(interpreter: self, arguments: arguments)
             }
             catch let internalError as InternalError {
-                switch internalError {
-                case let .invalidNumberOfArguments(expected, got):
-                    throw RuntimeError(
-                        code: .invalidNumberOfArguments,
-                        message: "invalid number of arguments: expected \(expected), got: \(got)",
-                        location: location
-                    )
-                }
+                throw internalError.makeRuntimeError(location: location)
             }
         }
     }
@@ -201,6 +194,23 @@ extension ASTInterpreter: ASTVisitor {
 
             default:
                 preconditionFailure("unimplemented logical operator: \(expression.op)")
+            }
+        }
+    }
+
+    func visitGetExpression(_ expression: GetExpression) -> Result {
+        return captureValue {
+            let object = expression.object
+            let name = expression.name.lexeme
+            let location = expression.name.location
+
+            let gettable = try lookupGettable(for: object, at: location)
+
+            do {
+                return try gettable.getProperty(named: name)
+            }
+            catch let internalError as InternalError {
+                throw internalError.makeRuntimeError(location: location)
             }
         }
     }
@@ -424,7 +434,7 @@ extension ASTInterpreter {
 
 // MARK: - call support
 extension ASTInterpreter {
-    private func getCallable(for callee: Expression, at location: SourceLocation) throws -> Callable {
+    private func lookupCallable(for callee: Expression, at location: SourceLocation) throws -> Callable {
         let calleeValue = try evaluate(callee)
 
         switch calleeValue {
@@ -435,6 +445,34 @@ extension ASTInterpreter {
             throw RuntimeError(
                 code: .invalidCallee,
                 message: "cannot call \(callee)",
+                location: location
+            )
+        }
+    }
+}
+
+
+// MARK: - getters support
+extension ASTInterpreter {
+    private func lookupGettable(for object: Expression, at location: SourceLocation) throws -> Gettable {
+        let objectValue = try evaluate(object)
+
+        switch objectValue {
+        case let .string(string):
+            guard let delegate = delegate else {
+                throw RuntimeError(
+                    code: .invalidGetExpression,
+                    message: "cannot access properties of type '\(objectValue.typeName)': interpeter delegate is not set",
+                    location: location
+                )
+            }
+
+            return delegate.stringDelegateForInterpreter(self).bind(string)
+
+        default:
+            throw RuntimeError(
+                code: .invalidGetExpression,
+                message: "cannot access properties on object of type \(objectValue.typeName)",
                 location: location
             )
         }

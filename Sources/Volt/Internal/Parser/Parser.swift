@@ -376,6 +376,10 @@ private final class ParserImpl {
             if match(.leftParen) {
                 expr = try parseCallCompletion(expr)
             }
+            else if match(.dot) {
+                let name = try consume(.identifier, "expected property name after '.'")
+                expr = GetExpression(object: expr, name: name)
+            }
             else {
                 break
             }

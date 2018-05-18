@@ -11,6 +11,8 @@ public final class VM {
 
     public var print: (Value) -> Void = { Swift.print($0) }
 
+    public let stringDelegate = StringDelegate()
+
     public init() {
         interpreter = ASTInterpreter()
         resolver = ASTResolver(interpreter: interpreter)
@@ -68,5 +70,9 @@ extension VM: ASTInterpreterDelegate {
 
     func interpreter(_ interpreter: ASTInterpreter, print value: Value) {
         print(value)
+    }
+
+    func stringDelegateForInterpreter(_ interpreter: ASTInterpreter) -> StringDelegate {
+        return stringDelegate
     }
 }

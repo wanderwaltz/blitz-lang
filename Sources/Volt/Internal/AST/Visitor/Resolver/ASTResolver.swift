@@ -123,6 +123,12 @@ extension ASTResolver: ASTVisitor {
         }
     }
 
+    func visitGetExpression(_ expression: GetExpression) -> Result {
+        return captureResult {
+            try resolve(expression.object)
+        }
+    }
+
     func visitGroupingExpression(_ expression: GroupingExpression) -> Result {
         return captureResult {
             try resolve(expression.expression)

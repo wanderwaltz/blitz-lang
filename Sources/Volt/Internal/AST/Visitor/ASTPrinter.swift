@@ -35,6 +35,11 @@ extension ASTPrinter: ASTVisitor {
         return parenthesize(expression.left, expression.op, expression.right)
     }
 
+    func visitGetExpression(_ expression: GetExpression) -> String {
+        let object = print(expression.object)
+        return parenthesize("\(object).\(expression.name)")
+    }
+
     func visitGroupingExpression(_ expression: GroupingExpression) -> String {
         return parenthesize("(", print(expression.expression) ,")")
     }
