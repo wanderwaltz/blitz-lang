@@ -1,5 +1,5 @@
 extension String: DefaultBindingsProviding {
-    public static func registerDefaultBindings<Delegate: BuiltinDelegate>(using delegate: Delegate)
+    public static func registerDefaultBindings<Delegate: TypeDelegate>(using delegate: Delegate)
         where Delegate.Object == String {
             delegate.registerProperty(named: "isEmpty", keyPath: \.isEmpty)
             delegate.registerProperty(named: "length", keyPath: \.count)

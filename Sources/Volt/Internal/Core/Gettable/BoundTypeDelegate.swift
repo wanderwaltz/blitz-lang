@@ -1,4 +1,4 @@
-struct BoundBuiltinDelegate<Delegate: BuiltinDelegate> {
+struct BoundTypeDelegate<Delegate: TypeDelegate> {
     typealias Object = Delegate.Object
 
     init(object: Object, delegate: Delegate) {
@@ -11,7 +11,7 @@ struct BoundBuiltinDelegate<Delegate: BuiltinDelegate> {
 }
 
 
-extension BoundBuiltinDelegate: Gettable {
+extension BoundTypeDelegate: Gettable {
     func getProperty(named name: String) throws -> Value {
         guard let getter = delegate.getterForProperty(named: name) else {
             throw InternalError.unknownProperty(named: name)
@@ -22,8 +22,8 @@ extension BoundBuiltinDelegate: Gettable {
 }
 
 
-extension BuiltinDelegate {
-    func bind(_ object: Object) -> BoundBuiltinDelegate<Self> {
-        return BoundBuiltinDelegate(object: object, delegate: self)
+extension TypeDelegate {
+    func bind(_ object: Object) -> BoundTypeDelegate<Self> {
+        return .init(object: object, delegate: self)
     }
 }

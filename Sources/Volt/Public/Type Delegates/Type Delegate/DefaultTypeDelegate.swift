@@ -1,13 +1,9 @@
-public final class GenericBuiltinDelegate<T: DefaultBindingsProviding> {
-    init() {
-        T.registerDefaultBindings(using: self)
-    }
-
+public final class DefaultTypeDelegate<T> {
     private(set) var getters: [String: Getter] = [:]
 }
 
 
-extension GenericBuiltinDelegate: BuiltinDelegate {
+extension DefaultTypeDelegate: TypeDelegate {
     public typealias Object = T
 
     public func getterForProperty(named name: String) -> Getter? {

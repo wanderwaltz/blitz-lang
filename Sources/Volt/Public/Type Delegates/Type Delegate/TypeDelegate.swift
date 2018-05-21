@@ -1,4 +1,4 @@
-public protocol BuiltinDelegate {
+public protocol TypeDelegate {
     associatedtype Object
     typealias Getter = (_ object: Object) -> Value
 

@@ -4,5 +4,5 @@ protocol ASTInterpreterDelegate: class {
 
     func interpreter(_ interpreter: ASTInterpreter, print value: Value)
 
-    func stringDelegateForInterpreter(_ interpreter: ASTInterpreter) -> StringDelegate
+    func interpreter(_ interpreter: ASTInterpreter, gettableFor value: Value) -> Gettable?
 }

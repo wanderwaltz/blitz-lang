@@ -457,25 +457,23 @@ extension ASTInterpreter {
     private func lookupGettable(for object: Expression, at location: SourceLocation) throws -> Gettable {
         let objectValue = try evaluate(object)
 
-        switch objectValue {
-        case let .string(string):
-            guard let delegate = delegate else {
-                throw RuntimeError(
-                    code: .invalidGetExpression,
-                    message: "cannot access properties of type '\(objectValue.typeName)': interpeter delegate is not set",
-                    location: location
-                )
-            }
+        guard let delegate = delegate else {
+            throw RuntimeError(
+                code: .invalidGetExpression,
+                message: "cannot access properties of type '\(objectValue.typeName)': interpeter delegate is not set",
+                location: location
+            )
+        }
 
-            return delegate.stringDelegateForInterpreter(self).bind(string)
-
-        default:
+        guard let typeDelegate = delegate.interpreter(self, gettableFor: objectValue) else {
             throw RuntimeError(
                 code: .invalidGetExpression,
                 message: "cannot access properties on object of type \(objectValue.typeName)",
                 location: location
             )
         }
+
+        return typeDelegate
     }
 }
 

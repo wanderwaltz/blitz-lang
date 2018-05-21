@@ -1,4 +1,4 @@
-extension BuiltinDelegate {
+extension TypeDelegate {
     public func registerProperty<T>(named name: String, keyPath: KeyPath<Object, T>) {
         registerProperty(named: name, getter: { object in
             return .init(object[keyPath: keyPath])

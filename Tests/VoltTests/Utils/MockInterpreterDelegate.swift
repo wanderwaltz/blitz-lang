@@ -7,7 +7,11 @@ final class MockInterpreterDelegate {
         throw RuntimeError(code: .cannotImportModule, message: "not implemented", location: .unknown)
     }
 
-    let stringDelegate = StringDelegate()
+    let typeDelegates = TypeDelegatesRepository()
+
+    init() {
+        typeDelegates.registerDefaultBindings(for: String.self)
+    }
 }
 
 extension MockInterpreterDelegate: ASTInterpreterDelegate {
@@ -20,7 +24,7 @@ extension MockInterpreterDelegate: ASTInterpreterDelegate {
         printedValues.append(value)
     }
 
-    func stringDelegateForInterpreter(_ interpreter: ASTInterpreter) -> StringDelegate {
-        return stringDelegate
+    func interpreter(_ interpreter: ASTInterpreter, gettableFor value: Value) -> Gettable? {
+        return typeDelegates.gettable(for: value)
     }
 }
