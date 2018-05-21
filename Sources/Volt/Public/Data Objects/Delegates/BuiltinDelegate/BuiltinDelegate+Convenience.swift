@@ -5,6 +5,17 @@ extension BuiltinDelegate {
         })
     }
 
+    public func registerPropertyAsMethod<T>(named name: String, keyPath: KeyPath<Object, T>) {
+        registerProperty(named: name, getter: { object in
+            return .object(
+                AnyCallable({ _, _ in
+                    .init(object[keyPath: keyPath])
+                })
+                .checkingArity(0)
+            )
+        })
+    }
+
     public func registerMethod<R>(named name: String, method getter: @escaping (Object) -> () -> R) {
         registerProperty(named: name, getter: { object in
             let method = getter(object)

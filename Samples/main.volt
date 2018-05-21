@@ -1,2 +1,2 @@
 print "Hello, World!".uppercased()
-print "Hello, World!".hasPrefix("Hello")
+print "'" + "   ello, World!    ".capitalized() + "'"
