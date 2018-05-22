@@ -436,7 +436,7 @@ extension ScannerTests {
 
 private func scan(_ source: String, file: StaticString = #file, line: UInt = #line) -> [Token] {
     do {
-        let tokens = try Scanner().process(source)
+        let tokens = try Scanner().tokenStream(for: source).readAll()
         return tokens
     }
     catch let error {
@@ -451,7 +451,7 @@ private func expect_source(_ source: String,
                            line: UInt = #line) {
 
     do {
-        let tokens = try Scanner().process(source)
+        let tokens = try Scanner().tokenStream(for: source).readAll()
         let types = tokens.map({ $0.type })
         let descriptions = types.map({ $0.description })
 
@@ -468,7 +468,7 @@ private func expect_source(_ source: String,
                            line: UInt = #line) {
 
     do {
-        let tokens = try Scanner().process(source)
+        let tokens = try Scanner().tokenStream(for: source).readAll()
         let lexemes = tokens.map({ $0.lexeme })
 
         XCTAssertEqual(lexemes, expectedLexemes, file: file, line: line)
@@ -483,7 +483,7 @@ private func expect_error_scanning(_ source: String,
                                    line: UInt = #line,
                                    do block: (ScannerError) -> Void) {
     do {
-        _ = try Scanner().process(source)
+        _ = try Scanner().tokenStream(for: source).readAll()
         XCTFail("expected an error scanning source", file: file, line: line)
     }
     catch let error {
@@ -493,5 +493,20 @@ private func expect_error_scanning(_ source: String,
         }
 
         block(scannerError)
+    }
+}
+
+
+private extension TokenStream {
+    func readAll() throws -> [Token] {
+        var result: [Token] = []
+
+        repeat {
+            result.append(try advance())
+        } while result.last?.type != .eof
+
+        result.removeLast() // remove .eof token
+
+        return result
     }
 }

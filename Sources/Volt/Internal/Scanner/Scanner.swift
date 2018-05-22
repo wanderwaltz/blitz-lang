@@ -16,14 +16,6 @@ struct Scanner {
             }
         )
     }
-
-    func process(_ source: String) throws -> [Token] {
-        guard !source.isEmpty else {
-            return []
-        }
-
-        return try ScannerImpl(source).scan()
-    }
 }
 
 
@@ -33,18 +25,6 @@ private final class ScannerImpl {
         self.currentIndex = source.startIndex
         self.lineStart = source.startIndex
         self.tokenStart = source.startIndex
-    }
-
-    func scan() throws -> [Token] {
-        scannedTokens = []
-        currentIndex = source.startIndex
-        lineNumber = 0
-
-        while !isAtEnd {
-            try scanToken()
-        }
-
-        return scannedTokens
     }
 
     fileprivate func scanToken() throws {
