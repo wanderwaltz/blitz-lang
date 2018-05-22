@@ -3,3 +3,10 @@ extension Bool: ValueConvertible {
         return .bool(self)
     }
 }
+
+
+extension Bool: ReverseValueConvertible {
+    public static func fromVoltValue(_ value: Value) -> Any? {
+        return value.boolValue
+    }
+}

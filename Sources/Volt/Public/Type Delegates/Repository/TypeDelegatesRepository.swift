@@ -1,3 +1,5 @@
+import Foundation
+
 public final class TypeDelegatesRepository {
     private var delegates: [String: BindableDelegate] = [:]
 }
@@ -18,6 +20,10 @@ extension TypeDelegatesRepository {
         }
 
         block(delegate)
+    }
+
+    public func registerTypeDelegate<Delegate: TypeDelegate>(_ delegate: Delegate) {
+        delegates[String(describing: Delegate.Object.self)] = BindableDelegate(AnyTypeDelegate(delegate))
     }
 
     public func registerDefaultBindings<T: DefaultBindingsProviding>(for type: T.Type) {

@@ -58,6 +58,21 @@ public final class VM {
 }
 
 
+extension VM {
+    public func defineGlobal<T>(named name: String, value: T, isMutable: Bool = false) throws {
+        try interpreter.rootEnvironment.defineVariable(
+            named: .init(
+                type: .identifier,
+                lexeme: name,
+                location: .unknown
+            ),
+            value: .init(value),
+            isMutable: isMutable
+        )
+    }
+}
+
+
 extension VM: ASTInterpreterDelegate {
     func interpreter(_ interpreter: ASTInterpreter, importModuleNamed name: String) throws
         -> ImportedModulesProvider.Result {
