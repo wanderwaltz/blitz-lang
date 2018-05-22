@@ -1,4 +1,22 @@
 struct Scanner {
+    func tokenStream(for source: String) throws -> TokenStream {
+        let impl = ScannerImpl(source)
+        return try SlidingWindowTokenStream(
+            advance: {
+                let tokensCount = impl.scannedTokens.count
+
+                // skip whitespace
+                while !impl.isAtEnd && impl.scannedTokens.count == tokensCount {
+                    try impl.scanToken()
+                }
+
+                let token = impl.scannedTokens.last
+                impl.scannedTokens = []
+                return token ?? .eof
+            }
+        )
+    }
+
     func process(_ source: String) throws -> [Token] {
         guard !source.isEmpty else {
             return []
@@ -23,14 +41,15 @@ private final class ScannerImpl {
         lineNumber = 0
 
         while !isAtEnd {
-            tokenStart = currentIndex
             try scanToken()
         }
 
         return scannedTokens
     }
 
-    private func scanToken() throws {
+    fileprivate func scanToken() throws {
+        tokenStart = currentIndex
+
         let character = advance()
 
         switch character {
@@ -235,7 +254,7 @@ private final class ScannerImpl {
         )
     }
 
-    private var isAtEnd: Bool {
+    fileprivate var isAtEnd: Bool {
         return currentIndex == source.endIndex
     }
 
@@ -250,5 +269,5 @@ private final class ScannerImpl {
     private var lineStart: String.Index
     private var lineNumber = 0
 
-    private var scannedTokens: [Token] = []
+    fileprivate var scannedTokens: [Token] = []
 }

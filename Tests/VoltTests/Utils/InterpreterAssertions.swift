@@ -146,7 +146,7 @@ func expect_source(_ source: String,
                    file: StaticString = #file,
                    line: UInt = #line) {
      do {
-         let tokens = try Scanner().process(source)
+         let tokens = try Scanner().tokenStream(for: source)
          let ast = try Parser().parse(tokens)
          let interpreter = ASTInterpreter()
          let resolver = ASTResolver(interpreter: interpreter)
@@ -167,7 +167,7 @@ func with_result_of_interpreting(_ source: String,
                                  file: StaticString = #file,
                                  line: UInt = #line) {
     do {
-        let tokens = try Scanner().process(source)
+        let tokens = try Scanner().tokenStream(for: source)
         let ast = try Parser().parse(tokens)
         let interpreter = ASTInterpreter()
         let delegate = MockInterpreterDelegate()

@@ -28,7 +28,7 @@ public final class VM {
     }
 
     public func parse(_ source: String) throws -> Program {
-        let tokens = try Scanner().process(source)
+        let tokens = try Scanner().tokenStream(for: source)
         let statements = try Parser().parse(tokens)
         try resolver.resolve(statements)
         return Program(statements: statements)

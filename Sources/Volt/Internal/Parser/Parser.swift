@@ -1,11 +1,11 @@
 struct Parser {
-    func parse(_ tokens: [Token]) throws -> [Statement] {
+    func parse(_ tokens: TokenStream) throws -> [Statement] {
         return try ParserImpl(tokens).parse()
     }
 }
 
 private final class ParserImpl {
-    init(_ tokens: [Token]) {
+    init(_ tokens: TokenStream) {
         self.tokens = tokens
     }
 
@@ -20,15 +20,15 @@ private final class ParserImpl {
     }
 
     private func parseDeclaration() throws -> Statement {
-        if match(.import) {
+        if try match(.import) {
             return try parseImportStatement()
         }
 
-        if match(.func) {
+        if try match(.func) {
             return try parseFunctionDeclaration(kind: "function")
         }
 
-        if match(.var, .let) {
+        if try match(.var, .let) {
             return try parseVarDeclaration()
         }
 
@@ -50,7 +50,7 @@ private final class ParserImpl {
         if !check(.rightParen) {
             repeat {
                 parameters.append(try consume(.identifier, "expected parameter name"))
-            } while match(.comma)
+            } while try match(.comma)
         }
 
         try consume(.rightParen, "expected ) after \(kind) parameter list")
@@ -70,7 +70,7 @@ private final class ParserImpl {
         let name = try consume(.identifier, "expected an identifier")
         var initializer: Expression = LiteralExpression.nil
 
-        if match(.equal) {
+        if try match(.equal) {
             initializer = try parseExpression()
         }
 
@@ -78,31 +78,31 @@ private final class ParserImpl {
     }
 
     private func parseStatement() throws -> Statement {
-        if match(.break, .continue) {
+        if try match(.break, .continue) {
             return SingleKeywordStatement(keyword: previous())
         }
 
-        if match(.if) {
+        if try match(.if) {
             return try parseIfStatement()
         }
 
-        if match(.print) {
+        if try match(.print) {
             return try parsePrintStatement()
         }
 
-        if match(.return) {
+        if try match(.return) {
             return try parseReturnStatement()
         }
 
-        if match(.while) {
+        if try match(.while) {
             return try parseWhileStatement()
         }
 
-        if match(.for) {
+        if try match(.for) {
             return try parseForStatement()
         }
 
-        if match(.leftBrace) {
+        if try match(.leftBrace) {
             return try parseBlockStatement()
         }
 
@@ -115,8 +115,8 @@ private final class ParserImpl {
         let thenStatement = try parseBlockStatement()
         var elseStatement: Statement?
 
-        if match(.else) {
-            if match(.if) {
+        if try match(.else) {
+            if try match(.if) {
                 elseStatement = try parseIfStatement()
             }
             else {
@@ -151,7 +151,7 @@ private final class ParserImpl {
         if check(.semicolon) {
             // no initializer
         }
-        else if match(.var) {
+        else if try match(.var) {
             initializer = try parseVarDeclaration()
         }
         else {
@@ -213,7 +213,7 @@ private final class ParserImpl {
 
         while !check(.rightBrace) && !isAtEnd {
             // parse deferred statements for block
-            if match(.defer) {
+            if try match(.defer) {
                 try consume(.leftBrace, "expected { after defer")
                 var deferredStatements: [Statement] = []
 
@@ -260,7 +260,7 @@ private final class ParserImpl {
     private func parseAssignment() throws -> Expression {
         let expression = try parseOr()
 
-        if match(.equal, .minusEqual, .plusEqual, .slashEqual, .starEqual) {
+        if try match(.equal, .minusEqual, .plusEqual, .slashEqual, .starEqual) {
             let op = previous()
             let value = try parseAssignment()
 
@@ -278,7 +278,7 @@ private final class ParserImpl {
     private func parseOr() throws -> Expression {
         var expr = try parseAnd()
 
-        while match(.or) {
+        while try match(.or) {
             let op = previous()
             let right = try parseAnd()
             expr = LogicalExpression(left: expr, op: op, right: right)
@@ -290,7 +290,7 @@ private final class ParserImpl {
     private func parseAnd() throws -> Expression {
         var expr = try parseEquality()
 
-        while match(.and) {
+        while try match(.and) {
             let op = previous()
             let right = try parseEquality()
             expr = LogicalExpression(left: expr, op: op, right: right)
@@ -302,7 +302,7 @@ private final class ParserImpl {
     private func parseEquality() throws -> Expression {
         var expr = try parseComparison()
 
-        while match(.bangEqual, .equalEqual) {
+        while try match(.bangEqual, .equalEqual) {
             let op = previous()
             let right = try parseComparison()
             expr = BinaryExpression(left: expr, op: op, right: right)
@@ -314,7 +314,7 @@ private final class ParserImpl {
     private func parseComparison() throws -> Expression {
         var expr = try parseAddition()
 
-        while match(.greater, .greaterEqual, .less, .lessEqual) {
+        while try match(.greater, .greaterEqual, .less, .lessEqual) {
             let op = previous()
             let right = try parseAddition()
             expr = BinaryExpression(left: expr, op: op, right: right)
@@ -326,7 +326,7 @@ private final class ParserImpl {
     private func parseAddition() throws -> Expression {
         var expr = try parseMultiplication()
 
-        while match(.minus, .plus) {
+        while try match(.minus, .plus) {
             let op = previous()
             let right = try parseMultiplication()
             expr = BinaryExpression(left: expr, op: op, right: right)
@@ -338,7 +338,7 @@ private final class ParserImpl {
     private func parseMultiplication() throws -> Expression {
         var expr = try parseQuestionQuestionOperator()
 
-        while match(.slash, .star) {
+        while try match(.slash, .star) {
             let op = previous()
             let right = try parseQuestionQuestionOperator()
             expr = BinaryExpression(left: expr, op: op, right: right)
@@ -350,7 +350,7 @@ private final class ParserImpl {
     private func parseQuestionQuestionOperator() throws -> Expression {
         var expr = try parseUnary()
 
-        while match(.questionQuestion) {
+        while try match(.questionQuestion) {
             let op = previous()
             let right = try parseUnary()
             expr = LogicalExpression(left: expr, op: op, right: right)
@@ -360,7 +360,7 @@ private final class ParserImpl {
     }
 
     private func parseUnary() throws -> Expression {
-        if match(.bang, .minus, .not) {
+        if try match(.bang, .minus, .not) {
             let op = previous()
             let expr = try parseUnary()
             return UnaryExpression(op: op, expression: expr)
@@ -373,10 +373,10 @@ private final class ParserImpl {
         var expr = try parsePrimary()
 
         while true {
-            if match(.leftParen) {
+            if try match(.leftParen) {
                 expr = try parseCallCompletion(expr)
             }
-            else if match(.dot) {
+            else if try match(.dot) {
                 let name = try consume(.identifier, "expected property name after '.'")
                 expr = GetExpression(object: expr, name: name)
             }
@@ -394,7 +394,7 @@ private final class ParserImpl {
         if !check(.rightParen) {
             repeat {
                 arguments.append(try parseExpression())
-            } while match(.comma)
+            } while try match(.comma)
         }
 
         let paren = try consume(.rightParen, "expected ) after call arguments")
@@ -407,19 +407,19 @@ private final class ParserImpl {
     }
 
     private func parsePrimary() throws -> Expression {
-        if match(.nil) {
+        if try match(.nil) {
             return LiteralExpression.nil
         }
 
-        if match(.false) {
+        if try match(.false) {
             return LiteralExpression.false
         }
 
-        if match(.true) {
+        if try match(.true) {
             return LiteralExpression.true
         }
 
-        if match(.number, .string) {
+        if try match(.number, .string) {
             guard let literal = previous().literal else {
                 preconditionFailure("expected a literal value")
             }
@@ -427,11 +427,11 @@ private final class ParserImpl {
             return LiteralExpression(literal: literal)
         }
 
-        if match(.identifier) {
+        if try match(.identifier) {
             return VariableExpression(identifier: previous())
         }
 
-        if match(.leftParen) {
+        if try match(.leftParen) {
             let expr = try parseExpression()
             try consume(.rightParen, "expected ')' after expression")
             return GroupingExpression(expression: expr)
@@ -443,16 +443,16 @@ private final class ParserImpl {
     @discardableResult
     private func consume(_ type: TokenType, _ message: String) throws -> Token {
         if check(type) {
-            return advance()
+            return try advance()
         }
 
         throw error(message);
     }
 
-    private func match(_ types: TokenType...) -> Bool {
+    private func match(_ types: TokenType...) throws -> Bool {
         for type in types {
             if check(type) {
-                advance()
+                try advance()
                 return true
             }
         }
@@ -469,34 +469,25 @@ private final class ParserImpl {
     }
 
     private func peek() -> Token {
-        guard !isAtEnd else {
-            return .eof
-        }
-
-        return tokens[currentIndex]
+        return tokens.peek()
     }
 
     private func previous() -> Token {
-        return tokens[currentIndex-1]
+        return tokens.previous()
     }
 
     @discardableResult
-    private func advance() -> Token {
-        if !isAtEnd {
-            currentIndex += 1
-        }
-
-        return tokens[currentIndex-1]
+    private func advance() throws -> Token {
+        return try tokens.advance()
     }
 
     private func error(_ message: String) -> ParserError {
-        return ParserError(code: .syntaxError, message: message, location: tokens[currentIndex].location)
+        return ParserError(code: .syntaxError, message: message, location: peek().location)
     }
 
     private var isAtEnd: Bool {
-        return currentIndex >= tokens.count
+        return peek().type == .eof
     }
 
-    private let tokens: [Token]
-    private var currentIndex = 0
+    private let tokens: TokenStream
 }

@@ -12,7 +12,7 @@ final class ImportedModulesProvider {
         }
 
         let source = try sourceProvider.sourceForModule(named: name)
-        let tokens = try Scanner().process(source)
+        let tokens = try Scanner().tokenStream(for: source)
         let statements = try Parser().parse(tokens)
         return .new(Program(statements: statements))
     }
