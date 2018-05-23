@@ -37,6 +37,11 @@ extension TypeDelegatesRepository {
         let key = value.typeName
         return delegates[key]?.bind(value)
     }
+
+    func settable(for value: Value) -> Settable? {
+        let key = value.typeName
+        return delegates[key]?.bind(value)
+    }
 }
 
 
@@ -54,12 +59,12 @@ private struct BindableDelegate {
         }
     }
 
-    private let _bind: (Any?) -> Gettable?
+    private let _bind: (Any?) -> (Gettable & Settable)?
 }
 
 
 extension BindableDelegate {
-    func bind(_ value: Value) -> Gettable? {
+    func bind(_ value: Value) -> (Gettable & Settable)? {
         return _bind(value.any)
     }
 }

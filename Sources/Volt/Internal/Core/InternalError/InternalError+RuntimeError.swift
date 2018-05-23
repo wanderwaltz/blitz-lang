@@ -21,6 +21,13 @@ extension InternalError {
                 message: "unknown property '\(name)'",
                 location: location
             )
+
+        case let .settingReadonlyProperty(name):
+            return RuntimeError(
+                code: .settingImmutableValue,
+                message: "cannot set a readonly property '\(name)'",
+                location: location
+            )
         }
     }
 }

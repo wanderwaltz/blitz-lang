@@ -146,6 +146,13 @@ extension ASTResolver: ASTVisitor {
         }
     }
 
+    func visitSetExpression(_ expression: SetExpression) -> Result {
+        return captureResult {
+            try resolve(expression.value)
+            try resolve(expression.object)
+        }
+    }
+
     func visitUnaryExpression(_ expression: UnaryExpression) -> Result {
         return captureResult {
             try resolve(expression.expression)

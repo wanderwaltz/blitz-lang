@@ -35,6 +35,12 @@ extension ASTPrinter: ASTVisitor {
         return parenthesize(expression.left, expression.op, expression.right)
     }
 
+    func visitSetExpression(_ expression: SetExpression) -> String {
+        let object = print(expression.object)
+        let value = print(expression.value)
+        return parenthesize("\(object).\(expression.name) \(expression.op) \(value)")
+    }
+
     func visitGetExpression(_ expression: GetExpression) -> String {
         let object = print(expression.object)
         return parenthesize("\(object).\(expression.name)")

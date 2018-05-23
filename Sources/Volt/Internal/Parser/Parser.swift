@@ -268,6 +268,11 @@ private final class ParserImpl {
                 let name = variableExpression.identifier
                 return AssignmentExpression(identifier: name, op: op, value: value)
             }
+            else if let getExpression = expression as? GetExpression {
+                let object = getExpression.object
+                let name = getExpression.name
+                return SetExpression(object: object, name: name, op: op, value: value)
+            }
 
             throw error("invalid assignment")
         }

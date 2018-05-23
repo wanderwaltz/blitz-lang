@@ -6,6 +6,7 @@ case invalidCallee
 case invalidGetExpression
 case invalidNumberOfArguments
 case invalidRedefenition
+case invalidSetExpression
 case settingImmutableValue
 case typeError
 case unknownIdentifier

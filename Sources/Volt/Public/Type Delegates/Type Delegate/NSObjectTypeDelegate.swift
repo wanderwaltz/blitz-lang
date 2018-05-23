@@ -1,7 +1,7 @@
 import Foundation
 
 public final class NSObjectTypeDelegate<T: NSObject> {
-    private(set) var getters: [String: Getter] = [:]
+    private let base = DefaultTypeDelegate<T>()
 }
 
 
@@ -9,19 +9,23 @@ extension NSObjectTypeDelegate: TypeDelegate {
     public typealias Object = T
 
     public func getterForProperty(named name: String) -> Getter? {
-        return getters[name] ?? defaultGetterForProperty(named: name)
+        return base.getterForProperty(named: name) ?? defaultGetterForProperty(named: name)
     }
 
-    public func registerProperty(named name: String, getter: @escaping (_ object: T) -> Value) {
-        getters[name] = getter
+    public func setterForProperty(named name: String) -> Setter? {
+        return base.setterForProperty(named: name) ?? defaultSetterForProperty(named: name)
+    }
+
+    public func registerProperty(named name: String, getter: @escaping Getter, setter: Setter?) {
+        base.registerProperty(named: name, getter: getter, setter: setter)
     }
 
     public func unregisterProperty(named name: String) {
-        getters.removeValue(forKey: name)
+        base.unregisterProperty(named: name)
     }
 
     public func unregisterAllProperties() {
-        getters = [:]
+        base.unregisterAllProperties()
     }
 }
 
@@ -34,6 +38,16 @@ extension NSObjectTypeDelegate {
 
         return { object in
             .init(object.value(forKey: name))
+        }
+    }
+
+    private func defaultSetterForProperty(named name: String) -> Setter? {
+        guard T.instancesRespond(to: NSSelectorFromString("set\(name.capitalized):")) else {
+            return nil
+        }
+
+        return { object, value in
+            object.setValue(value.any, forKey: name)
         }
     }
 }

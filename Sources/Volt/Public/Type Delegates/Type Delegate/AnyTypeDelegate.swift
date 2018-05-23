@@ -1,13 +1,15 @@
 public struct AnyTypeDelegate<T> {
     init<Delegate: TypeDelegate>(_ delegate: Delegate) where Delegate.Object == Object {
         _getter = delegate.getterForProperty
+        _setter = delegate.setterForProperty
         _register = delegate.registerProperty
         _unregister = delegate.unregisterProperty
         _unregisterAll = delegate.unregisterAllProperties
     }
 
     private let _getter: (String) -> Getter?
-    private let _register: (String, @escaping Getter) -> Void
+    private let _setter: (String) -> Setter?
+    private let _register: (String, @escaping Getter, Setter?) -> Void
     private let _unregister: (String) -> Void
     private let _unregisterAll: () -> Void
 }
@@ -20,8 +22,12 @@ extension AnyTypeDelegate: TypeDelegate {
         return _getter(name)
     }
 
-    public func registerProperty(named name: String, getter: @escaping Getter) {
-        _register(name, getter)
+    public func setterForProperty(named name: String) -> Setter? {
+        return _setter(name)
+    }
+
+    public func registerProperty(named name: String, getter: @escaping Getter, setter: Setter?) {
+        _register(name, getter, setter)
     }
 
     public func unregisterProperty(named name: String) {

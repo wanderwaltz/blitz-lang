@@ -11,13 +11,26 @@ struct BoundTypeDelegate<Delegate: TypeDelegate> {
 }
 
 
-extension BoundTypeDelegate: Gettable {
+extension BoundTypeDelegate: Gettable, Settable {
     func getProperty(named name: String) throws -> Value {
         guard let getter = delegate.getterForProperty(named: name) else {
             throw InternalError.unknownProperty(named: name)
         }
 
         return getter(object)
+    }
+
+    func setProperty(named name: String, value: Value) throws {
+        guard let setter = delegate.setterForProperty(named: name) else {
+            if delegate.getterForProperty(named: name) != nil {
+                throw InternalError.settingReadonlyProperty(named: name)
+            }
+            else {
+                throw InternalError.unknownProperty(named: name)
+            }
+        }
+
+        setter(object, value)
     }
 }
 

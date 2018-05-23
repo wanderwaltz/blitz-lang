@@ -27,4 +27,8 @@ extension MockInterpreterDelegate: ASTInterpreterDelegate {
     func interpreter(_ interpreter: ASTInterpreter, gettableFor value: Value) -> Gettable? {
         return typeDelegates.gettable(for: value)
     }
+
+    func interpreter(_ interpreter: ASTInterpreter, settableFor value: Value) -> Settable? {
+        return typeDelegates.settable(for: value)
+    }
 }

@@ -2,7 +2,7 @@ import Volt
 import Foundation
 
 final class TestNSObject: NSObject {
-    @objc var qq: String = "qq"
+    @objc var qq = -1
 
     @objc func aa() -> Double {
         return 123.45
@@ -10,7 +10,7 @@ final class TestNSObject: NSObject {
 
     @objc init(arg1: Float, arg2: Int) {
         super.init()
-        qq = "\(arg1)-\(arg2)"
+        qq = Int(arg1-Float(arg2))
     }
 }
 

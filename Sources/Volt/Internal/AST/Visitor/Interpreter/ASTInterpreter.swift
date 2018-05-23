@@ -71,28 +71,9 @@ extension ASTInterpreter: ASTVisitor {
         return captureValue {
             var value = try evaluate(expression.value)
 
-            if expression.op.type == .equal {
-                return try setVariable(named: expression.identifier, value: value)
-            }
-
-            let existingValue = try lookupVariable(named: expression.identifier)
-            let location = expression.op.location
-
-            switch expression.op.type {
-            case .minusEqual:
-                value = try unwrap(existingValue.subtracting(value, at: location))
-
-            case .plusEqual:
-                value = try unwrap(existingValue.adding(value, at: location))
-
-            case .slashEqual:
-                value = try unwrap(existingValue.dividing(by: value, at: location))
-
-            case .starEqual:
-                value = try unwrap(existingValue.multiplying(by: value, at: location))
-
-            default:
-                preconditionFailure("unimplemented assignment operator \(expression.op)")
+            if expression.op.type != .equal {
+                let existingValue = try lookupVariable(named: expression.identifier)
+                value = try rawOpAssignment(existingValue: existingValue, op: expression.op, newValue: value)
             }
 
             return try setVariable(named: expression.identifier, value: value)
@@ -200,18 +181,26 @@ extension ASTInterpreter: ASTVisitor {
 
     func visitGetExpression(_ expression: GetExpression) -> Result {
         return captureValue {
-            let object = expression.object
-            let name = expression.name.lexeme
-            let location = expression.name.location
+            return try rawGet(
+                object: try evaluate(expression.object),
+                name: expression.name
+            )
+        }
+    }
 
-            let gettable = try lookupGettable(for: object, at: location)
+    func visitSetExpression(_ expression: SetExpression) -> Result {
+        return captureValue {
+            let object = try evaluate(expression.object)
+            let name = expression.name
 
-            do {
-                return try gettable.getProperty(named: name)
+            var value = try evaluate(expression.value)
+
+            if expression.op.type != .equal {
+                let existingValue = try rawGet(object: object, name: name)
+                value = try rawOpAssignment(existingValue: existingValue, op: expression.op, newValue: value)
             }
-            catch let internalError as InternalError {
-                throw internalError.makeRuntimeError(location: location)
-            }
+
+            return try rawSet(object: object, name: name, value: value)
         }
     }
 
@@ -452,28 +441,93 @@ extension ASTInterpreter {
 }
 
 
-// MARK: - getters support
+// MARK: - getters/setters support
 extension ASTInterpreter {
-    private func lookupGettable(for object: Expression, at location: SourceLocation) throws -> Gettable {
-        let objectValue = try evaluate(object)
+    private func rawOpAssignment(existingValue: Value, op: Token, newValue: Value) throws -> Value {
+        let location = op.location
 
+        switch op.type {
+        case .minusEqual:
+            return try unwrap(existingValue.subtracting(newValue, at: location))
+
+        case .plusEqual:
+            return try unwrap(existingValue.adding(newValue, at: location))
+
+        case .slashEqual:
+            return try unwrap(existingValue.dividing(by: newValue, at: location))
+
+        case .starEqual:
+            return try unwrap(existingValue.multiplying(by: newValue, at: location))
+
+        default:
+            preconditionFailure("unimplemented assignment operator \(op)")
+        }
+    }
+
+    private func rawGet(object: Value, name: Token) throws -> Value {
+        let location = name.location
+
+        let gettable = try lookupGettable(for: object, at: location)
+
+        do {
+            return try gettable.getProperty(named: name.lexeme)
+        }
+        catch let internalError as InternalError {
+            throw internalError.makeRuntimeError(location: location)
+        }
+    }
+
+    private func rawSet(object: Value, name: Token, value: Value) throws -> Value {
+        let location = name.location
+        let settable = try lookupSettable(for: object, at: location)
+
+        do {
+            try settable.setProperty(named: name.lexeme, value: value)
+            return value
+        }
+        catch let internalError as InternalError {
+            throw internalError.makeRuntimeError(location: location)
+        }
+    }
+
+    private func lookupGettable(for object: Value, at location: SourceLocation) throws -> Gettable {
         guard let delegate = delegate else {
             throw RuntimeError(
                 code: .invalidGetExpression,
-                message: "cannot access properties of type '\(objectValue.typeName)': interpeter delegate is not set",
+                message: "cannot access properties of type '\(object.typeName)': interpeter delegate is not set",
                 location: location
             )
         }
 
-        guard let typeDelegate = delegate.interpreter(self, gettableFor: objectValue) else {
+        guard let gettable = delegate.interpreter(self, gettableFor: object) else {
             throw RuntimeError(
                 code: .invalidGetExpression,
-                message: "cannot access properties on object of type \(objectValue.typeName)",
+                message: "cannot access properties on object of type \(object.typeName)",
                 location: location
             )
         }
 
-        return typeDelegate
+        return gettable
+    }
+
+    private func lookupSettable(for object: Value, at location: SourceLocation) throws -> Settable {
+        guard let delegate = delegate else {
+            throw RuntimeError(
+                code: .invalidSetExpression,
+                message: "cannot access properties of type '\(object.typeName)': interpeter delegate is not set",
+                location: location
+            )
+        }
+
+        guard let settable = delegate.interpreter(self, settableFor: object) else {
+            throw RuntimeError(
+                code: .invalidGetExpression,
+                message: "cannot access properties on object of type \(object.typeName)",
+                location: location
+            )
+        }
+
+        return settable
     }
 }
 
