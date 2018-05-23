@@ -17,7 +17,7 @@ extension BoundTypeDelegate: Gettable, Settable {
             throw InternalError.unknownProperty(named: name)
         }
 
-        return getter(object)
+        return try getter(object)
     }
 
     func setProperty(named name: String, value: Value) throws {
@@ -30,7 +30,7 @@ extension BoundTypeDelegate: Gettable, Settable {
             }
         }
 
-        setter(object, value)
+        try setter(object, value)
     }
 }
 

@@ -3,9 +3,23 @@ extension TypeDelegate {
         registerProperty(
             named: name,
             getter: { object in
-                return .init(object[keyPath: keyPath])
+                .init(object[keyPath: keyPath])
             },
             setter: nil
+        )
+    }
+
+    public func registerMutableProperty<T>(named name: String, keyPath: ReferenceWritableKeyPath<Object, T>) {
+        registerProperty(
+            named: name,
+            getter: { object -> Value in
+                .init(object[keyPath: keyPath])
+            },
+            setter: { object, value in
+                try typecheck(value, T.self) { arg in
+                    object[keyPath: keyPath] = arg
+                }
+            }
         )
     }
 

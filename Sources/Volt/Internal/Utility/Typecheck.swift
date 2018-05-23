@@ -1,3 +1,16 @@
+func typecheck<T, R>(_ value: Value, _ type: T.Type, _ block: (T) throws -> R) throws -> R {
+    if let convertible = T.self as? ReverseValueConvertible.Type,
+       let v = convertible.fromVoltValue(value) as? T {
+           return try block(v)
+    }
+
+    guard let v = value.any as? T else {
+        throw InternalError.typeError(expected: String(describing: T.self), got: value.typeName)
+    }
+
+    return try block(v)
+}
+
 func typecheck<T0, R>
               (_ args: [Value],
                _ type0: T0.Type,
@@ -6,16 +19,7 @@ func typecheck<T0, R>
         throw InternalError.invalidNumberOfArguments(expected: 1, got: args.count)
     }
 
-    if let convertible = T0.self as? ReverseValueConvertible.Type,
-       let v0 = convertible.fromVoltValue(args[0]) as? T0 {
-           return try block(v0)
-    }
-
-    guard let v0 = args[0].any as? T0 else {
-        throw InternalError.typeError(expected: String(describing: T0.self), got: args[0].typeName)
-    }
-
-    return try block(v0)
+    return try typecheck(args[0], type0, block)
 }
 
 func typecheck<T0, T1, R>
