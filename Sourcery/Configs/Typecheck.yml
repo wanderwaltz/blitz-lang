@@ -1,0 +1,15 @@
+sources:
+  include:
+    - ../../Sources
+
+  exclude:
+    - ../../Sources/Volt/Internal/Utility/Typecheck.swift
+
+templates:
+  - ../Templates/Typecheck.ejs
+
+output:
+  ../../Sources/Volt/Internal/Utility/Typecheck.swift
+
+args:
+  generics_depth: 10

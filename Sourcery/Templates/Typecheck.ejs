@@ -1,0 +1,52 @@
+<%_
+  depth_range = Array.from({length: argument.generics_depth}, (x, i) => i);
+_%>
+
+/// Type-checking a single value
+func typecheck<T, R>(_ value: Value, _ type: T.Type, _ block: (T) throws -> R) throws -> R {
+    if let convertible = T.self as? ReverseValueConvertible.Type,
+       let v = convertible.fromVoltValue(value) as? T {
+           return try block(v)
+    }
+
+    guard let v = value.any as? T else {
+        throw InternalError.typeError(expected: String(describing: T.self), got: value.typeName)
+    }
+
+    return try block(v)
+}
+
+func typecheck<T0, R>
+              (_ args: [Value],
+               _ type0: T0.Type,
+               _ block: (T0) throws -> R) throws -> R {
+    guard args.count == 1 else {
+        throw InternalError.invalidNumberOfArguments(expected: 1, got: args.count)
+    }
+
+    return try typecheck(args[0], type0, block)
+}
+
+<%_ for (depth in depth_range) {
+      if (depth == 0) { continue; }
+      indices = Array.from({length: Number(depth) + 1}, (x, i) => i);
+      indices1 = Array.from({length: Number(depth) }, (x, i) => i);
+_%>
+func typecheck<<%_ for (i in indices) {_%>T<%= i %>, <% } _%> R>
+              (_ args: [Value],
+               <% for (i in indices) { _%>_ type<%= i %>: T<%= i %>.Type,
+               <% } %>_ block: (<%_ for (i in indices) { %>T<%= i %><% if (i != depth) {%>, <% }} _%>) throws -> R) throws -> R {
+    guard args.count == <%= indices.length %> else {
+        throw InternalError.invalidNumberOfArguments(expected: <%= indices.length %>, got: args.count)
+    }
+
+    let subargs = [<% for (i in indices1) { %>args[<%= i %>]<% if (i != depth - 1) {%>, <% }} _%>]
+
+    return try typecheck(subargs, <% for (i in indices1) { %>type<%= i %>, <% } %>{ <% for (i in indices1) { %>a<%= i %><% if (i != depth - 1) {%>, <% }} %> in
+        try typecheck(args[<%= depth %>], type<%= depth %>) { a<%= depth %> in
+            try block(<% for (i in indices) { %>a<%= i %><% if (i != depth) {%>, <% }} _%>)
+        }
+    })
+}
+
+<% } _%>
