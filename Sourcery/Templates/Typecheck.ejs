@@ -27,24 +27,24 @@ func typecheck<T0, R>
     return try typecheck(args[0], type0, block)
 }
 
-<%_ for (depth in depth_range) {
+<%_ for (depth of depth_range) {
       if (depth == 0) { continue; }
-      indices = Array.from({length: Number(depth) + 1}, (x, i) => i);
-      indices1 = Array.from({length: Number(depth) }, (x, i) => i);
+      indices = Array.from({length: depth + 1}, (x, i) => i);
+      indices1 = Array.from({length: depth }, (x, i) => i);
 _%>
-func typecheck<<%_ for (i in indices) {_%>T<%= i %>, <% } _%> R>
+func typecheck<<%_ for (i of indices) {_%>T<%= i %>, <% } _%> R>
               (_ args: [Value],
-               <% for (i in indices) { _%>_ type<%= i %>: T<%= i %>.Type,
-               <% } %>_ block: (<%_ for (i in indices) { %>T<%= i %><% if (i != depth) {%>, <% }} _%>) throws -> R) throws -> R {
+               <% for (i of indices) { _%>_ type<%= i %>: T<%= i %>.Type,
+               <% } %>_ block: (<%_ for (i of indices) { %>T<%= i %><% if (i != depth) {%>, <% }} _%>) throws -> R) throws -> R {
     guard args.count == <%= indices.length %> else {
         throw InternalError.invalidNumberOfArguments(expected: <%= indices.length %>, got: args.count)
     }
 
-    let subargs = [<% for (i in indices1) { %>args[<%= i %>]<% if (i != depth - 1) {%>, <% }} _%>]
+    let subargs = [<% for (i of indices1) { %>args[<%= i %>]<% if (i != depth - 1) {%>, <% }} _%>]
 
-    return try typecheck(subargs, <% for (i in indices1) { %>type<%= i %>, <% } %>{ <% for (i in indices1) { %>a<%= i %><% if (i != depth - 1) {%>, <% }} %> in
+    return try typecheck(subargs, <% for (i of indices1) { %>type<%= i %>, <% } %>{ <% for (i of indices1) { %>a<%= i %><% if (i != depth - 1) {%>, <% }} %> in
         try typecheck(args[<%= depth %>], type<%= depth %>) { a<%= depth %> in
-            try block(<% for (i in indices) { %>a<%= i %><% if (i != depth) {%>, <% }} _%>)
+            try block(<% for (i of indices) { %>a<%= i %><% if (i != depth) {%>, <% }} _%>)
         }
     })
 }

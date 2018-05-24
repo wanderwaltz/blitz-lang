@@ -1,0 +1,31 @@
+<%_
+  depth_range = Array.from({length: argument.generics_depth}, (x, i) => i).map(x => Number(x));
+_%>
+
+extension VM {
+    public func defineGlobalFunc0<R>(named name: String, `func`: @escaping () -> R) throws {
+        try defineGlobal(
+            named: name,
+            value: AnyCallable({ _, _ in
+                .init(`func`())
+            })
+            .checkingArity(0)
+        )
+    }
+
+<%_ for (depth of depth_range) {
+      indices = Array.from({length: depth + 1}, (x, i) => i);
+      indices1 = Array.from({length: depth }, (x, i) => i);
+_%>
+    public func defineGlobalFunc<%= depth + 1 %><<%_ for (i of indices) { %>P<%= i %>, <% } %>R>(named name: String, `func`: @escaping (<%_ for (i of indices) { %>P<%= i %><% if (i != depth) { %>, <% }} %>) -> R) throws {
+        try defineGlobal(
+            named: name,
+            value: AnyCallable({ _, args in
+                return try typecheck(args, <% for (i of indices) { %>P<%= i %>.self<% if (i != depth) { %>, <% }} %>) {
+                    .init(`func`(<% for (i of indices) { %>$<%= i %><% if (i != depth) { %>, <% }} %>))
+                }
+            })
+        )
+    }
+<% } _%>
+}
