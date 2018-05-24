@@ -9,6 +9,7 @@ extension VM {
         try defineGlobalFunc0(named: String(describing: T.self), func: initializer)
         continueDefinigNSObject(T.self)
     }
+
     public func defineNSObject1<T: NSObject, P0>(initializer: @escaping (P0) -> T) throws {
         try defineGlobalFunc1(named: String(describing: T.self), func: initializer)
         continueDefinigNSObject(T.self)

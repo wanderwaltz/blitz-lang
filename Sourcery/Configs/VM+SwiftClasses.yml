@@ -1,0 +1,15 @@
+sources:
+  include:
+    - ../../Sources
+
+  exclude:
+    - ../../Sources/Volt/Public/VM/VM+SwiftClasses.swift
+
+templates:
+  - ../Templates/VM+SwiftClasses.ejs
+
+output:
+  ../../Sources/Volt/Public/VM/VM+SwiftClasses.swift
+
+args:
+  generics_depth: 10

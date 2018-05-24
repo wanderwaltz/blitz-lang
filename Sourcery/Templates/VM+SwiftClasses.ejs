@@ -1,9 +1,8 @@
-import Foundation
-
 extension VM {
-    public func defineNSObject0<T: NSObject>(initializer: @escaping () -> T) throws {
+    public func defineClass0<T>(initializer: @escaping () -> T,
+                                with block: (AnyTypeDelegate<T>) -> Void) throws {
         try defineGlobalFunc0(named: String(describing: T.self), func: initializer)
-        continueDefinigNSObject(T.self)
+        continueDefiningClass(with: block)
     }
 
 <%
@@ -18,13 +17,13 @@ extension VM {
 
         generic_parameters = indices.map(x => "P" + x).join(", ")
 _%>
-    public func defineNSObject<%= num_args %><T: NSObject, <%= generic_parameters %>>(initializer: @escaping (<%= generic_parameters %>) -> T) throws {
+    public func defineClass<%= num_args %><T, <%= generic_parameters %>>(initializer: @escaping (<%= generic_parameters %>) -> T, with block: (AnyTypeDelegate<T>) -> Void) throws {
         try defineGlobalFunc<%= num_args %>(named: String(describing: T.self), func: initializer)
-        continueDefinigNSObject(T.self)
+        continueDefiningClass(with: block)
     }
 
 <% } _%>
-    private func continueDefinigNSObject<T: NSObject>(_ type: T.Type) {
-        typeDelegates.registerTypeDelegate(NSObjectTypeDelegate<T>())
+    private func continueDefiningClass<T>(with block: (AnyTypeDelegate<T>) -> Void) {
+        typeDelegates.withDelegate(for: T.self, do: block)
     }
 }
