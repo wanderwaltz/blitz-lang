@@ -1,9 +1,10 @@
 import Foundation
 
 extension VM {
-    public func defineNSObject0<T: NSObject>(initializer: @escaping () -> T) throws {
+    @discardableResult
+    public func defineNSObject0<T: NSObject>(initializer: @escaping () -> T) throws -> AnyTypeDelegate<T> {
         try defineGlobalFunc0(named: String(describing: T.self), func: initializer)
-        continueDefinigNSObject(T.self)
+        return continueDefinigNSObject(T.self)
     }
 
 <%
@@ -18,13 +19,16 @@ extension VM {
 
         generic_parameters = indices.map(x => "P" + x).join(", ")
 _%>
-    public func defineNSObject<%= num_args %><T: NSObject, <%= generic_parameters %>>(initializer: @escaping (<%= generic_parameters %>) -> T) throws {
+    @discardableResult
+    public func defineNSObject<%= num_args %><T: NSObject, <%= generic_parameters %>>(initializer: @escaping (<%= generic_parameters %>) -> T) throws -> AnyTypeDelegate<T> {
         try defineGlobalFunc<%= num_args %>(named: String(describing: T.self), func: initializer)
-        continueDefinigNSObject(T.self)
+        return continueDefinigNSObject(T.self)
     }
 
 <% } _%>
-    private func continueDefinigNSObject<T: NSObject>(_ type: T.Type) {
-        typeDelegates.registerTypeDelegate(NSObjectTypeDelegate<T>())
+    private func continueDefinigNSObject<T: NSObject>(_ type: T.Type) -> AnyTypeDelegate<T> {
+        let delegate = NSObjectTypeDelegate<T>()
+        typeDelegates.registerTypeDelegate(delegate)
+        return .init(delegate)
     }
 }

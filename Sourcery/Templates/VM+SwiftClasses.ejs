@@ -1,8 +1,8 @@
 extension VM {
-    public func defineClass0<T>(initializer: @escaping () -> T,
-                                with block: (AnyTypeDelegate<T>) -> Void) throws {
+    @discardableResult
+    public func defineClass0<T>(initializer: @escaping () -> T) throws -> AnyTypeDelegate<T> {
         try defineGlobalFunc0(named: String(describing: T.self), func: initializer)
-        continueDefiningClass(with: block)
+        return continueDefiningClass(T.self)
     }
 
 <%
@@ -17,13 +17,16 @@ extension VM {
 
         generic_parameters = indices.map(x => "P" + x).join(", ")
 _%>
-    public func defineClass<%= num_args %><T, <%= generic_parameters %>>(initializer: @escaping (<%= generic_parameters %>) -> T, with block: (AnyTypeDelegate<T>) -> Void) throws {
+    @discardableResult
+    public func defineClass<%= num_args %><T, <%= generic_parameters %>>(initializer: @escaping (<%= generic_parameters %>) -> T) throws -> AnyTypeDelegate<T> {
         try defineGlobalFunc<%= num_args %>(named: String(describing: T.self), func: initializer)
-        continueDefiningClass(with: block)
+        return continueDefiningClass(T.self)
     }
 
 <% } _%>
-    private func continueDefiningClass<T>(with block: (AnyTypeDelegate<T>) -> Void) {
-        typeDelegates.withDelegate(for: T.self, do: block)
+    private func continueDefiningClass<T>(_ type: T.Type) -> AnyTypeDelegate<T> {
+        let delegate = DefaultTypeDelegate<T>()
+        typeDelegates.registerTypeDelegate(delegate)
+        return .init(delegate)
     }
 }
