@@ -2,7 +2,6 @@
 // DO NOT EDIT
 
 
-
 extension VM {
     public func defineGlobalFunc0<R>(named name: String, `func`: @escaping () -> R) throws {
         try defineGlobal(
@@ -24,6 +23,7 @@ extension VM {
             })
         )
     }
+
     public func defineGlobalFunc2<P0, P1, R>(named name: String, `func`: @escaping (P0, P1) -> R) throws {
         try defineGlobal(
             named: name,
@@ -34,6 +34,7 @@ extension VM {
             })
         )
     }
+
     public func defineGlobalFunc3<P0, P1, P2, R>(named name: String, `func`: @escaping (P0, P1, P2) -> R) throws {
         try defineGlobal(
             named: name,
@@ -44,6 +45,7 @@ extension VM {
             })
         )
     }
+
     public func defineGlobalFunc4<P0, P1, P2, P3, R>(named name: String, `func`: @escaping (P0, P1, P2, P3) -> R) throws {
         try defineGlobal(
             named: name,
@@ -54,6 +56,7 @@ extension VM {
             })
         )
     }
+
     public func defineGlobalFunc5<P0, P1, P2, P3, P4, R>(named name: String, `func`: @escaping (P0, P1, P2, P3, P4) -> R) throws {
         try defineGlobal(
             named: name,
@@ -64,6 +67,7 @@ extension VM {
             })
         )
     }
+
     public func defineGlobalFunc6<P0, P1, P2, P3, P4, P5, R>(named name: String, `func`: @escaping (P0, P1, P2, P3, P4, P5) -> R) throws {
         try defineGlobal(
             named: name,
@@ -74,6 +78,7 @@ extension VM {
             })
         )
     }
+
     public func defineGlobalFunc7<P0, P1, P2, P3, P4, P5, P6, R>(named name: String, `func`: @escaping (P0, P1, P2, P3, P4, P5, P6) -> R) throws {
         try defineGlobal(
             named: name,
@@ -84,6 +89,7 @@ extension VM {
             })
         )
     }
+
     public func defineGlobalFunc8<P0, P1, P2, P3, P4, P5, P6, P7, R>(named name: String, `func`: @escaping (P0, P1, P2, P3, P4, P5, P6, P7) -> R) throws {
         try defineGlobal(
             named: name,
@@ -94,6 +100,7 @@ extension VM {
             })
         )
     }
+
     public func defineGlobalFunc9<P0, P1, P2, P3, P4, P5, P6, P7, P8, R>(named name: String, `func`: @escaping (P0, P1, P2, P3, P4, P5, P6, P7, P8) -> R) throws {
         try defineGlobal(
             named: name,
@@ -104,6 +111,7 @@ extension VM {
             })
         )
     }
+
     public func defineGlobalFunc10<P0, P1, P2, P3, P4, P5, P6, P7, P8, P9, R>(named name: String, `func`: @escaping (P0, P1, P2, P3, P4, P5, P6, P7, P8, P9) -> R) throws {
         try defineGlobal(
             named: name,
@@ -114,4 +122,5 @@ extension VM {
             })
         )
     }
+
 }

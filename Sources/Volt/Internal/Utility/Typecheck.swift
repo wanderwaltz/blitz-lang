@@ -2,7 +2,6 @@
 // DO NOT EDIT
 
 
-
 /// Type-checking a single value
 func typecheck<T, R>(_ value: Value, _ type: T.Type, _ block: (T) throws -> R) throws -> R {
     if let convertible = T.self as? ReverseValueConvertible.Type,
@@ -45,7 +44,6 @@ func typecheck<T0, T1, R>
         }
     })
 }
-
 func typecheck<T0, T1, T2, R>
               (_ args: [Value],
                _ type0: T0.Type,
@@ -64,7 +62,6 @@ func typecheck<T0, T1, T2, R>
         }
     })
 }
-
 func typecheck<T0, T1, T2, T3, R>
               (_ args: [Value],
                _ type0: T0.Type,
@@ -84,7 +81,6 @@ func typecheck<T0, T1, T2, T3, R>
         }
     })
 }
-
 func typecheck<T0, T1, T2, T3, T4, R>
               (_ args: [Value],
                _ type0: T0.Type,
@@ -105,7 +101,6 @@ func typecheck<T0, T1, T2, T3, T4, R>
         }
     })
 }
-
 func typecheck<T0, T1, T2, T3, T4, T5, R>
               (_ args: [Value],
                _ type0: T0.Type,
@@ -127,7 +122,6 @@ func typecheck<T0, T1, T2, T3, T4, T5, R>
         }
     })
 }
-
 func typecheck<T0, T1, T2, T3, T4, T5, T6, R>
               (_ args: [Value],
                _ type0: T0.Type,
@@ -150,7 +144,6 @@ func typecheck<T0, T1, T2, T3, T4, T5, T6, R>
         }
     })
 }
-
 func typecheck<T0, T1, T2, T3, T4, T5, T6, T7, R>
               (_ args: [Value],
                _ type0: T0.Type,
@@ -174,7 +167,6 @@ func typecheck<T0, T1, T2, T3, T4, T5, T6, T7, R>
         }
     })
 }
-
 func typecheck<T0, T1, T2, T3, T4, T5, T6, T7, T8, R>
               (_ args: [Value],
                _ type0: T0.Type,
@@ -199,7 +191,6 @@ func typecheck<T0, T1, T2, T3, T4, T5, T6, T7, T8, R>
         }
     })
 }
-
 func typecheck<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, R>
               (_ args: [Value],
                _ type0: T0.Type,

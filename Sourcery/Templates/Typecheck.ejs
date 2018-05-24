@@ -1,7 +1,3 @@
-<%_
-  depth_range = Array.from({length: argument.generics_depth}, (x, i) => i);
-_%>
-
 /// Type-checking a single value
 func typecheck<T, R>(_ value: Value, _ type: T.Type, _ block: (T) throws -> R) throws -> R {
     if let convertible = T.self as? ReverseValueConvertible.Type,
@@ -27,26 +23,38 @@ func typecheck<T0, R>
     return try typecheck(args[0], type0, block)
 }
 
-<%_ for (depth of depth_range) {
+<%_
+    depth_range = Array.from({length: argument.generics_depth}, (x, i) => i);
+
+    for (depth of depth_range) {
       if (depth == 0) { continue; }
+
       indices = Array.from({length: depth + 1}, (x, i) => i);
       indices1 = Array.from({length: depth }, (x, i) => i);
+
+      args_count = indices.length
+      generic_parameters = indices.map(x => "T" + x).join(", ")
+      type_arguments_singature = indices.map(x => "_ type" + x + ": T" + x + ".Type").join(",\n               ")
+      block_arguments_signature = indices.map(x => "T" + x).join(", ")
+
+      super_arguments_array = indices1.map(x => "args[" + x + "]").join(", ")
+      super_type_arguments = indices1.map(x => "type" + x).join(", ")
+      super_closure_arguments = indices1.map(x => "a" + x).join(", ")
 _%>
-func typecheck<<%_ for (i of indices) {_%>T<%= i %>, <% } _%> R>
+func typecheck<<%= generic_parameters %>, R>
               (_ args: [Value],
-               <% for (i of indices) { _%>_ type<%= i %>: T<%= i %>.Type,
-               <% } %>_ block: (<%_ for (i of indices) { %>T<%= i %><% if (i != depth) {%>, <% }} _%>) throws -> R) throws -> R {
-    guard args.count == <%= indices.length %> else {
-        throw InternalError.invalidNumberOfArguments(expected: <%= indices.length %>, got: args.count)
+               <%= type_arguments_singature %>,
+               _ block: (<%= block_arguments_signature %>) throws -> R) throws -> R {
+    guard args.count == <%= args_count %> else {
+        throw InternalError.invalidNumberOfArguments(expected: <%= args_count %>, got: args.count)
     }
 
-    let subargs = [<% for (i of indices1) { %>args[<%= i %>]<% if (i != depth - 1) {%>, <% }} _%>]
+    let subargs = [<%= super_arguments_array %>]
 
-    return try typecheck(subargs, <% for (i of indices1) { %>type<%= i %>, <% } %>{ <% for (i of indices1) { %>a<%= i %><% if (i != depth - 1) {%>, <% }} %> in
+    return try typecheck(subargs, <%= super_type_arguments %>, { <%= super_closure_arguments %> in
         try typecheck(args[<%= depth %>], type<%= depth %>) { a<%= depth %> in
-            try block(<% for (i of indices) { %>a<%= i %><% if (i != depth) {%>, <% }} _%>)
+            try block(<%= super_closure_arguments %>, a<%= depth %>)
         }
     })
 }
-
-<% } _%>
+<% } %>
