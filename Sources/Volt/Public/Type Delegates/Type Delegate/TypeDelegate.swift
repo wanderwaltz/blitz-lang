@@ -6,7 +6,8 @@ public protocol TypeDelegate {
     func getterForProperty(named name: String) -> Getter?
     func setterForProperty(named name: String) -> Setter?
 
-    func registerProperty(named name: String, getter: @escaping Getter, setter: Setter?)
+    @discardableResult
+    func registerProperty(named name: String, getter: @escaping Getter, setter: Setter?) -> Self
 
     func unregisterProperty(named name: String)
     func unregisterAllProperties()

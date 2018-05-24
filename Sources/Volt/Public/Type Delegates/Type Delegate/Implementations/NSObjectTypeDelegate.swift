@@ -16,8 +16,10 @@ extension NSObjectTypeDelegate: TypeDelegate {
         return base.setterForProperty(named: name) ?? defaultSetterForProperty(named: name)
     }
 
-    public func registerProperty(named name: String, getter: @escaping Getter, setter: Setter?) {
+    @discardableResult
+    public func registerProperty(named name: String, getter: @escaping Getter, setter: Setter?) -> Self {
         base.registerProperty(named: name, getter: getter, setter: setter)
+        return self
     }
 
     public func unregisterProperty(named name: String) {

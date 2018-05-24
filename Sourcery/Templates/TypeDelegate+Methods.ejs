@@ -1,0 +1,52 @@
+extension TypeDelegate {
+    @discardableResult
+    public func registerMethod<R>(named name: String, method getter: @escaping (Object) -> () -> R) -> Self {
+        return registerProperty(
+            named: name,
+            getter: { object in
+                let method = getter(object)
+
+                return .object(
+                    AnyCallable({ _, _ in
+                        .init(method())
+                    })
+                    .checkingArity(0)
+                )
+            },
+            setter: nil
+        )
+    }
+
+<%_
+    depth_range = Array.from({length: argument.generics_depth}, (x, i) => i).map(x => Number(x));
+
+    for (depth of depth_range) {
+      indices = Array.from({length: depth + 1}, (x, i) => i);
+
+      num_args = depth + 1
+
+      generic_parameters = indices.map(x => "T" + x).join(", ")
+      typecheck_arguments = indices.map(x => "T" + x + ".self").join(", ")
+      closure_arguments = indices.map(x => "$" + x).join(", ")
+_%>
+    @discardableResult
+    public func registerMethod<<%= generic_parameters %>, R>(named name: String, method getter: @escaping (Object) -> (<%= generic_parameters %>) -> R) -> Self {
+        return registerProperty(
+            named: name,
+            getter: { object in
+                let method = getter(object)
+
+                return .object(
+                    AnyCallable({ _, args in
+                        return try typecheck(args, <%= typecheck_arguments %>) {
+                            Value(method(<%= closure_arguments %>))
+                        }
+                    })
+                )
+            },
+            setter: nil
+        )
+    }
+
+<% } _%>
+}

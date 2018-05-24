@@ -1,0 +1,15 @@
+sources:
+  include:
+    - ../../Sources
+
+  exclude:
+    - ../../Sources/Volt/Public/Type Delegates/Type Delegate/TypeDelegate+Methods.swift
+
+templates:
+  - ../Templates/TypeDelegate+Methods.ejs
+
+output:
+  ../../Sources/Volt/Public/Type Delegates/Type Delegate/TypeDelegate+Methods.swift
+
+args:
+  generics_depth: 10

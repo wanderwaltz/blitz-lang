@@ -15,7 +15,8 @@ extension DefaultTypeDelegate: TypeDelegate {
         return setters[name]
     }
 
-    public func registerProperty(named name: String, getter: @escaping Getter, setter: Setter?) {
+    @discardableResult
+    public func registerProperty(named name: String, getter: @escaping Getter, setter: Setter?) -> DefaultTypeDelegate {
         getters[name] = getter
 
         if let setter = setter {
@@ -24,6 +25,8 @@ extension DefaultTypeDelegate: TypeDelegate {
         else {
             setters.removeValue(forKey: name)
         }
+
+        return self
     }
 
     public func unregisterProperty(named name: String) {
