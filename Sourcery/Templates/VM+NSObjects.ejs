@@ -1,0 +1,29 @@
+import Foundation
+
+extension VM {
+    public func defineNSObject0<T: NSObject>(initializer: @escaping () -> T) throws {
+        try defineGlobalFunc0(named: String(describing: T.self), func: initializer)
+        continueDefinigNSObject(T.self)
+    }
+<%_
+    depth_range = Array.from({length: argument.generics_depth + 1}, (x, i) => i).map(x => Number(x));
+
+    for (depth of depth_range) {
+        if (depth == 0) { continue; }
+
+        indices = Array.from({length: depth }, (x, i) => i);
+
+        num_args = depth
+
+        generic_parameters = indices.map(x => "P" + x).join(", ")
+_%>
+    public func defineNSObject<%= num_args %><T: NSObject, <%= generic_parameters %>>(initializer: @escaping (<%= generic_parameters %>) -> T) throws {
+        try defineGlobalFunc<%= num_args %>(named: String(describing: T.self), func: initializer)
+        continueDefinigNSObject(T.self)
+    }
+
+<% } _%>
+    private func continueDefinigNSObject<T: NSObject>(_ type: T.Type) {
+        typeDelegates.registerTypeDelegate(NSObjectTypeDelegate<T>())
+    }
+}
