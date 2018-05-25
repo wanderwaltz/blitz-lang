@@ -396,11 +396,20 @@ private final class ParserImpl {
     }
 
     private func parseCallCompletion(_ callee: Expression) throws -> Expression {
-        var arguments: [Expression] = []
+        var arguments: [CallExpression.Argument] = []
 
         if !check(.rightParen) {
             repeat {
-                arguments.append(try parseExpression())
+                var label: Token? = nil
+
+                if check(.identifier, .colon) {
+                    label = try consume(.identifier, "expected argument label")
+                    try consume(.colon, "expected : after argument label")
+                }
+
+                let value = try parseExpression()
+
+                arguments.append((label: label, value: value))
             } while try match(.comma)
         }
 
@@ -475,8 +484,20 @@ private final class ParserImpl {
         return peek().type == type
     }
 
+    private func check(_ t1: TokenType, _ t2: TokenType) -> Bool {
+        guard !isAtEnd else {
+            return false
+        }
+
+        return peek().type == t1 && peekNext().type == t2
+    }
+
     private func peek() -> Token {
         return tokens.peek()
+    }
+
+    private func peekNext() -> Token {
+        return tokens.peekNext()
     }
 
     private func previous() -> Token {

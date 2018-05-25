@@ -118,7 +118,7 @@ extension ASTResolver: ASTVisitor {
             try resolve(expression.callee)
 
             for argument in expression.arguments {
-                try resolve(argument)
+                try resolve(argument.value)
             }
         }
     }

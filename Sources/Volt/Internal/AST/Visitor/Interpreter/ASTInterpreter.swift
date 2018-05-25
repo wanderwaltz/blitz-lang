@@ -128,7 +128,7 @@ extension ASTInterpreter: ASTVisitor {
             let location = expression.paren.location
             let callable = try lookupCallable(for: expression.callee, at: location)
             let arguments = try expression.arguments.map({ arg in
-                try evaluate(arg)
+                try evaluate(arg.value)
             })
 
             do {

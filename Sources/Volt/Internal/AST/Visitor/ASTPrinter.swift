@@ -23,7 +23,15 @@ extension ASTPrinter: ASTVisitor {
     }
 
     func visitCallExpression(_ expression: CallExpression) -> String {
-        let arguments = expression.arguments.map({ print($0) }).joined(separator: ", ")
+        let arguments = expression.arguments.map({ arg in
+            let (label, value) = arg
+            let printedLabel = label.map({ "\($0.lexeme): "}) ?? ""
+            let printedValue = print(value)
+
+            return "\(printedLabel)\(printedValue)"
+        })
+        .joined(separator: ", ")
+
         return parenthesize("call", print(expression.callee), "arguments: [", arguments, "]")
     }
 
