@@ -2,6 +2,7 @@ extension TokenType: CustomStringConvertible {
     var description: String {
         switch self {
         // single-character tokens
+        case .colon: return ":"
         case .comma: return ","
         case .dot: return "."
         case .leftBrace: return "{"

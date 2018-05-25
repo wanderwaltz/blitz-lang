@@ -1,5 +1,6 @@
 enum TokenType: Int {
 // single-character tokens
+case colon
 case comma
 case dot
 case leftBrace

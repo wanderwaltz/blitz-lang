@@ -34,13 +34,14 @@ private final class ScannerImpl {
 
         switch character {
         // single-character tokens
+        case ",": addToken(.comma)
+        case ";": addToken(.semicolon)
+        case ":": addToken(.colon)
+        case ".": addToken(.dot)
         case "(": addToken(.leftParen)
         case ")": addToken(.rightParen)
         case "{": addToken(.leftBrace)
         case "}": addToken(.rightBrace)
-        case ",": addToken(.comma)
-        case ".": addToken(.dot)
-        case ";": addToken(.semicolon)
 
         // one or two character tokens
         case "!": addToken(match("=") ? .bangEqual : .bang)
