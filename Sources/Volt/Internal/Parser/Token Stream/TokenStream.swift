@@ -6,5 +6,8 @@ protocol TokenStream {
     func peek() -> Token
 
     /// should return .eof if no more tokens
+    func peekNext() -> Token
+
+    /// should return .eof if no more tokens
     func advance() throws -> Token
 }
