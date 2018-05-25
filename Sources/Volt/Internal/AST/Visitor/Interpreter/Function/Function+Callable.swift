@@ -10,7 +10,7 @@ extension Function: Callable {
             let parameter = declaration.parameters[i]
             let value = arguments[i]
 
-            try environment.defineVariable(named: parameter, value: value, isMutable: false)
+            try environment.defineVariable(named: parameter.name, value: value, isMutable: false)
         }
 
         environment = ASTInterpreterEnvironment(parent: environment)

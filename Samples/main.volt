@@ -1,2 +1,5 @@
-print "Hello, World!".uppercased()
-print "'" + "   ello, World!    ".capitalized() + "'"
+func append(_ right, to left) {
+    return left + right
+}
+
+print append("World!", "Hello, ")

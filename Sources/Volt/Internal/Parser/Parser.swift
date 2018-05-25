@@ -45,11 +45,13 @@ private final class ParserImpl {
 
         try consume(.leftParen, "expecred ( after \(kind) name")
 
-        var parameters: [Token] = []
+        var parameters: [FunctionDeclarationStatement.ParamDecl] = []
 
         if !check(.rightParen) {
             repeat {
-                parameters.append(try consume(.identifier, "expected parameter name"))
+                let label = try consume(.identifier, "expected parameter label")
+                let name = try consume(.identifier, "expected parameter name")
+                parameters.append((label: label, name: name))
             } while try match(.comma)
         }
 

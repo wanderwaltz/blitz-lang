@@ -88,8 +88,8 @@ extension ASTResolver {
     private func resolveFunction(_ function: FunctionDeclarationStatement) throws {
         beginScope(type: .function)
         for param in function.parameters {
-            declare(param)
-            define(param)
+            declare(param.name)
+            define(param.name)
         }
         try resolve(function.body)
         endScope()

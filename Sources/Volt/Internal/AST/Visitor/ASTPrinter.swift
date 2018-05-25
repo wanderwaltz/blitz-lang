@@ -88,7 +88,7 @@ extension ASTPrinter: ASTVisitor {
             "func",
             statement.name.lexeme,
             "(",
-            statement.parameters.map({ $0.lexeme }).joined(separator: ", "),
+            statement.parameters.map({ "\($0.label.lexeme) \($0.name.lexeme)" }).joined(separator: ", "),
             ")",
             print(statement.body)
         ]
