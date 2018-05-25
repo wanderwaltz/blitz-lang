@@ -7,7 +7,7 @@ extension TypeDelegate {
                 let method = getter(object)
 
                 return .object(
-                    AnyCallable({ _, _ in
+                    AnyCallable({ _, _, _ in
                         .init(method())
                     })
                     .checkingArity(0)
@@ -37,7 +37,7 @@ _%>
                 let method = getter(object)
 
                 return .object(
-                    AnyCallable({ _, args in
+                    AnyCallable({ _, _, args in
                         return try typecheck(args, <%= typecheck_arguments %>) {
                             Value(method(<%= closure_arguments %>))
                         }

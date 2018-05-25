@@ -11,7 +11,7 @@ extension TypeDelegate {
                 let method = getter(object)
 
                 return .object(
-                    AnyCallable({ _, _ in
+                    AnyCallable({ _, _, _ in
                         .init(method())
                     })
                     .checkingArity(0)
@@ -29,7 +29,7 @@ extension TypeDelegate {
                 let method = getter(object)
 
                 return .object(
-                    AnyCallable({ _, args in
+                    AnyCallable({ _, _, args in
                         return try typecheck(args, T0.self) {
                             Value(method($0))
                         }
@@ -48,7 +48,7 @@ extension TypeDelegate {
                 let method = getter(object)
 
                 return .object(
-                    AnyCallable({ _, args in
+                    AnyCallable({ _, _, args in
                         return try typecheck(args, T0.self, T1.self) {
                             Value(method($0, $1))
                         }
@@ -67,7 +67,7 @@ extension TypeDelegate {
                 let method = getter(object)
 
                 return .object(
-                    AnyCallable({ _, args in
+                    AnyCallable({ _, _, args in
                         return try typecheck(args, T0.self, T1.self, T2.self) {
                             Value(method($0, $1, $2))
                         }
@@ -86,7 +86,7 @@ extension TypeDelegate {
                 let method = getter(object)
 
                 return .object(
-                    AnyCallable({ _, args in
+                    AnyCallable({ _, _, args in
                         return try typecheck(args, T0.self, T1.self, T2.self, T3.self) {
                             Value(method($0, $1, $2, $3))
                         }
@@ -105,7 +105,7 @@ extension TypeDelegate {
                 let method = getter(object)
 
                 return .object(
-                    AnyCallable({ _, args in
+                    AnyCallable({ _, _, args in
                         return try typecheck(args, T0.self, T1.self, T2.self, T3.self, T4.self) {
                             Value(method($0, $1, $2, $3, $4))
                         }
@@ -124,7 +124,7 @@ extension TypeDelegate {
                 let method = getter(object)
 
                 return .object(
-                    AnyCallable({ _, args in
+                    AnyCallable({ _, _, args in
                         return try typecheck(args, T0.self, T1.self, T2.self, T3.self, T4.self, T5.self) {
                             Value(method($0, $1, $2, $3, $4, $5))
                         }
@@ -143,7 +143,7 @@ extension TypeDelegate {
                 let method = getter(object)
 
                 return .object(
-                    AnyCallable({ _, args in
+                    AnyCallable({ _, _, args in
                         return try typecheck(args, T0.self, T1.self, T2.self, T3.self, T4.self, T5.self, T6.self) {
                             Value(method($0, $1, $2, $3, $4, $5, $6))
                         }
@@ -162,7 +162,7 @@ extension TypeDelegate {
                 let method = getter(object)
 
                 return .object(
-                    AnyCallable({ _, args in
+                    AnyCallable({ _, _, args in
                         return try typecheck(args, T0.self, T1.self, T2.self, T3.self, T4.self, T5.self, T6.self, T7.self) {
                             Value(method($0, $1, $2, $3, $4, $5, $6, $7))
                         }
@@ -181,7 +181,7 @@ extension TypeDelegate {
                 let method = getter(object)
 
                 return .object(
-                    AnyCallable({ _, args in
+                    AnyCallable({ _, _, args in
                         return try typecheck(args, T0.self, T1.self, T2.self, T3.self, T4.self, T5.self, T6.self, T7.self, T8.self) {
                             Value(method($0, $1, $2, $3, $4, $5, $6, $7, $8))
                         }
@@ -200,7 +200,7 @@ extension TypeDelegate {
                 let method = getter(object)
 
                 return .object(
-                    AnyCallable({ _, args in
+                    AnyCallable({ _, _, args in
                         return try typecheck(args, T0.self, T1.self, T2.self, T3.self, T4.self, T5.self, T6.self, T7.self, T8.self, T9.self) {
                             Value(method($0, $1, $2, $3, $4, $5, $6, $7, $8, $9))
                         }

@@ -132,7 +132,11 @@ extension ASTInterpreter: ASTVisitor {
             })
 
             do {
-                return try callable.call(interpreter: self, arguments: arguments)
+                return try callable.call(
+                    interpreter: self,
+                    signature: expression.signature,
+                    arguments: arguments
+                )
             }
             catch let internalError as InternalError {
                 throw internalError.makeRuntimeError(location: location)

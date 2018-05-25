@@ -3,6 +3,7 @@ case cannotImportModule = 1
 case cannotPrint
 case internalInconsistency
 case invalidCallee
+case invalidCallSignature
 case invalidGetExpression
 case invalidNumberOfArguments
 case invalidRedefenition

@@ -31,7 +31,7 @@ extension TypeDelegate {
             named: name,
             getter: { object in
                 return .object(
-                    AnyCallable({ _, _ in
+                    AnyCallable({ _, _, _ in
                         .init(object[keyPath: keyPath])
                     })
                     .checkingArity(0)

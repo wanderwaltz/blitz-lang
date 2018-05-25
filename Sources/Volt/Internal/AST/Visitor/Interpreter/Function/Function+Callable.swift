@@ -1,7 +1,11 @@
 extension Function: Callable {
-    func call(interpreter: ASTInterpreter, arguments: [Value]) throws -> Value {
+    func call(interpreter: ASTInterpreter, signature: CallSignature, arguments: [Value]) throws -> Value {
         guard arguments.count == arity else {
             throw InternalError.invalidNumberOfArguments(expected: arity, got: arguments.count)
+        }
+
+        guard signature == declaration.signature else {
+            throw InternalError.invalidCallSignature(expected: declaration.signature, got: signature)
         }
 
         var environment = ASTInterpreterEnvironment(parent: closure)

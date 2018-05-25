@@ -1,6 +1,13 @@
 extension InternalError {
     func makeRuntimeError(location: SourceLocation) -> RuntimeError {
         switch self {
+        case let .invalidCallSignature(expected, got):
+            return RuntimeError(
+                code: .invalidCallSignature,
+                message: "invalid call signature: expected '\(expected)', got: '\(got)'",
+                location: location
+            )
+
         case let .invalidNumberOfArguments(expected, got):
             return RuntimeError(
                 code: .invalidNumberOfArguments,

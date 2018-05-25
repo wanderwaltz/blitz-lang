@@ -1,6 +1,10 @@
-func append(_ right, to left) {
+func append(some right, _ left) {
     return left + right
 }
 
-print append("World!", to: "Hello, ")
-print append("World!", qwerty: "Hello, ") // should be an error
+func voidFunc() {
+    return "qwerty"
+}
+
+print append(some: "World!", "Hello, ")
+//print append("World!", qwerty: "Hello, ") // should be an error

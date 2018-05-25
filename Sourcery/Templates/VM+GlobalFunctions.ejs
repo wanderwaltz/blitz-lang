@@ -2,7 +2,7 @@ extension VM {
     public func defineGlobalFunc0<R>(named name: String, `func`: @escaping () -> R) throws {
         try defineGlobal(
             named: name,
-            value: AnyCallable({ _, _ in
+            value: AnyCallable({ _, _, _ in
                 .init(`func`())
             })
             .checkingArity(0)
@@ -24,7 +24,7 @@ _%>
     public func defineGlobalFunc<%= num_args %><<%= generic_parameters %>, R>(named name: String, `func`: @escaping (<%= generic_parameters %>) -> R) throws {
         try defineGlobal(
             named: name,
-            value: AnyCallable({ _, args in
+            value: AnyCallable({ _, _, args in
                 return try typecheck(args, <%= typecheck_arguments %>) {
                     .init(`func`(<%= closure_arguments %>))
                 }
