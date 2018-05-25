@@ -41,8 +41,8 @@ final class ScopingTests: XCTestCase {
     func test_object_like_closure() {
         expect_source(
             """
-            func makePoint(x, y) {
-              func closure(method) {
+            func makePoint(_ x, _ y) {
+              func closure(_ method) {
                 if (method == "x") { return x }
                 if (method == "y") { return y }
                 print "unknown method " + method
