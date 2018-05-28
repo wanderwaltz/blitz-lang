@@ -1,3 +1,3 @@
 protocol Gettable {
-    func getProperty(named name: String) throws -> Value
+    func getProperty(named name: String, interpreter: ASTInterpreter) throws -> Value
 }

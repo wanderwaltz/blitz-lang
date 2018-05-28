@@ -504,7 +504,7 @@ extension ASTInterpreter {
         let gettable = try lookupGettable(for: object, at: location)
 
         do {
-            return try gettable.getProperty(named: name.lexeme)
+            return try gettable.getProperty(named: name.lexeme, interpreter: self)
         }
         catch let internalError as InternalError {
             throw internalError.makeRuntimeError(location: location)
@@ -516,7 +516,7 @@ extension ASTInterpreter {
         let settable = try lookupSettable(for: object, at: location)
 
         do {
-            try settable.setProperty(named: name.lexeme, value: value)
+            try settable.setProperty(named: name.lexeme, value: value, interpreter: self)
             return value
         }
         catch let internalError as InternalError {

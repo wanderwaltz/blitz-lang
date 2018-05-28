@@ -1,5 +1,5 @@
 extension Instance: Gettable {
-    func getProperty(named name: String) throws -> Value {
+    func getProperty(named name: String, interpreter: ASTInterpreter) throws -> Value {
         if let method = klass.methods[name] {
             return .object(method.bind(to: self))
         }
