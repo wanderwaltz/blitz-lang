@@ -27,7 +27,7 @@ do {
 
     let program = try vm.parse(source)
 
-    try vm.defineClass1(selector: "TestClass(text:)", initializer: TestClass.init)
+    try vm.defineClass1(initializer: TestClass.init)
         .registerMutableProperty(named: "text", keyPath: \.text)
         .registerMethod(selector: "parenthesize(adding:)", method: TestClass.parenthesize)
 
