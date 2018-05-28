@@ -4,9 +4,23 @@
 
 extension TypeDelegate {
     @discardableResult
-    public func registerMethod<R>(named name: String, method getter: @escaping (Object) -> () -> R) -> Self {
+    public func registerMethod<R>(selector rawSelector: String, method getter: @escaping (Object) -> () -> R) -> Self {
+        guard let selector = Selector(rawValue: rawSelector) else {
+            preconditionFailure("invalid selector: '\(rawSelector)'")
+        }
+
+        let selectorArgumentsCount = selector.signature.components.count
+
+        guard selectorArgumentsCount == 0 else {
+            preconditionFailure(
+                """
+                invalid number of arguments: expected 0 arguments in selector '\(selector)', got: \(selectorArgumentsCount)
+                """
+            )
+        }
+
         return registerProperty(
-            named: name,
+            named: selector.name,
             getter: { object in
                 let method = getter(object)
 
@@ -22,9 +36,23 @@ extension TypeDelegate {
     }
 
     @discardableResult
-    public func registerMethod<T0, R>(named name: String, method getter: @escaping (Object) -> (T0) -> R) -> Self {
+    public func registerMethod<T0, R>(selector rawSelector: String, method getter: @escaping (Object) -> (T0) -> R) -> Self {
+        guard let selector = Selector(rawValue: rawSelector) else {
+            preconditionFailure("invalid selector: '\(rawSelector)'")
+        }
+
+        let selectorArgumentsCount = selector.signature.components.count
+
+        guard selectorArgumentsCount == 1 else {
+            preconditionFailure(
+                """
+                invalid number of arguments: expected 1 arguments in selector '\(selector)', got: \(selectorArgumentsCount)
+                """
+            )
+        }
+
         return registerProperty(
-            named: name,
+            named: selector.name,
             getter: { object in
                 let method = getter(object)
 
@@ -34,6 +62,8 @@ extension TypeDelegate {
                             Value(method($0))
                         }
                     })
+                    .checkingArity(1)
+                    .checkingSignature(selector.signature)
                 )
             },
             setter: nil
@@ -41,9 +71,23 @@ extension TypeDelegate {
     }
 
     @discardableResult
-    public func registerMethod<T0, T1, R>(named name: String, method getter: @escaping (Object) -> (T0, T1) -> R) -> Self {
+    public func registerMethod<T0, T1, R>(selector rawSelector: String, method getter: @escaping (Object) -> (T0, T1) -> R) -> Self {
+        guard let selector = Selector(rawValue: rawSelector) else {
+            preconditionFailure("invalid selector: '\(rawSelector)'")
+        }
+
+        let selectorArgumentsCount = selector.signature.components.count
+
+        guard selectorArgumentsCount == 2 else {
+            preconditionFailure(
+                """
+                invalid number of arguments: expected 2 arguments in selector '\(selector)', got: \(selectorArgumentsCount)
+                """
+            )
+        }
+
         return registerProperty(
-            named: name,
+            named: selector.name,
             getter: { object in
                 let method = getter(object)
 
@@ -53,6 +97,8 @@ extension TypeDelegate {
                             Value(method($0, $1))
                         }
                     })
+                    .checkingArity(2)
+                    .checkingSignature(selector.signature)
                 )
             },
             setter: nil
@@ -60,9 +106,23 @@ extension TypeDelegate {
     }
 
     @discardableResult
-    public func registerMethod<T0, T1, T2, R>(named name: String, method getter: @escaping (Object) -> (T0, T1, T2) -> R) -> Self {
+    public func registerMethod<T0, T1, T2, R>(selector rawSelector: String, method getter: @escaping (Object) -> (T0, T1, T2) -> R) -> Self {
+        guard let selector = Selector(rawValue: rawSelector) else {
+            preconditionFailure("invalid selector: '\(rawSelector)'")
+        }
+
+        let selectorArgumentsCount = selector.signature.components.count
+
+        guard selectorArgumentsCount == 3 else {
+            preconditionFailure(
+                """
+                invalid number of arguments: expected 3 arguments in selector '\(selector)', got: \(selectorArgumentsCount)
+                """
+            )
+        }
+
         return registerProperty(
-            named: name,
+            named: selector.name,
             getter: { object in
                 let method = getter(object)
 
@@ -72,6 +132,8 @@ extension TypeDelegate {
                             Value(method($0, $1, $2))
                         }
                     })
+                    .checkingArity(3)
+                    .checkingSignature(selector.signature)
                 )
             },
             setter: nil
@@ -79,9 +141,23 @@ extension TypeDelegate {
     }
 
     @discardableResult
-    public func registerMethod<T0, T1, T2, T3, R>(named name: String, method getter: @escaping (Object) -> (T0, T1, T2, T3) -> R) -> Self {
+    public func registerMethod<T0, T1, T2, T3, R>(selector rawSelector: String, method getter: @escaping (Object) -> (T0, T1, T2, T3) -> R) -> Self {
+        guard let selector = Selector(rawValue: rawSelector) else {
+            preconditionFailure("invalid selector: '\(rawSelector)'")
+        }
+
+        let selectorArgumentsCount = selector.signature.components.count
+
+        guard selectorArgumentsCount == 4 else {
+            preconditionFailure(
+                """
+                invalid number of arguments: expected 4 arguments in selector '\(selector)', got: \(selectorArgumentsCount)
+                """
+            )
+        }
+
         return registerProperty(
-            named: name,
+            named: selector.name,
             getter: { object in
                 let method = getter(object)
 
@@ -91,6 +167,8 @@ extension TypeDelegate {
                             Value(method($0, $1, $2, $3))
                         }
                     })
+                    .checkingArity(4)
+                    .checkingSignature(selector.signature)
                 )
             },
             setter: nil
@@ -98,9 +176,23 @@ extension TypeDelegate {
     }
 
     @discardableResult
-    public func registerMethod<T0, T1, T2, T3, T4, R>(named name: String, method getter: @escaping (Object) -> (T0, T1, T2, T3, T4) -> R) -> Self {
+    public func registerMethod<T0, T1, T2, T3, T4, R>(selector rawSelector: String, method getter: @escaping (Object) -> (T0, T1, T2, T3, T4) -> R) -> Self {
+        guard let selector = Selector(rawValue: rawSelector) else {
+            preconditionFailure("invalid selector: '\(rawSelector)'")
+        }
+
+        let selectorArgumentsCount = selector.signature.components.count
+
+        guard selectorArgumentsCount == 5 else {
+            preconditionFailure(
+                """
+                invalid number of arguments: expected 5 arguments in selector '\(selector)', got: \(selectorArgumentsCount)
+                """
+            )
+        }
+
         return registerProperty(
-            named: name,
+            named: selector.name,
             getter: { object in
                 let method = getter(object)
 
@@ -110,6 +202,8 @@ extension TypeDelegate {
                             Value(method($0, $1, $2, $3, $4))
                         }
                     })
+                    .checkingArity(5)
+                    .checkingSignature(selector.signature)
                 )
             },
             setter: nil
@@ -117,9 +211,23 @@ extension TypeDelegate {
     }
 
     @discardableResult
-    public func registerMethod<T0, T1, T2, T3, T4, T5, R>(named name: String, method getter: @escaping (Object) -> (T0, T1, T2, T3, T4, T5) -> R) -> Self {
+    public func registerMethod<T0, T1, T2, T3, T4, T5, R>(selector rawSelector: String, method getter: @escaping (Object) -> (T0, T1, T2, T3, T4, T5) -> R) -> Self {
+        guard let selector = Selector(rawValue: rawSelector) else {
+            preconditionFailure("invalid selector: '\(rawSelector)'")
+        }
+
+        let selectorArgumentsCount = selector.signature.components.count
+
+        guard selectorArgumentsCount == 6 else {
+            preconditionFailure(
+                """
+                invalid number of arguments: expected 6 arguments in selector '\(selector)', got: \(selectorArgumentsCount)
+                """
+            )
+        }
+
         return registerProperty(
-            named: name,
+            named: selector.name,
             getter: { object in
                 let method = getter(object)
 
@@ -129,6 +237,8 @@ extension TypeDelegate {
                             Value(method($0, $1, $2, $3, $4, $5))
                         }
                     })
+                    .checkingArity(6)
+                    .checkingSignature(selector.signature)
                 )
             },
             setter: nil
@@ -136,9 +246,23 @@ extension TypeDelegate {
     }
 
     @discardableResult
-    public func registerMethod<T0, T1, T2, T3, T4, T5, T6, R>(named name: String, method getter: @escaping (Object) -> (T0, T1, T2, T3, T4, T5, T6) -> R) -> Self {
+    public func registerMethod<T0, T1, T2, T3, T4, T5, T6, R>(selector rawSelector: String, method getter: @escaping (Object) -> (T0, T1, T2, T3, T4, T5, T6) -> R) -> Self {
+        guard let selector = Selector(rawValue: rawSelector) else {
+            preconditionFailure("invalid selector: '\(rawSelector)'")
+        }
+
+        let selectorArgumentsCount = selector.signature.components.count
+
+        guard selectorArgumentsCount == 7 else {
+            preconditionFailure(
+                """
+                invalid number of arguments: expected 7 arguments in selector '\(selector)', got: \(selectorArgumentsCount)
+                """
+            )
+        }
+
         return registerProperty(
-            named: name,
+            named: selector.name,
             getter: { object in
                 let method = getter(object)
 
@@ -148,6 +272,8 @@ extension TypeDelegate {
                             Value(method($0, $1, $2, $3, $4, $5, $6))
                         }
                     })
+                    .checkingArity(7)
+                    .checkingSignature(selector.signature)
                 )
             },
             setter: nil
@@ -155,9 +281,23 @@ extension TypeDelegate {
     }
 
     @discardableResult
-    public func registerMethod<T0, T1, T2, T3, T4, T5, T6, T7, R>(named name: String, method getter: @escaping (Object) -> (T0, T1, T2, T3, T4, T5, T6, T7) -> R) -> Self {
+    public func registerMethod<T0, T1, T2, T3, T4, T5, T6, T7, R>(selector rawSelector: String, method getter: @escaping (Object) -> (T0, T1, T2, T3, T4, T5, T6, T7) -> R) -> Self {
+        guard let selector = Selector(rawValue: rawSelector) else {
+            preconditionFailure("invalid selector: '\(rawSelector)'")
+        }
+
+        let selectorArgumentsCount = selector.signature.components.count
+
+        guard selectorArgumentsCount == 8 else {
+            preconditionFailure(
+                """
+                invalid number of arguments: expected 8 arguments in selector '\(selector)', got: \(selectorArgumentsCount)
+                """
+            )
+        }
+
         return registerProperty(
-            named: name,
+            named: selector.name,
             getter: { object in
                 let method = getter(object)
 
@@ -167,6 +307,8 @@ extension TypeDelegate {
                             Value(method($0, $1, $2, $3, $4, $5, $6, $7))
                         }
                     })
+                    .checkingArity(8)
+                    .checkingSignature(selector.signature)
                 )
             },
             setter: nil
@@ -174,9 +316,23 @@ extension TypeDelegate {
     }
 
     @discardableResult
-    public func registerMethod<T0, T1, T2, T3, T4, T5, T6, T7, T8, R>(named name: String, method getter: @escaping (Object) -> (T0, T1, T2, T3, T4, T5, T6, T7, T8) -> R) -> Self {
+    public func registerMethod<T0, T1, T2, T3, T4, T5, T6, T7, T8, R>(selector rawSelector: String, method getter: @escaping (Object) -> (T0, T1, T2, T3, T4, T5, T6, T7, T8) -> R) -> Self {
+        guard let selector = Selector(rawValue: rawSelector) else {
+            preconditionFailure("invalid selector: '\(rawSelector)'")
+        }
+
+        let selectorArgumentsCount = selector.signature.components.count
+
+        guard selectorArgumentsCount == 9 else {
+            preconditionFailure(
+                """
+                invalid number of arguments: expected 9 arguments in selector '\(selector)', got: \(selectorArgumentsCount)
+                """
+            )
+        }
+
         return registerProperty(
-            named: name,
+            named: selector.name,
             getter: { object in
                 let method = getter(object)
 
@@ -186,6 +342,8 @@ extension TypeDelegate {
                             Value(method($0, $1, $2, $3, $4, $5, $6, $7, $8))
                         }
                     })
+                    .checkingArity(9)
+                    .checkingSignature(selector.signature)
                 )
             },
             setter: nil
@@ -193,9 +351,23 @@ extension TypeDelegate {
     }
 
     @discardableResult
-    public func registerMethod<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, R>(named name: String, method getter: @escaping (Object) -> (T0, T1, T2, T3, T4, T5, T6, T7, T8, T9) -> R) -> Self {
+    public func registerMethod<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, R>(selector rawSelector: String, method getter: @escaping (Object) -> (T0, T1, T2, T3, T4, T5, T6, T7, T8, T9) -> R) -> Self {
+        guard let selector = Selector(rawValue: rawSelector) else {
+            preconditionFailure("invalid selector: '\(rawSelector)'")
+        }
+
+        let selectorArgumentsCount = selector.signature.components.count
+
+        guard selectorArgumentsCount == 10 else {
+            preconditionFailure(
+                """
+                invalid number of arguments: expected 10 arguments in selector '\(selector)', got: \(selectorArgumentsCount)
+                """
+            )
+        }
+
         return registerProperty(
-            named: name,
+            named: selector.name,
             getter: { object in
                 let method = getter(object)
 
@@ -205,6 +377,8 @@ extension TypeDelegate {
                             Value(method($0, $1, $2, $3, $4, $5, $6, $7, $8, $9))
                         }
                     })
+                    .checkingArity(10)
+                    .checkingSignature(selector.signature)
                 )
             },
             setter: nil

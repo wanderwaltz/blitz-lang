@@ -9,7 +9,8 @@
 //print append("World!", to: "Hello, ")
 //print append("World!", qwerty: "Hello, ") // should be an error
 
-let object = TestClass()
+let object = TestClass(text: "qwerty")
 
-object.text = "qwerty"
-print object.parenthesize("asdfg")
+print object.parenthesize(adding: "asdfg")
+
+print greet(who: "World!")

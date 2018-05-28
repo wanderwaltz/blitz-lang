@@ -6,13 +6,13 @@ extension String: DefaultBindingsProviding {
                 .registerProperty(named: "length", keyPath: \.count)
 
                 .registerPropertyAsMethod(named: "capitalized", keyPath: \.capitalized)
-                .registerMethod(named: "lowercased", method: String.lowercased)
-                .registerMethod(named: "uppercased", method: String.uppercased)
+                .registerMethod(selector: "lowercased()", method: String.lowercased)
+                .registerMethod(selector: "uppercased()", method: String.uppercased)
 
-                .registerMethod(named: "hasPrefix", method: String.hasPrefix)
-                .registerMethod(named: "hasSuffix", method: String.hasSuffix)
+                .registerMethod(selector: "hasPrefix(_:)", method: String.hasPrefix)
+                .registerMethod(selector: "hasSuffix(_:)", method: String.hasSuffix)
 
-                .registerMethod(named: "trimmed", method: { string in {
+                .registerMethod(selector: "trimmed()", method: { string in {
                     string.trimmingCharacters(in: .whitespacesAndNewlines)
                 }})
     }

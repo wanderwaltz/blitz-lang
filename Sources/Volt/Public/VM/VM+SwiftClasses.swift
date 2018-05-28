@@ -4,68 +4,68 @@
 
 extension VM {
     @discardableResult
-    public func defineClass0<T>(initializer: @escaping () -> T) throws -> AnyTypeDelegate<T> {
-        try defineGlobalFunc0(named: String(describing: T.self), func: initializer)
+    public func defineClass0<T>(selector rawSelector: String, initializer: @escaping () -> T) throws -> AnyTypeDelegate<T> {
+        try defineGlobalFunc0(selector: rawSelector, func: initializer)
         return continueDefiningClass(T.self)
     }
 
     @discardableResult
-    public func defineClass1<T, P0>(initializer: @escaping (P0) -> T) throws -> AnyTypeDelegate<T> {
-        try defineGlobalFunc1(named: String(describing: T.self), func: initializer)
+    public func defineClass1<T, P0>(selector rawSelector: String, initializer: @escaping (P0) -> T) throws -> AnyTypeDelegate<T> {
+        try defineGlobalFunc1(selector: rawSelector, func: initializer)
         return continueDefiningClass(T.self)
     }
 
     @discardableResult
-    public func defineClass2<T, P0, P1>(initializer: @escaping (P0, P1) -> T) throws -> AnyTypeDelegate<T> {
-        try defineGlobalFunc2(named: String(describing: T.self), func: initializer)
+    public func defineClass2<T, P0, P1>(selector rawSelector: String, initializer: @escaping (P0, P1) -> T) throws -> AnyTypeDelegate<T> {
+        try defineGlobalFunc2(selector: rawSelector, func: initializer)
         return continueDefiningClass(T.self)
     }
 
     @discardableResult
-    public func defineClass3<T, P0, P1, P2>(initializer: @escaping (P0, P1, P2) -> T) throws -> AnyTypeDelegate<T> {
-        try defineGlobalFunc3(named: String(describing: T.self), func: initializer)
+    public func defineClass3<T, P0, P1, P2>(selector rawSelector: String, initializer: @escaping (P0, P1, P2) -> T) throws -> AnyTypeDelegate<T> {
+        try defineGlobalFunc3(selector: rawSelector, func: initializer)
         return continueDefiningClass(T.self)
     }
 
     @discardableResult
-    public func defineClass4<T, P0, P1, P2, P3>(initializer: @escaping (P0, P1, P2, P3) -> T) throws -> AnyTypeDelegate<T> {
-        try defineGlobalFunc4(named: String(describing: T.self), func: initializer)
+    public func defineClass4<T, P0, P1, P2, P3>(selector rawSelector: String, initializer: @escaping (P0, P1, P2, P3) -> T) throws -> AnyTypeDelegate<T> {
+        try defineGlobalFunc4(selector: rawSelector, func: initializer)
         return continueDefiningClass(T.self)
     }
 
     @discardableResult
-    public func defineClass5<T, P0, P1, P2, P3, P4>(initializer: @escaping (P0, P1, P2, P3, P4) -> T) throws -> AnyTypeDelegate<T> {
-        try defineGlobalFunc5(named: String(describing: T.self), func: initializer)
+    public func defineClass5<T, P0, P1, P2, P3, P4>(selector rawSelector: String, initializer: @escaping (P0, P1, P2, P3, P4) -> T) throws -> AnyTypeDelegate<T> {
+        try defineGlobalFunc5(selector: rawSelector, func: initializer)
         return continueDefiningClass(T.self)
     }
 
     @discardableResult
-    public func defineClass6<T, P0, P1, P2, P3, P4, P5>(initializer: @escaping (P0, P1, P2, P3, P4, P5) -> T) throws -> AnyTypeDelegate<T> {
-        try defineGlobalFunc6(named: String(describing: T.self), func: initializer)
+    public func defineClass6<T, P0, P1, P2, P3, P4, P5>(selector rawSelector: String, initializer: @escaping (P0, P1, P2, P3, P4, P5) -> T) throws -> AnyTypeDelegate<T> {
+        try defineGlobalFunc6(selector: rawSelector, func: initializer)
         return continueDefiningClass(T.self)
     }
 
     @discardableResult
-    public func defineClass7<T, P0, P1, P2, P3, P4, P5, P6>(initializer: @escaping (P0, P1, P2, P3, P4, P5, P6) -> T) throws -> AnyTypeDelegate<T> {
-        try defineGlobalFunc7(named: String(describing: T.self), func: initializer)
+    public func defineClass7<T, P0, P1, P2, P3, P4, P5, P6>(selector rawSelector: String, initializer: @escaping (P0, P1, P2, P3, P4, P5, P6) -> T) throws -> AnyTypeDelegate<T> {
+        try defineGlobalFunc7(selector: rawSelector, func: initializer)
         return continueDefiningClass(T.self)
     }
 
     @discardableResult
-    public func defineClass8<T, P0, P1, P2, P3, P4, P5, P6, P7>(initializer: @escaping (P0, P1, P2, P3, P4, P5, P6, P7) -> T) throws -> AnyTypeDelegate<T> {
-        try defineGlobalFunc8(named: String(describing: T.self), func: initializer)
+    public func defineClass8<T, P0, P1, P2, P3, P4, P5, P6, P7>(selector rawSelector: String, initializer: @escaping (P0, P1, P2, P3, P4, P5, P6, P7) -> T) throws -> AnyTypeDelegate<T> {
+        try defineGlobalFunc8(selector: rawSelector, func: initializer)
         return continueDefiningClass(T.self)
     }
 
     @discardableResult
-    public func defineClass9<T, P0, P1, P2, P3, P4, P5, P6, P7, P8>(initializer: @escaping (P0, P1, P2, P3, P4, P5, P6, P7, P8) -> T) throws -> AnyTypeDelegate<T> {
-        try defineGlobalFunc9(named: String(describing: T.self), func: initializer)
+    public func defineClass9<T, P0, P1, P2, P3, P4, P5, P6, P7, P8>(selector rawSelector: String, initializer: @escaping (P0, P1, P2, P3, P4, P5, P6, P7, P8) -> T) throws -> AnyTypeDelegate<T> {
+        try defineGlobalFunc9(selector: rawSelector, func: initializer)
         return continueDefiningClass(T.self)
     }
 
     @discardableResult
-    public func defineClass10<T, P0, P1, P2, P3, P4, P5, P6, P7, P8, P9>(initializer: @escaping (P0, P1, P2, P3, P4, P5, P6, P7, P8, P9) -> T) throws -> AnyTypeDelegate<T> {
-        try defineGlobalFunc10(named: String(describing: T.self), func: initializer)
+    public func defineClass10<T, P0, P1, P2, P3, P4, P5, P6, P7, P8, P9>(selector rawSelector: String, initializer: @escaping (P0, P1, P2, P3, P4, P5, P6, P7, P8, P9) -> T) throws -> AnyTypeDelegate<T> {
+        try defineGlobalFunc10(selector: rawSelector, func: initializer)
         return continueDefiningClass(T.self)
     }
 

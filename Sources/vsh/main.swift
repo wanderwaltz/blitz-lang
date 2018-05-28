@@ -4,6 +4,10 @@ import Foundation
 final class TestClass {
     var text = ""
 
+    init(text: String) {
+        self.text = text
+    }
+
     func parenthesize(adding prefix: String) -> String {
         return "\(prefix)(\(text))"
     }
@@ -23,9 +27,13 @@ do {
 
     let program = try vm.parse(source)
 
-    try vm.defineClass0(initializer: TestClass.init)
+    try vm.defineClass1(selector: "TestClass(text:)", initializer: TestClass.init)
         .registerMutableProperty(named: "text", keyPath: \.text)
-        .registerMethod(named: "parenthesize", method: TestClass.parenthesize)
+        .registerMethod(selector: "parenthesize(adding:)", method: TestClass.parenthesize)
+
+    try vm.defineGlobalFunc1(selector: "greet(who:)", func: { (who: Any) -> String in
+        return "Hello, \(who)"
+    })
 
     print(program)
 

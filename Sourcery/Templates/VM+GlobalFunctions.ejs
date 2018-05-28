@@ -1,7 +1,21 @@
 extension VM {
-    public func defineGlobalFunc0<R>(named name: String, `func`: @escaping () -> R) throws {
+    public func defineGlobalFunc0<R>(selector rawSelector: String, `func`: @escaping () -> R) throws {
+        guard let selector = Selector(rawValue: rawSelector) else {
+            preconditionFailure("invalid selector: '\(rawSelector)'")
+        }
+
+        let selectorArgumentsCount = selector.signature.components.count
+
+        guard selectorArgumentsCount == 0 else {
+            preconditionFailure(
+                """
+                invalid number of arguments: expected 0 arguments in selector '\(selector)', got: \(selectorArgumentsCount)
+                """
+            )
+        }
+
         try defineGlobal(
-            named: name,
+            named: selector.name,
             value: AnyCallable({ _, _, _ in
                 .init(`func`())
             })
@@ -21,14 +35,30 @@ extension VM {
       typecheck_arguments = indices.map(x => "P" + x + ".self").join(", ")
       closure_arguments = indices.map(x => "$" + x).join(", ")
 _%>
-    public func defineGlobalFunc<%= num_args %><<%= generic_parameters %>, R>(named name: String, `func`: @escaping (<%= generic_parameters %>) -> R) throws {
+    public func defineGlobalFunc<%= num_args %><<%= generic_parameters %>, R>(selector rawSelector: String, `func`: @escaping (<%= generic_parameters %>) -> R) throws {
+        guard let selector = Selector(rawValue: rawSelector) else {
+            preconditionFailure("invalid selector: '\(rawSelector)'")
+        }
+
+        let selectorArgumentsCount = selector.signature.components.count
+
+        guard selectorArgumentsCount == <%= num_args %> else {
+            preconditionFailure(
+                """
+                invalid number of arguments: expected <%= num_args %> arguments in selector '\(selector)', got: \(selectorArgumentsCount)
+                """
+            )
+        }
+
         try defineGlobal(
-            named: name,
+            named: selector.name,
             value: AnyCallable({ _, _, args in
                 return try typecheck(args, <%= typecheck_arguments %>) {
                     .init(`func`(<%= closure_arguments %>))
                 }
             })
+            .checkingArity(<%= num_args %>)
+            .checkingSignature(selector.signature)
         )
     }
 
