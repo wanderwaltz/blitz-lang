@@ -347,7 +347,8 @@ extension ASTInterpreter: ASTVisitor {
 
     func visitReturnStatement(_ statement: ReturnStatement) -> Result {
         return captureResult {
-            throw ThrowableCommand.return(try evaluate(statement.value))
+            let value = try statement.value.map({ try evaluate($0) }) ?? .nil
+            throw ThrowableCommand.return(value)
         }
     }
 

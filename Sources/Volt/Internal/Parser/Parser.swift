@@ -294,7 +294,7 @@ private final class ParserImpl {
 
     private func parseReturnStatement() throws -> Statement {
         let keyword = previous()
-        var value: Expression = LiteralExpression(literal: .nil)
+        var value: Expression?
 
         if !check(.rightBrace) {
             value = try parseExpression()

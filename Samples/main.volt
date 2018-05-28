@@ -1,11 +1,17 @@
 class Breakfast {
     init(arg arg) {
+        if arg.length < 5 {
+            print("init called with small arg")
+            return
+        }
+
         print "init called with arg: " + arg
     }
 
     func cook() {
         func closure(arg x) {
-            print " " + self + x
+            print "" + self + x
+            return x
         }
 
         return closure
@@ -25,4 +31,4 @@ print "instance: " + breakfast
 let closure = breakfast.cook()
 breakfast = nil
 
-closure(arg: "qwerty")
+print closure(arg: "qwerty")

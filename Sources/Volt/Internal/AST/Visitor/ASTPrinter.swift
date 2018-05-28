@@ -138,7 +138,8 @@ extension ASTPrinter: ASTVisitor {
     }
 
     func visitReturnStatement(_ statement: ReturnStatement) -> String {
-        return parenthesize("return", print(statement.value))
+        let value = statement.value.map({ print($0) }) ?? String(describing: Value.nil)
+        return parenthesize("return", value)
     }
 
     func visitSingleKeywordStatement(_ statement: SingleKeywordStatement) -> String {

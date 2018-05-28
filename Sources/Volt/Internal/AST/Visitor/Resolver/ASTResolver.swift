@@ -56,7 +56,7 @@ extension ASTResolver {
 }
 
 
-// MARK: - private utility methods
+// MARK: - working with sopes
 extension ASTResolver {
     private func beginScope(type: ScopeType) {
         scopes.append(.init(type: type))
@@ -66,6 +66,22 @@ extension ASTResolver {
         scopes.removeLast()
     }
 
+    private func matchScope(_ type: ScopeType) -> Bool {
+        return matchScope(where: { $0.type == type })
+    }
+
+    private func matchScope(_ keyPath: KeyPath<ScopeType, Bool>) -> Bool {
+        return matchScope(where: { $0.type[keyPath: keyPath] })
+    }
+
+    private func matchScope(where predicate: (Scope) -> Bool) -> Bool {
+        return scopes.reversed().reduce(false, { $0 || predicate($1) })
+    }
+}
+
+
+// MARK: - private utility methods
+extension ASTResolver {
     private func declare(_ name: Token) {
         scopes.last?.declare(name)
     }
@@ -148,10 +164,7 @@ extension ASTResolver: ASTVisitor {
 
     func visitSelfExpression(_ expression: SelfExpression) -> Result {
         return captureResult {
-            let selfExpressionIsAllowed: Bool =
-                scopes.reversed().reduce(false, { $0 || $1.type.allowsSelfExpression })
-
-            guard selfExpressionIsAllowed else {
+            guard matchScope(\.allowsSelfExpression) else {
                 throw ResolverError(
                     code: .selfExpressionNotAllowed,
                     message: "cannot use `self` outside of a class",
@@ -207,7 +220,7 @@ extension ASTResolver: ASTVisitor {
             beginScope(type: .class)
             scopes.last?.define(.self(at: statement.name.location))
 
-            try resolveFunction(statement.initializer, .method)
+            try resolveFunction(statement.initializer, .initializer)
 
             for method in statement.methods {
                 try resolveFunction(method, .method)
@@ -261,10 +274,15 @@ extension ASTResolver: ASTVisitor {
 
     func visitReturnStatement(_ statement: ReturnStatement) -> Result {
         return captureResult {
-            let returnStatementIsAllowed: Bool =
-                scopes.reversed().reduce(false, { $0 || $1.type.allowsReturnStatement })
+            if matchScope(.initializer) && statement.value != nil {
+                throw ResolverError(
+                    code: .returnStatementNotAllowed,
+                    message: "cannot return a value from an initializer",
+                    location: statement.keyword.location
+                )
+            }
 
-            guard returnStatementIsAllowed else {
+            guard matchScope(\.allowsReturnStatement) else {
                 throw ResolverError(
                     code: .returnStatementNotAllowed,
                     message: "cannot return from top-level code",
@@ -272,7 +290,11 @@ extension ASTResolver: ASTVisitor {
                 )
             }
 
-            try resolve(statement.value)
+            guard let value = statement.value else {
+                return
+            }
+
+            try resolve(value)
         }
     }
 

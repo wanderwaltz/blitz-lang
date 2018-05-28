@@ -5,7 +5,8 @@ extension Class: Callable {
         }
 
         let instance = Instance(klass: self)
-        try initializer
+
+        _ = try initializer
             .bind(to: instance)
             .call(
                 interpreter: interpreter,
