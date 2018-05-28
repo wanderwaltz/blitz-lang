@@ -6,4 +6,8 @@ extension CallSignature: CustomStringConvertible {
 
         return components.joined(separator: ":") + ":"
     }
+
+    var selectorDescription: String {
+        return "(\(components.isEmpty ? "" : description))"
+    }
 }

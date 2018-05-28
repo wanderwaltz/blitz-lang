@@ -148,6 +148,17 @@ extension ASTResolver: ASTVisitor {
 
     func visitSelfExpression(_ expression: SelfExpression) -> Result {
         return captureResult {
+            let selfExpressionIsAllowed: Bool =
+                scopes.reversed().reduce(false, { $0 || $1.type.allowsSelfExpression })
+
+            guard selfExpressionIsAllowed else {
+                throw ResolverError(
+                    code: .selfExpressionNotAllowed,
+                    message: "cannot use `self` outside of a class",
+                    location: expression.keyword.location
+                )
+            }
+
             resolveLocal(expression.keyword)
         }
     }

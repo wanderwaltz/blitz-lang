@@ -51,9 +51,8 @@ private final class ParserImpl {
 
         var methods: [FunctionDeclarationStatement] = []
         while !check(.rightBrace) && !isAtEnd {
-            if try match(.func) {
-                methods.append(try parseFunctionDeclaration(kind: "method"))
-            }
+            try consume(.func, "expected method")
+            methods.append(try parseFunctionDeclaration(kind: "method"))
         }
 
         try consume(.rightBrace, "expected } after class body")

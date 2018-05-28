@@ -10,8 +10,15 @@ case method
 extension ASTResolverScopeType {
     var allowsReturnStatement: Bool {
         switch self {
-        case .global, .default, .class: return false
         case .function, .method: return true
+        case .global, .default, .class: return false
+        }
+    }
+
+    var allowsSelfExpression: Bool {
+        switch self {
+        case .method: return true
+        case .global, .default, .class, .function: return false
         }
     }
 }

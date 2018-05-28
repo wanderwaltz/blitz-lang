@@ -1,6 +1,6 @@
 extension Selector: RawRepresentable {
     var rawValue: String {
-        return "\(name)(\(signature.components.isEmpty ? "" : String(describing: signature)))"
+        return "\(name)\(signature.selectorDescription)"
     }
 
     init?(rawValue: String) {

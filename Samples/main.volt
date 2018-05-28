@@ -1,6 +1,10 @@
 class Breakfast {
     func cook() {
-        self.serve(who: self)
+        func closure(arg x) {
+            print " " + self + x
+        }
+
+        return closure
     }
 
     func serve(who who) {
@@ -10,8 +14,11 @@ class Breakfast {
 
 print "class: " + Breakfast
 
-let breakfast = Breakfast()
+var breakfast = Breakfast()
 
 print "instance: " + breakfast
 
-breakfast.cook()
+let closure = breakfast.cook()
+breakfast = nil
+
+closure(arg: "qwerty")

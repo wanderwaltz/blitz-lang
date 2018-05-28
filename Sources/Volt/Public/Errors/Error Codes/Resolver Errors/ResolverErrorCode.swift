@@ -2,4 +2,5 @@ public enum ResolverErrorCode: Int {
 case cannotImportAtNonGlobalScope
 case readingLocalValueWithinItsOwnInitializer
 case returnStatementNotAllowed
+case selfExpressionNotAllowed
 }
