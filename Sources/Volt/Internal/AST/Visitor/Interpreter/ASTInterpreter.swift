@@ -254,13 +254,16 @@ extension ASTInterpreter: ASTVisitor {
                 })
             )
 
+            let initializer = Function(
+                declaration: statement.initializer,
+                closure: environment
+            )
+
             let klass = Class(
                 name: statement.name.lexeme,
-                methods: methods,
-                initializer: Function(
-                    declaration: statement.initializer,
-                    closure: environment
-                )
+                initializer: initializer,
+                storedProperties: [:], // TODO: stored properties
+                methods: methods
             )
 
             let value = Value.object(klass)
@@ -310,7 +313,7 @@ extension ASTInterpreter: ASTVisitor {
             guard let delegate = delegate else {
                 throw RuntimeError(
                     code: .cannotImportModule,
-                    message: "cannot import module '\(moduleName)': interpeter delegate is not set",
+                    message: "cannot import module '\(moduleName)': interpreter delegate is not set",
                     location: statement.identifier.location
                 )
             }
@@ -532,7 +535,7 @@ extension ASTInterpreter {
         guard let delegate = delegate else {
             throw RuntimeError(
                 code: .invalidGetExpression,
-                message: "cannot access properties of type '\(object.typeName)': interpeter delegate is not set",
+                message: "cannot read properties of type '\(object.typeName)': interpeter delegate is not set",
                 location: location
             )
         }
@@ -540,7 +543,7 @@ extension ASTInterpreter {
         guard let gettable = delegate.interpreter(self, gettableFor: object) else {
             throw RuntimeError(
                 code: .invalidGetExpression,
-                message: "cannot access properties on object of type \(object.typeName)",
+                message: "cannot read properties on object of type \(object.typeName)",
                 location: location
             )
         }
@@ -549,10 +552,14 @@ extension ASTInterpreter {
     }
 
     private func lookupSettable(for object: Value, at location: SourceLocation) throws -> Settable {
+        if case let .object(settable as Settable) = object {
+            return settable
+        }
+
         guard let delegate = delegate else {
             throw RuntimeError(
                 code: .invalidSetExpression,
-                message: "cannot access properties of type '\(object.typeName)': interpeter delegate is not set",
+                message: "cannot write properties of type '\(object.typeName)': interpreter delegate is not set",
                 location: location
             )
         }
@@ -560,7 +567,7 @@ extension ASTInterpreter {
         guard let settable = delegate.interpreter(self, settableFor: object) else {
             throw RuntimeError(
                 code: .invalidGetExpression,
-                message: "cannot access properties on object of type \(object.typeName)",
+                message: "cannot write properties on object of type \(object.typeName)",
                 location: location
             )
         }

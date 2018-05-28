@@ -1,7 +1,8 @@
 struct Class {
     let name: String
-    let methods: [String: Function]
     let initializer: Function
+    let storedProperties: [String: StoredProperty]
+    let methods: [String: Function]
 }
 
 

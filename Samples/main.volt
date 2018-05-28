@@ -22,13 +22,6 @@ class Breakfast {
     }
 }
 
-print "class: " + Breakfast
-
 var breakfast = Breakfast(arg: "some")
 
-print "instance: " + breakfast
-
-let closure = breakfast.cook()
-breakfast = nil
-
-print closure(arg: "qwerty")
+print breakfast.x = 123
