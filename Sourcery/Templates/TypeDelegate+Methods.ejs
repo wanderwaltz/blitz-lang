@@ -1,6 +1,8 @@
 extension TypeDelegate {
     @discardableResult
-    public func registerMethod<R>(selector rawSelector: String, method getter: @escaping (Object) -> () -> R) -> Self {
+    public func registerMethod<R>
+                              (selector rawSelector: String,
+                               method getter: @escaping (Object) -> () -> R) -> Self {
         guard let selector = Selector(rawValue: rawSelector) else {
             preconditionFailure("invalid selector: '\(rawSelector)'")
         }
@@ -44,7 +46,9 @@ extension TypeDelegate {
       closure_arguments = indices.map(x => "$" + x).join(", ")
 _%>
     @discardableResult
-    public func registerMethod<<%= generic_parameters %>, R>(selector rawSelector: String, method getter: @escaping (Object) -> (<%= generic_parameters %>) -> R) -> Self {
+    public func registerMethod<<%= generic_parameters %>, R>
+                              (selector rawSelector: String,
+                               method getter: @escaping (Object) -> (<%= generic_parameters %>) -> R) -> Self {
         guard let selector = Selector(rawValue: rawSelector) else {
             preconditionFailure("invalid selector: '\(rawSelector)'")
         }

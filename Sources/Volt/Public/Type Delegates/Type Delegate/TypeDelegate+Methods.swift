@@ -4,7 +4,9 @@
 
 extension TypeDelegate {
     @discardableResult
-    public func registerMethod<R>(selector rawSelector: String, method getter: @escaping (Object) -> () -> R) -> Self {
+    public func registerMethod<R>
+                              (selector rawSelector: String,
+                               method getter: @escaping (Object) -> () -> R) -> Self {
         guard let selector = Selector(rawValue: rawSelector) else {
             preconditionFailure("invalid selector: '\(rawSelector)'")
         }
@@ -36,7 +38,9 @@ extension TypeDelegate {
     }
 
     @discardableResult
-    public func registerMethod<T0, R>(selector rawSelector: String, method getter: @escaping (Object) -> (T0) -> R) -> Self {
+    public func registerMethod<T0, R>
+                              (selector rawSelector: String,
+                               method getter: @escaping (Object) -> (T0) -> R) -> Self {
         guard let selector = Selector(rawValue: rawSelector) else {
             preconditionFailure("invalid selector: '\(rawSelector)'")
         }
@@ -71,7 +75,9 @@ extension TypeDelegate {
     }
 
     @discardableResult
-    public func registerMethod<T0, T1, R>(selector rawSelector: String, method getter: @escaping (Object) -> (T0, T1) -> R) -> Self {
+    public func registerMethod<T0, T1, R>
+                              (selector rawSelector: String,
+                               method getter: @escaping (Object) -> (T0, T1) -> R) -> Self {
         guard let selector = Selector(rawValue: rawSelector) else {
             preconditionFailure("invalid selector: '\(rawSelector)'")
         }
@@ -106,7 +112,9 @@ extension TypeDelegate {
     }
 
     @discardableResult
-    public func registerMethod<T0, T1, T2, R>(selector rawSelector: String, method getter: @escaping (Object) -> (T0, T1, T2) -> R) -> Self {
+    public func registerMethod<T0, T1, T2, R>
+                              (selector rawSelector: String,
+                               method getter: @escaping (Object) -> (T0, T1, T2) -> R) -> Self {
         guard let selector = Selector(rawValue: rawSelector) else {
             preconditionFailure("invalid selector: '\(rawSelector)'")
         }
@@ -141,7 +149,9 @@ extension TypeDelegate {
     }
 
     @discardableResult
-    public func registerMethod<T0, T1, T2, T3, R>(selector rawSelector: String, method getter: @escaping (Object) -> (T0, T1, T2, T3) -> R) -> Self {
+    public func registerMethod<T0, T1, T2, T3, R>
+                              (selector rawSelector: String,
+                               method getter: @escaping (Object) -> (T0, T1, T2, T3) -> R) -> Self {
         guard let selector = Selector(rawValue: rawSelector) else {
             preconditionFailure("invalid selector: '\(rawSelector)'")
         }
@@ -176,7 +186,9 @@ extension TypeDelegate {
     }
 
     @discardableResult
-    public func registerMethod<T0, T1, T2, T3, T4, R>(selector rawSelector: String, method getter: @escaping (Object) -> (T0, T1, T2, T3, T4) -> R) -> Self {
+    public func registerMethod<T0, T1, T2, T3, T4, R>
+                              (selector rawSelector: String,
+                               method getter: @escaping (Object) -> (T0, T1, T2, T3, T4) -> R) -> Self {
         guard let selector = Selector(rawValue: rawSelector) else {
             preconditionFailure("invalid selector: '\(rawSelector)'")
         }
@@ -211,7 +223,9 @@ extension TypeDelegate {
     }
 
     @discardableResult
-    public func registerMethod<T0, T1, T2, T3, T4, T5, R>(selector rawSelector: String, method getter: @escaping (Object) -> (T0, T1, T2, T3, T4, T5) -> R) -> Self {
+    public func registerMethod<T0, T1, T2, T3, T4, T5, R>
+                              (selector rawSelector: String,
+                               method getter: @escaping (Object) -> (T0, T1, T2, T3, T4, T5) -> R) -> Self {
         guard let selector = Selector(rawValue: rawSelector) else {
             preconditionFailure("invalid selector: '\(rawSelector)'")
         }
@@ -246,7 +260,9 @@ extension TypeDelegate {
     }
 
     @discardableResult
-    public func registerMethod<T0, T1, T2, T3, T4, T5, T6, R>(selector rawSelector: String, method getter: @escaping (Object) -> (T0, T1, T2, T3, T4, T5, T6) -> R) -> Self {
+    public func registerMethod<T0, T1, T2, T3, T4, T5, T6, R>
+                              (selector rawSelector: String,
+                               method getter: @escaping (Object) -> (T0, T1, T2, T3, T4, T5, T6) -> R) -> Self {
         guard let selector = Selector(rawValue: rawSelector) else {
             preconditionFailure("invalid selector: '\(rawSelector)'")
         }
@@ -281,7 +297,9 @@ extension TypeDelegate {
     }
 
     @discardableResult
-    public func registerMethod<T0, T1, T2, T3, T4, T5, T6, T7, R>(selector rawSelector: String, method getter: @escaping (Object) -> (T0, T1, T2, T3, T4, T5, T6, T7) -> R) -> Self {
+    public func registerMethod<T0, T1, T2, T3, T4, T5, T6, T7, R>
+                              (selector rawSelector: String,
+                               method getter: @escaping (Object) -> (T0, T1, T2, T3, T4, T5, T6, T7) -> R) -> Self {
         guard let selector = Selector(rawValue: rawSelector) else {
             preconditionFailure("invalid selector: '\(rawSelector)'")
         }
@@ -316,7 +334,9 @@ extension TypeDelegate {
     }
 
     @discardableResult
-    public func registerMethod<T0, T1, T2, T3, T4, T5, T6, T7, T8, R>(selector rawSelector: String, method getter: @escaping (Object) -> (T0, T1, T2, T3, T4, T5, T6, T7, T8) -> R) -> Self {
+    public func registerMethod<T0, T1, T2, T3, T4, T5, T6, T7, T8, R>
+                              (selector rawSelector: String,
+                               method getter: @escaping (Object) -> (T0, T1, T2, T3, T4, T5, T6, T7, T8) -> R) -> Self {
         guard let selector = Selector(rawValue: rawSelector) else {
             preconditionFailure("invalid selector: '\(rawSelector)'")
         }
@@ -351,7 +371,9 @@ extension TypeDelegate {
     }
 
     @discardableResult
-    public func registerMethod<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, R>(selector rawSelector: String, method getter: @escaping (Object) -> (T0, T1, T2, T3, T4, T5, T6, T7, T8, T9) -> R) -> Self {
+    public func registerMethod<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, R>
+                              (selector rawSelector: String,
+                               method getter: @escaping (Object) -> (T0, T1, T2, T3, T4, T5, T6, T7, T8, T9) -> R) -> Self {
         guard let selector = Selector(rawValue: rawSelector) else {
             preconditionFailure("invalid selector: '\(rawSelector)'")
         }
