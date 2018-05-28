@@ -2,8 +2,8 @@ import Foundation
 
 extension VM {
     @discardableResult
-    public func defineNSObject0<T: NSObject>(selector rawSelector: String = "\(String(describing: T.self))()", initializer: @escaping () -> T) throws -> AnyTypeDelegate<T> {
-        try defineGlobalFunc0(selector: rawSelector, func: initializer)
+    public func defineNSObject0<T: NSObject>(selector rawSelector: String = "\(String(describing: T.self))()", initializer: @escaping () -> T) -> AnyTypeDelegate<T> {
+        defineGlobalFunc0(selector: rawSelector, func: initializer)
         return continueDefinigNSObject(T.self)
     }
 
@@ -21,8 +21,8 @@ extension VM {
         default_selector_signature = indices.map(x => "_:").join("")
 _%>
     @discardableResult
-    public func defineNSObject<%= num_args %><T: NSObject, <%= generic_parameters %>>(selector rawSelector: String = "\(String(describing: T.self))(<%= default_selector_signature %>)", initializer: @escaping (<%= generic_parameters %>) -> T) throws -> AnyTypeDelegate<T> {
-        try defineGlobalFunc<%= num_args %>(selector: rawSelector, func: initializer)
+    public func defineNSObject<%= num_args %><T: NSObject, <%= generic_parameters %>>(selector rawSelector: String = "\(String(describing: T.self))(<%= default_selector_signature %>)", initializer: @escaping (<%= generic_parameters %>) -> T) -> AnyTypeDelegate<T> {
+        defineGlobalFunc<%= num_args %>(selector: rawSelector, func: initializer)
         return continueDefinigNSObject(T.self)
     }
 

@@ -59,8 +59,8 @@ public final class VM {
 
 
 extension VM {
-    public func defineGlobal<T>(named name: String, value: T, isMutable: Bool = false) throws {
-        try interpreter.rootEnvironment.defineVariable(
+    public func defineGlobal<T>(named name: String, value: T, isMutable: Bool = false) {
+        interpreter.rootEnvironment.forceDefineVariable(
             named: .init(
                 type: .identifier,
                 lexeme: name,

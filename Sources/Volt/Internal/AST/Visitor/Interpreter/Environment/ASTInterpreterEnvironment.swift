@@ -18,6 +18,12 @@ extension ASTInterpreterEnvironment {
             throw error(.invalidRedefenition, "'\(name)' is already defined", name.location)
         }
 
+        forceDefineVariable(named: name, value: value, isMutable: isMutable)
+    }
+
+    /// Force version does not throw if the variable is already defined;
+    /// As a side effect this also allows redefining `let` constants.
+    func forceDefineVariable(named name: Token, value: Value, isMutable: Bool) {
         values[name.lexeme] = RuntimeValue(value: value, isMutable: isMutable)
     }
 

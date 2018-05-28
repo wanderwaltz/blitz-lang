@@ -1,7 +1,7 @@
 extension VM {
     @discardableResult
-    public func defineClass0<T>(selector rawSelector: String = "\(String(describing: T.self))()", initializer: @escaping () -> T) throws -> AnyTypeDelegate<T> {
-        try defineGlobalFunc0(selector: rawSelector, func: initializer)
+    public func defineClass0<T>(selector rawSelector: String = "\(String(describing: T.self))()", initializer: @escaping () -> T) -> AnyTypeDelegate<T> {
+        defineGlobalFunc0(selector: rawSelector, func: initializer)
         return continueDefiningClass(T.self)
     }
 
@@ -19,8 +19,8 @@ extension VM {
         default_selector_signature = indices.map(x => "_:").join("")
 _%>
     @discardableResult
-    public func defineClass<%= num_args %><T, <%= generic_parameters %>>(selector rawSelector: String = "\(String(describing: T.self))(<%= default_selector_signature %>)", initializer: @escaping (<%= generic_parameters %>) -> T) throws -> AnyTypeDelegate<T> {
-        try defineGlobalFunc<%= num_args %>(selector: rawSelector, func: initializer)
+    public func defineClass<%= num_args %><T, <%= generic_parameters %>>(selector rawSelector: String = "\(String(describing: T.self))(<%= default_selector_signature %>)", initializer: @escaping (<%= generic_parameters %>) -> T) -> AnyTypeDelegate<T> {
+        defineGlobalFunc<%= num_args %>(selector: rawSelector, func: initializer)
         return continueDefiningClass(T.self)
     }
 

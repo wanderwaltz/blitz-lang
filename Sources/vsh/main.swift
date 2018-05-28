@@ -27,11 +27,11 @@ do {
 
     let program = try vm.parse(source)
 
-    try vm.defineClass1(initializer: TestClass.init)
+    vm.defineClass1(initializer: TestClass.init)
         .registerMutableProperty(named: "text", keyPath: \.text)
         .registerMethod(selector: "parenthesize(adding:)", method: TestClass.parenthesize)
 
-    try vm.defineGlobalFunc1(selector: "greet(who:)", func: { (who: Any) -> String in
+    vm.defineGlobalFunc1(selector: "greet(who:)", func: { (who: Any) -> String in
         return "Hello, \(who)"
     })
 

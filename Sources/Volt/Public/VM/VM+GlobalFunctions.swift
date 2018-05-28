@@ -3,7 +3,7 @@
 
 
 extension VM {
-    public func defineGlobalFunc0<R>(selector rawSelector: String, `func`: @escaping () -> R) throws {
+    public func defineGlobalFunc0<R>(selector rawSelector: String, `func`: @escaping () -> R) {
         guard let selector = Selector(rawValue: rawSelector) else {
             preconditionFailure("invalid selector: '\(rawSelector)'")
         }
@@ -18,7 +18,7 @@ extension VM {
             )
         }
 
-        try defineGlobal(
+        defineGlobal(
             named: selector.name,
             value: AnyCallable({ _, _, _ in
                 .init(`func`())
@@ -27,7 +27,7 @@ extension VM {
         )
     }
 
-    public func defineGlobalFunc1<P0, R>(selector rawSelector: String, `func`: @escaping (P0) -> R) throws {
+    public func defineGlobalFunc1<P0, R>(selector rawSelector: String, `func`: @escaping (P0) -> R) {
         guard let selector = Selector(rawValue: rawSelector) else {
             preconditionFailure("invalid selector: '\(rawSelector)'")
         }
@@ -42,7 +42,7 @@ extension VM {
             )
         }
 
-        try defineGlobal(
+        defineGlobal(
             named: selector.name,
             value: AnyCallable({ _, _, args in
                 return try typecheck(args, P0.self) {
@@ -54,7 +54,7 @@ extension VM {
         )
     }
 
-    public func defineGlobalFunc2<P0, P1, R>(selector rawSelector: String, `func`: @escaping (P0, P1) -> R) throws {
+    public func defineGlobalFunc2<P0, P1, R>(selector rawSelector: String, `func`: @escaping (P0, P1) -> R) {
         guard let selector = Selector(rawValue: rawSelector) else {
             preconditionFailure("invalid selector: '\(rawSelector)'")
         }
@@ -69,7 +69,7 @@ extension VM {
             )
         }
 
-        try defineGlobal(
+        defineGlobal(
             named: selector.name,
             value: AnyCallable({ _, _, args in
                 return try typecheck(args, P0.self, P1.self) {
@@ -81,7 +81,7 @@ extension VM {
         )
     }
 
-    public func defineGlobalFunc3<P0, P1, P2, R>(selector rawSelector: String, `func`: @escaping (P0, P1, P2) -> R) throws {
+    public func defineGlobalFunc3<P0, P1, P2, R>(selector rawSelector: String, `func`: @escaping (P0, P1, P2) -> R) {
         guard let selector = Selector(rawValue: rawSelector) else {
             preconditionFailure("invalid selector: '\(rawSelector)'")
         }
@@ -96,7 +96,7 @@ extension VM {
             )
         }
 
-        try defineGlobal(
+        defineGlobal(
             named: selector.name,
             value: AnyCallable({ _, _, args in
                 return try typecheck(args, P0.self, P1.self, P2.self) {
@@ -108,7 +108,7 @@ extension VM {
         )
     }
 
-    public func defineGlobalFunc4<P0, P1, P2, P3, R>(selector rawSelector: String, `func`: @escaping (P0, P1, P2, P3) -> R) throws {
+    public func defineGlobalFunc4<P0, P1, P2, P3, R>(selector rawSelector: String, `func`: @escaping (P0, P1, P2, P3) -> R) {
         guard let selector = Selector(rawValue: rawSelector) else {
             preconditionFailure("invalid selector: '\(rawSelector)'")
         }
@@ -123,7 +123,7 @@ extension VM {
             )
         }
 
-        try defineGlobal(
+        defineGlobal(
             named: selector.name,
             value: AnyCallable({ _, _, args in
                 return try typecheck(args, P0.self, P1.self, P2.self, P3.self) {
@@ -135,7 +135,7 @@ extension VM {
         )
     }
 
-    public func defineGlobalFunc5<P0, P1, P2, P3, P4, R>(selector rawSelector: String, `func`: @escaping (P0, P1, P2, P3, P4) -> R) throws {
+    public func defineGlobalFunc5<P0, P1, P2, P3, P4, R>(selector rawSelector: String, `func`: @escaping (P0, P1, P2, P3, P4) -> R) {
         guard let selector = Selector(rawValue: rawSelector) else {
             preconditionFailure("invalid selector: '\(rawSelector)'")
         }
@@ -150,7 +150,7 @@ extension VM {
             )
         }
 
-        try defineGlobal(
+        defineGlobal(
             named: selector.name,
             value: AnyCallable({ _, _, args in
                 return try typecheck(args, P0.self, P1.self, P2.self, P3.self, P4.self) {
@@ -162,7 +162,7 @@ extension VM {
         )
     }
 
-    public func defineGlobalFunc6<P0, P1, P2, P3, P4, P5, R>(selector rawSelector: String, `func`: @escaping (P0, P1, P2, P3, P4, P5) -> R) throws {
+    public func defineGlobalFunc6<P0, P1, P2, P3, P4, P5, R>(selector rawSelector: String, `func`: @escaping (P0, P1, P2, P3, P4, P5) -> R) {
         guard let selector = Selector(rawValue: rawSelector) else {
             preconditionFailure("invalid selector: '\(rawSelector)'")
         }
@@ -177,7 +177,7 @@ extension VM {
             )
         }
 
-        try defineGlobal(
+        defineGlobal(
             named: selector.name,
             value: AnyCallable({ _, _, args in
                 return try typecheck(args, P0.self, P1.self, P2.self, P3.self, P4.self, P5.self) {
@@ -189,7 +189,7 @@ extension VM {
         )
     }
 
-    public func defineGlobalFunc7<P0, P1, P2, P3, P4, P5, P6, R>(selector rawSelector: String, `func`: @escaping (P0, P1, P2, P3, P4, P5, P6) -> R) throws {
+    public func defineGlobalFunc7<P0, P1, P2, P3, P4, P5, P6, R>(selector rawSelector: String, `func`: @escaping (P0, P1, P2, P3, P4, P5, P6) -> R) {
         guard let selector = Selector(rawValue: rawSelector) else {
             preconditionFailure("invalid selector: '\(rawSelector)'")
         }
@@ -204,7 +204,7 @@ extension VM {
             )
         }
 
-        try defineGlobal(
+        defineGlobal(
             named: selector.name,
             value: AnyCallable({ _, _, args in
                 return try typecheck(args, P0.self, P1.self, P2.self, P3.self, P4.self, P5.self, P6.self) {
@@ -216,7 +216,7 @@ extension VM {
         )
     }
 
-    public func defineGlobalFunc8<P0, P1, P2, P3, P4, P5, P6, P7, R>(selector rawSelector: String, `func`: @escaping (P0, P1, P2, P3, P4, P5, P6, P7) -> R) throws {
+    public func defineGlobalFunc8<P0, P1, P2, P3, P4, P5, P6, P7, R>(selector rawSelector: String, `func`: @escaping (P0, P1, P2, P3, P4, P5, P6, P7) -> R) {
         guard let selector = Selector(rawValue: rawSelector) else {
             preconditionFailure("invalid selector: '\(rawSelector)'")
         }
@@ -231,7 +231,7 @@ extension VM {
             )
         }
 
-        try defineGlobal(
+        defineGlobal(
             named: selector.name,
             value: AnyCallable({ _, _, args in
                 return try typecheck(args, P0.self, P1.self, P2.self, P3.self, P4.self, P5.self, P6.self, P7.self) {
@@ -243,7 +243,7 @@ extension VM {
         )
     }
 
-    public func defineGlobalFunc9<P0, P1, P2, P3, P4, P5, P6, P7, P8, R>(selector rawSelector: String, `func`: @escaping (P0, P1, P2, P3, P4, P5, P6, P7, P8) -> R) throws {
+    public func defineGlobalFunc9<P0, P1, P2, P3, P4, P5, P6, P7, P8, R>(selector rawSelector: String, `func`: @escaping (P0, P1, P2, P3, P4, P5, P6, P7, P8) -> R) {
         guard let selector = Selector(rawValue: rawSelector) else {
             preconditionFailure("invalid selector: '\(rawSelector)'")
         }
@@ -258,7 +258,7 @@ extension VM {
             )
         }
 
-        try defineGlobal(
+        defineGlobal(
             named: selector.name,
             value: AnyCallable({ _, _, args in
                 return try typecheck(args, P0.self, P1.self, P2.self, P3.self, P4.self, P5.self, P6.self, P7.self, P8.self) {
@@ -270,7 +270,7 @@ extension VM {
         )
     }
 
-    public func defineGlobalFunc10<P0, P1, P2, P3, P4, P5, P6, P7, P8, P9, R>(selector rawSelector: String, `func`: @escaping (P0, P1, P2, P3, P4, P5, P6, P7, P8, P9) -> R) throws {
+    public func defineGlobalFunc10<P0, P1, P2, P3, P4, P5, P6, P7, P8, P9, R>(selector rawSelector: String, `func`: @escaping (P0, P1, P2, P3, P4, P5, P6, P7, P8, P9) -> R) {
         guard let selector = Selector(rawValue: rawSelector) else {
             preconditionFailure("invalid selector: '\(rawSelector)'")
         }
@@ -285,7 +285,7 @@ extension VM {
             )
         }
 
-        try defineGlobal(
+        defineGlobal(
             named: selector.name,
             value: AnyCallable({ _, _, args in
                 return try typecheck(args, P0.self, P1.self, P2.self, P3.self, P4.self, P5.self, P6.self, P7.self, P8.self, P9.self) {
