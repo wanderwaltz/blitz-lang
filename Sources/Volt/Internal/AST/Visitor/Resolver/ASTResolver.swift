@@ -95,6 +95,7 @@ extension ASTResolver {
             if scope.knows(of: name) {
                 let depth = scopes.count - 1 - index
                 interpreter.resolve(name, depth: depth)
+                break
             }
         }
 
@@ -221,6 +222,10 @@ extension ASTResolver: ASTVisitor {
             scopes.last?.define(.self(at: statement.name.location))
 
             try resolveFunction(statement.initializer, .initializer)
+
+            for property in statement.storedProperties {
+                try resolve(property)
+            }
 
             for method in statement.methods {
                 try resolveFunction(method, .method)

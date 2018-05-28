@@ -248,21 +248,35 @@ extension ASTInterpreter: ASTVisitor {
 
     func visitClassDeclarationStatement(_ statement: ClassDeclarationStatement) -> Result {
         return captureValue {
+            let initializer = Function(
+                declaration: statement.initializer,
+                closure: environment
+            )
+
+            let storedProperties = Dictionary<String, StoredProperty>(
+                uniqueKeysWithValues: try statement.storedProperties.map({ declaration in
+                    let name = declaration.identifier.lexeme
+                    let isMutable = declaration.keyword.type == .var
+                    let value = try evaluate(declaration.initializer)
+
+                    return (name, StoredProperty(
+                        name: name,
+                        isMutable: isMutable,
+                        initialValue: value
+                    ))
+                })
+            )
+
             let methods = Dictionary<String, Function>(
                 uniqueKeysWithValues: statement.methods.map({ declaration in
                     (declaration.name.lexeme, Function(declaration: declaration, closure: environment))
                 })
             )
 
-            let initializer = Function(
-                declaration: statement.initializer,
-                closure: environment
-            )
-
             let klass = Class(
                 name: statement.name.lexeme,
                 initializer: initializer,
-                storedProperties: [:], // TODO: stored properties
+                storedProperties: storedProperties,
                 methods: methods
             )
 

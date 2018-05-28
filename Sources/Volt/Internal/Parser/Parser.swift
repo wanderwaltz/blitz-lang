@@ -55,8 +55,13 @@ private final class ParserImpl {
 
         try consume(.leftBrace, "expected { before class body")
 
+        var storedProperties: [String: VariableDeclarationStatement] = [:]
         var methods: [String: FunctionDeclarationStatement] = [:]
         var initializer: FunctionDeclarationStatement? = nil
+
+        func alreadyDefined(_ name: String) -> Bool {
+            return storedProperties[name] != nil || methods[name] != nil
+        }
 
         while !check(.rightBrace) && !isAtEnd {
             if try match(.initKeyword) {
@@ -69,12 +74,22 @@ private final class ParserImpl {
                     named: initializerName
                 )
             }
+            else if try match(.var, .let) {
+                let property = try parseVarDeclaration()
+                let propertyName = property.identifier.lexeme
+
+                guard !alreadyDefined(propertyName) else {
+                    throw error("invalid redefenition of property '\(propertyName)'")
+                }
+
+                storedProperties[propertyName] = property
+            }
             else {
                 try consume(.func, "expected method")
                 let method = try parseFunctionDeclaration(kind: "method")
                 let methodName = method.name.lexeme
 
-                guard methods[methodName] == nil else {
+                guard !alreadyDefined(methodName) else {
                     throw error("invalid redefenition of method '\(methodName)'")
                 }
 
@@ -86,8 +101,9 @@ private final class ParserImpl {
 
         return ClassDeclarationStatement(
             name: name,
-            methods: Array(methods.values).sorted(by: { $0.name.lexeme < $1.name.lexeme }),
-            initializer: initializer ?? .voidDoNothing(named: initializerName)
+            initializer: initializer ?? .voidDoNothing(named: initializerName),
+            storedProperties: Array(storedProperties.values).sorted(by: { $0.identifier.lexeme < $1.identifier.lexeme }),
+            methods: Array(methods.values).sorted(by: { $0.name.lexeme < $1.name.lexeme })
         )
     }
 
@@ -118,7 +134,7 @@ private final class ParserImpl {
         )
     }
 
-    private func parseVarDeclaration() throws -> Statement {
+    private func parseVarDeclaration() throws -> VariableDeclarationStatement {
         let keyword = previous()
         let name = try consume(.identifier, "expected an identifier")
         var initializer: Expression = LiteralExpression.nil

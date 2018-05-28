@@ -95,7 +95,9 @@ extension ASTPrinter: ASTVisitor {
         let components: [String] = [
             statement.name.lexeme,
             "{\n",
-            indentedStatements([statement.initializer] + statement.methods),
+            indentedStatements([statement.initializer]),
+            indentedStatements(statement.storedProperties),
+            indentedStatements(statement.methods),
             "\n}"
         ]
         return parenthesize(components.joined(separator: " "))

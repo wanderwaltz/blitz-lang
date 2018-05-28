@@ -6,7 +6,7 @@ final class Instance {
         self.klass = klass
 
         for property in klass.storedProperties.values {
-            storedProperties[property.name] = property.initialValue ?? .nil
+            storedProperties[property.name] = property.initialValue
         }
     }
 }
