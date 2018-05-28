@@ -45,6 +45,7 @@ case `for`
 case `func`
 case `if`
 case `import`
+case `initKeyword`
 case `let`
 case `nil`
 case `not`

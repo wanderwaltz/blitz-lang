@@ -12,6 +12,7 @@ extension TokenType {
             .`func`,
             .`if`,
             .`import`,
+            .`initKeyword`,
             .`let`,
             .`nil`,
             .`not`,

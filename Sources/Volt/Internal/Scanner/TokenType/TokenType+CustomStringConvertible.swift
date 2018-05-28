@@ -47,6 +47,7 @@ extension TokenType: CustomStringConvertible {
         case .`func`: return "func"
         case .`if`: return "if"
         case .`import`: return "import"
+        case .`initKeyword`: return "init"
         case .`let`: return "let"
         case .`nil`: return "nil"
         case .`not`: return "not"

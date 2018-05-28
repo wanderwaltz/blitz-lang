@@ -256,7 +256,11 @@ extension ASTInterpreter: ASTVisitor {
 
             let klass = Class(
                 name: statement.name.lexeme,
-                methods: methods
+                methods: methods,
+                initializer: Function(
+                    declaration: statement.initializer,
+                    closure: environment
+                )
             )
 
             let value = Value.object(klass)

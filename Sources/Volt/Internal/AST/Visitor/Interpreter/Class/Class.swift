@@ -1,11 +1,12 @@
 struct Class {
     let name: String
     let methods: [String: Function]
+    let initializer: Function
 }
 
 
 extension Class {
     var arity: Int {
-        return 0
+        return initializer.arity
     }
 }

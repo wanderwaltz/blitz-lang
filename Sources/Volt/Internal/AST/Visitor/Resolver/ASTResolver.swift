@@ -207,6 +207,8 @@ extension ASTResolver: ASTVisitor {
             beginScope(type: .class)
             scopes.last?.define(.self(at: statement.name.location))
 
+            try resolveFunction(statement.initializer, .method)
+
             for method in statement.methods {
                 try resolveFunction(method, .method)
             }

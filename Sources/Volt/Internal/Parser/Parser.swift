@@ -50,21 +50,33 @@ private final class ParserImpl {
         try consume(.leftBrace, "expected { before class body")
 
         var methods: [FunctionDeclarationStatement] = []
+        var initializer: FunctionDeclarationStatement? = nil
+
         while !check(.rightBrace) && !isAtEnd {
-            try consume(.func, "expected method")
-            methods.append(try parseFunctionDeclaration(kind: "method"))
+            if try match(.initKeyword) {
+                guard initializer == nil else {
+                    throw error("a class can have only one initializer")
+                }
+
+                initializer = try parseFunctionDeclaration(kind: "initializer", named: name)
+            }
+            else {
+                try consume(.func, "expected method")
+                methods.append(try parseFunctionDeclaration(kind: "method"))
+            }
         }
 
         try consume(.rightBrace, "expected } after class body")
 
         return ClassDeclarationStatement(
             name: name,
-            methods: methods
+            methods: methods,
+            initializer: initializer ?? .voidDoNothing(named: name)
         )
     }
 
-    private func parseFunctionDeclaration(kind: String) throws -> FunctionDeclarationStatement {
-        let name = try consume(.identifier, "expected \(kind) name")
+    private func parseFunctionDeclaration(kind: String, named _name: Token? = nil) throws -> FunctionDeclarationStatement {
+        let name = try _name ?? consume(.identifier, "expected \(kind) name")
 
         try consume(.leftParen, "expecred ( after \(kind) name")
 

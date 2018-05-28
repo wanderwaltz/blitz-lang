@@ -1,4 +1,8 @@
 class Breakfast {
+    init(arg arg) {
+        print "init called with arg: " + arg
+    }
+
     func cook() {
         func closure(arg x) {
             print " " + self + x
@@ -14,7 +18,7 @@ class Breakfast {
 
 print "class: " + Breakfast
 
-var breakfast = Breakfast()
+var breakfast = Breakfast(arg: "some")
 
 print "instance: " + breakfast
 

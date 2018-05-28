@@ -4,6 +4,15 @@ extension Class: Callable {
             throw InternalError.invalidNumberOfArguments(expected: arity, got: arguments.count)
         }
 
-        return .object(Instance(klass: self))
+        let instance = Instance(klass: self)
+        try initializer
+            .bind(to: instance)
+            .call(
+                interpreter: interpreter,
+                signature: signature,
+                arguments: arguments
+            )
+
+        return .object(instance)
     }
 }
