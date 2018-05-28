@@ -85,8 +85,8 @@ extension ASTResolver {
         // not found; assume it is global
     }
 
-    private func resolveFunction(_ function: FunctionDeclarationStatement) throws {
-        beginScope(type: .function)
+    private func resolveFunction(_ function: FunctionDeclarationStatement, _ scopeType: ScopeType) throws {
+        beginScope(type: scopeType)
         for param in function.parameters {
             declare(param.name)
             define(param.name)
@@ -182,6 +182,17 @@ extension ASTResolver: ASTVisitor {
         }
     }
 
+    func visitClassDeclarationStatement(_ statement: ClassDeclarationStatement) -> Result {
+        return captureResult {
+            declare(statement.name)
+            define(statement.name)
+
+            for method in statement.methods {
+                try resolveFunction(method, .method)
+            }
+        }
+    }
+
     func visitExpressionStatement(_ statement: ExpressionStatement) -> Result {
         return captureResult {
             try resolve(statement.expression)
@@ -192,7 +203,7 @@ extension ASTResolver: ASTVisitor {
         return captureResult {
             declare(statement.name)
             define(statement.name)
-            try resolveFunction(statement)
+            try resolveFunction(statement, .function)
         }
     }
 

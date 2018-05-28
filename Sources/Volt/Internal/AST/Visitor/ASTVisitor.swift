@@ -17,6 +17,7 @@ protocol ASTVisitor {
     func visitVariableExpression(_ expression: VariableExpression) -> ReturnValue
 
     func visitBlockStatement(_ statement: BlockStatement) -> ReturnValue
+    func visitClassDeclarationStatement(_ statement: ClassDeclarationStatement) -> ReturnValue
     func visitExpressionStatement(_ statement: ExpressionStatement) -> ReturnValue
     func visitFunctionDeclarationStatement(_ statement: FunctionDeclarationStatement) -> ReturnValue
     func visitIfStatement(_ statement: IfStatement) -> ReturnValue

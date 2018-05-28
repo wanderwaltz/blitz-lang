@@ -1,18 +1,6 @@
 import Volt
 import Foundation
 
-final class TestClass {
-    var text = ""
-
-    init(text: String) {
-        self.text = text
-    }
-
-    func parenthesize(adding prefix: String) -> String {
-        return "\(prefix)(\(text))"
-    }
-}
-
 guard let sourceFileName = CommandLine.arguments.last, CommandLine.arguments.count == 2 else {
     print("expected a file name")
     exit(1)
@@ -26,14 +14,6 @@ do {
     vm.importedModulesSourceProvider = FileSystemImportedModulesSourceProvider(prefix: "Samples")
 
     let program = try vm.parse(source)
-
-    vm.defineClass1(initializer: TestClass.init)
-        .registerMutableProperty(named: "text", keyPath: \.text)
-        .registerMethod(selector: "parenthesize(adding:)", method: TestClass.parenthesize)
-
-    vm.defineGlobalFunc1(selector: "greet(who:)", func: { (who: Any) -> String in
-        return "Hello, \(who)"
-    })
 
     print(program)
 

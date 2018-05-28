@@ -24,6 +24,10 @@ private final class ParserImpl {
             return try parseImportStatement()
         }
 
+        if try match(.class) {
+            return try parseClassDeclaration()
+        }
+
         if try match(.func) {
             return try parseFunctionDeclaration(kind: "function")
         }
@@ -40,7 +44,27 @@ private final class ParserImpl {
         return ImportStatement(identifier: name)
     }
 
-    private func parseFunctionDeclaration(kind: String) throws -> Statement {
+    private func parseClassDeclaration() throws -> Statement {
+        let name = try consume(.identifier, "expected class name")
+
+        try consume(.leftBrace, "expected { before class body")
+
+        var methods: [FunctionDeclarationStatement] = []
+        while !check(.rightBrace) && !isAtEnd {
+            if try match(.func) {
+                methods.append(try parseFunctionDeclaration(kind: "method"))
+            }
+        }
+
+        try consume(.rightBrace, "expected } after class body")
+
+        return ClassDeclarationStatement(
+            name: name,
+            methods: methods
+        )
+    }
+
+    private func parseFunctionDeclaration(kind: String) throws -> FunctionDeclarationStatement {
         let name = try consume(.identifier, "expected \(kind) name")
 
         try consume(.leftParen, "expecred ( after \(kind) name")

@@ -240,6 +240,25 @@ extension ASTInterpreter: ASTVisitor {
         return executeBlock(statement, environment: Environment(parent: environment))
     }
 
+    func visitClassDeclarationStatement(_ statement: ClassDeclarationStatement) -> Result {
+        return captureValue {
+            let methods = Dictionary<String, Function>(
+                uniqueKeysWithValues: statement.methods.map({ declaration in
+                    (declaration.name.lexeme, Function(declaration: declaration, closure: environment))
+                })
+            )
+
+            let klass = Class(
+                name: statement.name.lexeme,
+                methods: methods
+            )
+
+            let value = Value.object(klass)
+            try environment.defineVariable(named: statement.name, value: value, isMutable: false)
+            return value
+        }
+    }
+
     func visitExpressionStatement(_ statement: ExpressionStatement) -> Result {
         return captureValue { try evaluate(statement.expression) }
     }
@@ -495,6 +514,10 @@ extension ASTInterpreter {
     }
 
     private func lookupGettable(for object: Value, at location: SourceLocation) throws -> Gettable {
+        if case let .object(gettable as Gettable) = object {
+            return gettable
+        }
+
         guard let delegate = delegate else {
             throw RuntimeError(
                 code: .invalidGetExpression,

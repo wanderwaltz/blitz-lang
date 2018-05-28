@@ -1,16 +1,18 @@
-//func append(_ right, to left) {
-//    return left + right
-//}
+class Breakfast {
+    func cook() {
+        print "Eggs a-fryin'!"
+    }
 
-//func voidFunc() {
-//    return "qwerty"
-//}
+    func serve(who who) {
+        print "Enjoy your breakfast, " + who
+    }
+}
 
-//print append("World!", to: "Hello, ")
-//print append("World!", qwerty: "Hello, ") // should be an error
+print "class: " + Breakfast
 
-let object = TestClass("qwerty")
+let breakfast = Breakfast()
 
-print object.parenthesize(adding: "asdfg")
+print "instance: " + breakfast
 
-print greet(who: "World!")
+breakfast.cook()
+breakfast.serve(who: "World!")
