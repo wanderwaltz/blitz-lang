@@ -92,7 +92,12 @@ extension ASTPrinter: ASTVisitor {
     }
 
     func visitClassDeclarationStatement(_ statement: ClassDeclarationStatement) -> String {
-        let components: [String] = [statement.name.lexeme, "{\n", indentedStatements(statement.methods), "\n}"]
+        let components: [String] = [
+            statement.name.lexeme,
+            "{\n",
+            indentedStatements([statement.initializer] + statement.methods),
+            "\n}"
+        ]
         return parenthesize(components.joined(separator: " "))
     }
 

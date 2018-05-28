@@ -47,9 +47,15 @@ private final class ParserImpl {
     private func parseClassDeclaration() throws -> Statement {
         let name = try consume(.identifier, "expected class name")
 
+        let initializerName = Token(
+            type: .initKeyword,
+            lexeme: String(describing: TokenType.initKeyword),
+            location: name.location
+        )
+
         try consume(.leftBrace, "expected { before class body")
 
-        var methods: [FunctionDeclarationStatement] = []
+        var methods: [String: FunctionDeclarationStatement] = [:]
         var initializer: FunctionDeclarationStatement? = nil
 
         while !check(.rightBrace) && !isAtEnd {
@@ -58,11 +64,21 @@ private final class ParserImpl {
                     throw error("a class can have only one initializer")
                 }
 
-                initializer = try parseFunctionDeclaration(kind: "initializer", named: name)
+                initializer = try parseFunctionDeclaration(
+                    kind: "initializer",
+                    named: initializerName
+                )
             }
             else {
                 try consume(.func, "expected method")
-                methods.append(try parseFunctionDeclaration(kind: "method"))
+                let method = try parseFunctionDeclaration(kind: "method")
+                let methodName = method.name.lexeme
+
+                guard methods[methodName] == nil else {
+                    throw error("invalid redefenition of method '\(methodName)'")
+                }
+
+                methods[methodName] = method
             }
         }
 
@@ -70,8 +86,8 @@ private final class ParserImpl {
 
         return ClassDeclarationStatement(
             name: name,
-            methods: methods,
-            initializer: initializer ?? .voidDoNothing(named: name)
+            methods: Array(methods.values).sorted(by: { $0.name.lexeme < $1.name.lexeme }),
+            initializer: initializer ?? .voidDoNothing(named: initializerName)
         )
     }
 
