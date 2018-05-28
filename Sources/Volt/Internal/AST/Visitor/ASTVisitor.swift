@@ -13,6 +13,7 @@ protocol ASTVisitor {
     func visitLiteralExpression(_ expression: LiteralExpression) -> ReturnValue
     func visitLogicalExpression(_ expression: LogicalExpression) -> ReturnValue
     func visitSetExpression(_ expression: SetExpression) -> ReturnValue
+    func visitSelfExpression(_ expression: SelfExpression) -> ReturnValue
     func visitUnaryExpression(_ expression: UnaryExpression) -> ReturnValue
     func visitVariableExpression(_ expression: VariableExpression) -> ReturnValue
 

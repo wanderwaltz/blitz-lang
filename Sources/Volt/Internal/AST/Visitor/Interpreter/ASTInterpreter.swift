@@ -192,6 +192,12 @@ extension ASTInterpreter: ASTVisitor {
         }
     }
 
+    func visitSelfExpression(_ expression: SelfExpression) -> Result {
+        return captureValue {
+            return try lookupVariable(named: expression.keyword)
+        }
+    }
+
     func visitSetExpression(_ expression: SetExpression) -> Result {
         return captureValue {
             let object = try evaluate(expression.object)

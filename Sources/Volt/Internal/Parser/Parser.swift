@@ -467,6 +467,10 @@ private final class ParserImpl {
             return LiteralExpression(literal: literal)
         }
 
+        if try match(.self) {
+            return SelfExpression(keyword: previous())
+        }
+
         if try match(.identifier) {
             return VariableExpression(identifier: previous())
         }

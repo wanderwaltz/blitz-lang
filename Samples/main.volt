@@ -1,6 +1,6 @@
 class Breakfast {
     func cook() {
-        print "Eggs a-fryin'!"
+        self.serve(who: self)
     }
 
     func serve(who who) {
@@ -15,4 +15,3 @@ let breakfast = Breakfast()
 print "instance: " + breakfast
 
 breakfast.cook()
-breakfast.serve(who: "World!")

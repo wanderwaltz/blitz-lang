@@ -43,6 +43,10 @@ extension ASTPrinter: ASTVisitor {
         return parenthesize(expression.left, expression.op, expression.right)
     }
 
+    func visitSelfExpression(_ expression: SelfExpression) -> String {
+        return parenthesize(expression.keyword.lexeme)
+    }
+
     func visitSetExpression(_ expression: SetExpression) -> String {
         let object = print(expression.object)
         let value = print(expression.value)
@@ -88,7 +92,7 @@ extension ASTPrinter: ASTVisitor {
     }
 
     func visitClassDeclarationStatement(_ statement: ClassDeclarationStatement) -> String {
-        var components: [String] = [statement.name.lexeme, "{\n", indentedStatements(statement.methods), "\n}"]
+        let components: [String] = [statement.name.lexeme, "{\n", indentedStatements(statement.methods), "\n}"]
         return parenthesize(components.joined(separator: " "))
     }
 

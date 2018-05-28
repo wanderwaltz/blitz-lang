@@ -146,6 +146,12 @@ extension ASTResolver: ASTVisitor {
         }
     }
 
+    func visitSelfExpression(_ expression: SelfExpression) -> Result {
+        return captureResult {
+            resolveLocal(expression.keyword)
+        }
+    }
+
     func visitSetExpression(_ expression: SetExpression) -> Result {
         return captureResult {
             try resolve(expression.value)
@@ -187,9 +193,14 @@ extension ASTResolver: ASTVisitor {
             declare(statement.name)
             define(statement.name)
 
+            beginScope(type: .class)
+            scopes.last?.define(.self(at: statement.name.location))
+
             for method in statement.methods {
                 try resolveFunction(method, .method)
             }
+
+            endScope()
         }
     }
 
