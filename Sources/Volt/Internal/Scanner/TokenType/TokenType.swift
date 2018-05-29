@@ -43,6 +43,7 @@ case `else`
 case `false`
 case `for`
 case `func`
+case `get`
 case `if`
 case `import`
 case `initKeyword`
@@ -53,6 +54,7 @@ case `or`
 case `print`
 case `return`
 case `self`
+case `set`
 case `super`
 case `true`
 case `var`

@@ -268,7 +268,7 @@ extension ASTInterpreter: ASTVisitor {
             )
 
             let readonlyComputedProperties = Dictionary<String, ReadonlyComputedProperty>(
-                uniqueKeysWithValues: try statement.readonlyComputedProperties.map({ declaration in
+                uniqueKeysWithValues: statement.readonlyComputedProperties.map({ declaration in
                     let name = declaration.name.lexeme
 
                     return (name, ReadonlyComputedProperty(
