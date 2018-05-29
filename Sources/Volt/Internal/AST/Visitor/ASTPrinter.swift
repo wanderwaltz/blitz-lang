@@ -96,7 +96,11 @@ extension ASTPrinter: ASTVisitor {
             statement.name.lexeme,
             "{\n",
             indentedStatements([statement.initializer]),
+            "\n\n",
             indentedStatements(statement.storedProperties),
+            "\n\n",
+            indentedStatements(statement.readonlyComputedProperties),
+            "\n\n",
             indentedStatements(statement.methods),
             "\n}"
         ]
@@ -137,6 +141,10 @@ extension ASTPrinter: ASTVisitor {
 
     func visitPrintStatement(_ statement: PrintStatement) -> String {
         return parenthesize("print", print(statement.expression))
+    }
+
+    func visitReadonlyComputedPropertyDeclarationStatement(_ statement: ReadonlyComputedPropertyDeclarationStatement) -> String {
+        return parenthesize("var", statement.name.lexeme, print(statement.getter))
     }
 
     func visitReturnStatement(_ statement: ReturnStatement) -> String {

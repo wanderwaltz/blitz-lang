@@ -1,6 +1,9 @@
 class Breakfast {
     var x = "_"
-    let y = "z"
+
+    var y {
+        return self.x + "z"
+    }
 
     init(arg arg) {
         self.x += arg
@@ -22,4 +25,8 @@ class Breakfast {
 
 var breakfast = Breakfast(arg: "some")
 
-print breakfast.cook()(arg: "y")
+print breakfast.y
+
+breakfast.x = "123"
+
+print breakfast.y

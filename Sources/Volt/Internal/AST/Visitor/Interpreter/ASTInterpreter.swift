@@ -267,6 +267,24 @@ extension ASTInterpreter: ASTVisitor {
                 })
             )
 
+            let readonlyComputedProperties = Dictionary<String, ReadonlyComputedProperty>(
+                uniqueKeysWithValues: try statement.readonlyComputedProperties.map({ declaration in
+                    let name = declaration.name.lexeme
+
+                    return (name, ReadonlyComputedProperty(
+                        name: name,
+                        getter: Function(
+                            declaration: .init(
+                                name: declaration.name,
+                                parameters: [],
+                                body: declaration.getter
+                            ),
+                            closure: environment
+                        )
+                    ))
+                })
+            )
+
             let methods = Dictionary<String, Function>(
                 uniqueKeysWithValues: statement.methods.map({ declaration in
                     (declaration.name.lexeme, Function(declaration: declaration, closure: environment))
@@ -277,6 +295,7 @@ extension ASTInterpreter: ASTVisitor {
                 name: statement.name.lexeme,
                 initializer: initializer,
                 storedProperties: storedProperties,
+                readonlyComputedProperties: readonlyComputedProperties,
                 methods: methods
             )
 
@@ -360,6 +379,10 @@ extension ASTInterpreter: ASTVisitor {
 
             return .value(value)
         }
+    }
+
+    func visitReadonlyComputedPropertyDeclarationStatement(_ statement: ReadonlyComputedPropertyDeclarationStatement) -> Result {
+        preconditionFailure("visiting readonly computed property declarations is not supported")
     }
 
     func visitReturnStatement(_ statement: ReturnStatement) -> Result {

@@ -56,11 +56,14 @@ private final class ParserImpl {
         try consume(.leftBrace, "expected { before class body")
 
         var storedProperties: [String: VariableDeclarationStatement] = [:]
+        var readonlyComputedProperties: [String: ReadonlyComputedPropertyDeclarationStatement] = [:]
         var methods: [String: FunctionDeclarationStatement] = [:]
         var initializer: FunctionDeclarationStatement? = nil
 
         func alreadyDefined(_ name: String) -> Bool {
-            return storedProperties[name] != nil || methods[name] != nil
+            return storedProperties[name] != nil
+                || readonlyComputedProperties[name] != nil
+                || methods[name] != nil
         }
 
         while !check(.rightBrace) && !isAtEnd {
@@ -75,14 +78,32 @@ private final class ParserImpl {
                 )
             }
             else if try match(.var, .let) {
-                let property = try parseVarDeclaration()
-                let propertyName = property.identifier.lexeme
+                let keyword = previous()
+                let name = try consume(.identifier, "expected property name")
+                let propertyName = name.lexeme
 
                 guard !alreadyDefined(propertyName) else {
                     throw error("invalid redefenition of property '\(propertyName)'")
                 }
 
-                storedProperties[propertyName] = property
+                if try match(.leftBrace) {
+                    guard keyword.type == .var else {
+                        throw error("computed properties should be declared with var keyword")
+                    }
+
+                    let getter = try parseBlockStatement()
+
+                    readonlyComputedProperties[propertyName] = ReadonlyComputedPropertyDeclarationStatement(
+                        name: name,
+                        getter: getter
+                    )
+                }
+                else {
+                    storedProperties[propertyName] = try parseVarDeclaration(
+                        keyword: keyword,
+                        name: name
+                    )
+                }
             }
             else {
                 try consume(.func, "expected method")
@@ -103,6 +124,7 @@ private final class ParserImpl {
             name: name,
             initializer: initializer ?? .voidDoNothing(named: initializerName),
             storedProperties: Array(storedProperties.values).sorted(by: { $0.identifier.lexeme < $1.identifier.lexeme }),
+            readonlyComputedProperties: Array(readonlyComputedProperties.values).sorted(by: { $0.name.lexeme < $1.name.lexeme }),
             methods: Array(methods.values).sorted(by: { $0.name.lexeme < $1.name.lexeme })
         )
     }
@@ -134,9 +156,10 @@ private final class ParserImpl {
         )
     }
 
-    private func parseVarDeclaration() throws -> VariableDeclarationStatement {
-        let keyword = previous()
-        let name = try consume(.identifier, "expected an identifier")
+    private func parseVarDeclaration(keyword _keyword: Token? = nil,
+                                     name _name: Token? = nil) throws -> VariableDeclarationStatement {
+        let keyword = _keyword ?? previous()
+        let name = try _name ?? consume(.identifier, "expected an identifier")
         var initializer: Expression = LiteralExpression.nil
 
         if try match(.equal) {

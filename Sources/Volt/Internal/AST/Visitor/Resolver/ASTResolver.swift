@@ -227,6 +227,10 @@ extension ASTResolver: ASTVisitor {
                 try resolve(property)
             }
 
+            for property in statement.readonlyComputedProperties {
+                try resolve(property)
+            }
+
             for method in statement.methods {
                 try resolveFunction(method, .method)
             }
@@ -274,6 +278,17 @@ extension ASTResolver: ASTVisitor {
     func visitPrintStatement(_ statement: PrintStatement) -> Result {
         return captureResult {
             try resolve(statement.expression)
+        }
+    }
+
+    func visitReadonlyComputedPropertyDeclarationStatement(_ statement: ReadonlyComputedPropertyDeclarationStatement) -> Result {
+        return captureResult {
+            declare(statement.name)
+            beginScope(type: .property)
+            try resolve(statement.getter)
+            endScope()
+            define(statement.name)
+
         }
     }
 

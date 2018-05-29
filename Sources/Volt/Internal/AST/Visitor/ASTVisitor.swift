@@ -12,8 +12,8 @@ protocol ASTVisitor {
     func visitGroupingExpression(_ expression: GroupingExpression) -> ReturnValue
     func visitLiteralExpression(_ expression: LiteralExpression) -> ReturnValue
     func visitLogicalExpression(_ expression: LogicalExpression) -> ReturnValue
-    func visitSetExpression(_ expression: SetExpression) -> ReturnValue
     func visitSelfExpression(_ expression: SelfExpression) -> ReturnValue
+    func visitSetExpression(_ expression: SetExpression) -> ReturnValue
     func visitUnaryExpression(_ expression: UnaryExpression) -> ReturnValue
     func visitVariableExpression(_ expression: VariableExpression) -> ReturnValue
 
@@ -24,6 +24,7 @@ protocol ASTVisitor {
     func visitIfStatement(_ statement: IfStatement) -> ReturnValue
     func visitImportStatement(_ statement: ImportStatement) -> ReturnValue
     func visitPrintStatement(_ statement: PrintStatement) -> ReturnValue
+    func visitReadonlyComputedPropertyDeclarationStatement(_ statement: ReadonlyComputedPropertyDeclarationStatement) -> ReturnValue
     func visitReturnStatement(_ statement: ReturnStatement) -> ReturnValue
     func visitSingleKeywordStatement(_ statement: SingleKeywordStatement) -> ReturnValue
     func visitVariableDeclarationStatement(_ statement: VariableDeclarationStatement) -> ReturnValue

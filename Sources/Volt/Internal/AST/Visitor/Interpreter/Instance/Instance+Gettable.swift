@@ -1,6 +1,6 @@
 extension Instance: Gettable {
     func getProperty(named name: String, interpreter: ASTInterpreter) throws -> Value {
-        let optionalValue = lookupProperty(named: name, interpreter: interpreter)
+        let optionalValue = try lookupProperty(named: name, interpreter: interpreter)
             ?? lookupMethod(named: name)
 
         guard let value = optionalValue else {
@@ -13,12 +13,27 @@ extension Instance: Gettable {
 
 
 extension Instance {
-    func lookupProperty(named name: String, interpreter: ASTInterpreter) -> Value? {
-        return lookupStoredProperty(named: name)
+    func lookupProperty(named name: String, interpreter: ASTInterpreter) throws -> Value? {
+        return try lookupStoredProperty(named: name)
+            ?? lookupReadonlyComputedProperty(named: name, interpreter: interpreter)
     }
 
     private func lookupStoredProperty(named name: String) -> Value? {
         return storedProperties[name]
+    }
+
+    private func lookupReadonlyComputedProperty(named name: String, interpreter: ASTInterpreter) throws -> Value? {
+        guard let property = klass.readonlyComputedProperties[name] else {
+            return nil
+        }
+
+        let getter = property.getter.bind(to: self)
+
+        return try getter.call(
+            interpreter: interpreter,
+            signature: .void,
+            arguments: []
+        )
     }
 }
 
