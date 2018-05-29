@@ -92,18 +92,28 @@ extension ASTPrinter: ASTVisitor {
     }
 
     func visitClassDeclarationStatement(_ statement: ClassDeclarationStatement) -> String {
-        let components: [String] = [
+        var components: [String] = [
             statement.name.lexeme,
             "{\n",
-            indentedStatements([statement.initializer]),
-            "\n\n",
-            indentedStatements(statement.storedProperties),
-            "\n\n",
-            indentedStatements(statement.computedProperties),
-            "\n\n",
-            indentedStatements(statement.methods),
-            "\n}"
         ]
+
+        if !statement.storedProperties.isEmpty {
+            components.append("\n\n")
+            components.append(indentedStatements(statement.storedProperties))
+        }
+
+        if !statement.computedProperties.isEmpty {
+            components.append("\n\n")
+            components.append(indentedStatements(statement.computedProperties))
+        }
+
+        if !statement.methods.isEmpty {
+            components.append("\n\n")
+            components.append(indentedStatements(statement.methods))
+        }
+
+        components.append("\n}")
+
         return parenthesize(components.joined(separator: " "))
     }
 

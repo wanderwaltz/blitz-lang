@@ -398,7 +398,19 @@ extension ASTInterpreter: ASTVisitor {
                 )
             }
 
-            delegate.interpreter(self, print: value)
+            var valueToPrint = value
+
+            if case let .object(convertible as VoltStringConvertible) = value {
+                do {
+                    let string = try convertible.voltDescription(interpreter: self)
+                    valueToPrint = string.map({ Value.string($0) }) ?? valueToPrint
+                }
+                catch let internalError as InternalError {
+                    throw internalError.makeRuntimeError(location: statement.keyword.location)
+                }
+            }
+
+            delegate.interpreter(self, print: valueToPrint)
 
             return .value(value)
         }

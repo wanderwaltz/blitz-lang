@@ -1,43 +1,23 @@
-class Breakfast {
-    var x = "_"
+class Base {
+    var property = "base property"
+    var otherProperty
 
-    var y {
-        return self.x + "z"
+    init(arg otherProperty) {
+        self.otherProperty = otherProperty
     }
 
-    var z {
-        get {
-            return self.y
-        }
-
-        set {
-            self.x = newValue
-        }
-    }
-
-    init(arg arg) {
-        self.x += arg
-    }
-
-    func cook() {
-        func closure(arg x) {
-            print "" + self.x + x
-            return x
-        }
-
-        return closure
-    }
-
-    func serve(who who) {
-        print "Enjoy your breakfast, " + who
+    func method() {
+        return "base method"
     }
 }
 
-var breakfast = Breakfast(arg: "some")
 
-print breakfast.z
+class Derived {
+    func description() {
+        "text"
+    }
+}
 
-breakfast.z = 123
+let instance = Derived()
 
-print breakfast.z
-print breakfast.x
+print instance
