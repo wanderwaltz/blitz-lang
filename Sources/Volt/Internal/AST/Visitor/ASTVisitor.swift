@@ -19,12 +19,12 @@ protocol ASTVisitor {
 
     func visitBlockStatement(_ statement: BlockStatement) -> ReturnValue
     func visitClassDeclarationStatement(_ statement: ClassDeclarationStatement) -> ReturnValue
+    func visitComputedPropertyDeclarationStatement(_ statement: ComputedPropertyDeclarationStatement) -> ReturnValue
     func visitExpressionStatement(_ statement: ExpressionStatement) -> ReturnValue
     func visitFunctionDeclarationStatement(_ statement: FunctionDeclarationStatement) -> ReturnValue
     func visitIfStatement(_ statement: IfStatement) -> ReturnValue
     func visitImportStatement(_ statement: ImportStatement) -> ReturnValue
     func visitPrintStatement(_ statement: PrintStatement) -> ReturnValue
-    func visitReadonlyComputedPropertyDeclarationStatement(_ statement: ReadonlyComputedPropertyDeclarationStatement) -> ReturnValue
     func visitReturnStatement(_ statement: ReturnStatement) -> ReturnValue
     func visitSingleKeywordStatement(_ statement: SingleKeywordStatement) -> ReturnValue
     func visitVariableDeclarationStatement(_ statement: VariableDeclarationStatement) -> ReturnValue

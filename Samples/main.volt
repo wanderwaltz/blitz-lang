@@ -5,6 +5,16 @@ class Breakfast {
         return self.x + "z"
     }
 
+    var z {
+        get {
+            return self.y
+        }
+
+        set {
+            self.x = newValue
+        }
+    }
+
     init(arg arg) {
         self.x += arg
     }
@@ -25,8 +35,9 @@ class Breakfast {
 
 var breakfast = Breakfast(arg: "some")
 
-print breakfast.y
+print breakfast.z
 
-breakfast.x = "123"
+breakfast.z = 123
 
-print breakfast.y
+print breakfast.z
+print breakfast.x

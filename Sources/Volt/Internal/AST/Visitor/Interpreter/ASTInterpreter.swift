@@ -267,11 +267,11 @@ extension ASTInterpreter: ASTVisitor {
                 })
             )
 
-            let readonlyComputedProperties = Dictionary<String, ReadonlyComputedProperty>(
-                uniqueKeysWithValues: statement.readonlyComputedProperties.map({ declaration in
+            let computedProperties = Dictionary<String, ComputedProperty>(
+                uniqueKeysWithValues: statement.computedProperties.map({ declaration in
                     let name = declaration.name.lexeme
 
-                    return (name, ReadonlyComputedProperty(
+                    return (name, ComputedProperty(
                         name: name,
                         getter: Function(
                             declaration: .init(
@@ -280,7 +280,26 @@ extension ASTInterpreter: ASTVisitor {
                                 body: declaration.getter
                             ),
                             closure: environment
-                        )
+                        ),
+                        setter: declaration.setter.map({ setter in
+                            Function(
+                                declaration: .init(
+                                    name: declaration.name,
+                                    parameters: [
+                                        (
+                                            label: .init(
+                                                type: .identifier,
+                                                lexeme: "_",
+                                                location: declaration.name.location
+                                            ),
+                                            name: .newValue(at: declaration.name.location)
+                                        )
+                                    ],
+                                    body: setter
+                                ),
+                                closure: environment
+                            )
+                        })
                     ))
                 })
             )
@@ -295,7 +314,7 @@ extension ASTInterpreter: ASTVisitor {
                 name: statement.name.lexeme,
                 initializer: initializer,
                 storedProperties: storedProperties,
-                readonlyComputedProperties: readonlyComputedProperties,
+                computedProperties: computedProperties,
                 methods: methods
             )
 
@@ -303,6 +322,10 @@ extension ASTInterpreter: ASTVisitor {
             try environment.defineVariable(named: statement.name, value: value, isMutable: false)
             return value
         }
+    }
+
+    func visitComputedPropertyDeclarationStatement(_ statement: ComputedPropertyDeclarationStatement) -> Result {
+        preconditionFailure("visiting computed property declarations is not supported")
     }
 
     func visitExpressionStatement(_ statement: ExpressionStatement) -> Result {
@@ -379,10 +402,6 @@ extension ASTInterpreter: ASTVisitor {
 
             return .value(value)
         }
-    }
-
-    func visitReadonlyComputedPropertyDeclarationStatement(_ statement: ReadonlyComputedPropertyDeclarationStatement) -> Result {
-        preconditionFailure("visiting readonly computed property declarations is not supported")
     }
 
     func visitReturnStatement(_ statement: ReturnStatement) -> Result {

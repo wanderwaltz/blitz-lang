@@ -56,13 +56,13 @@ private final class ParserImpl {
         try consume(.leftBrace, "expected { before class body")
 
         var storedProperties: [String: VariableDeclarationStatement] = [:]
-        var readonlyComputedProperties: [String: ReadonlyComputedPropertyDeclarationStatement] = [:]
+        var computedProperties: [String: ComputedPropertyDeclarationStatement] = [:]
         var methods: [String: FunctionDeclarationStatement] = [:]
         var initializer: FunctionDeclarationStatement? = nil
 
         func alreadyDefined(_ name: String) -> Bool {
             return storedProperties[name] != nil
-                || readonlyComputedProperties[name] != nil
+                || computedProperties[name] != nil
                 || methods[name] != nil
         }
 
@@ -91,11 +91,30 @@ private final class ParserImpl {
                         throw error("computed properties should be declared with var keyword")
                     }
 
-                    let getter = try parseBlockStatement()
+                    var _getter: BlockStatement?
+                    var setter: BlockStatement?
 
-                    readonlyComputedProperties[propertyName] = ReadonlyComputedPropertyDeclarationStatement(
+                    if try match(.get) {
+                        try consume(.leftBrace, "expected { after get keyword")
+                        _getter = try parseBlockStatement()
+
+                        try consume(.set, "expected setter")
+                        try consume(.leftBrace, "expected { after set keyword")
+                        setter = try parseBlockStatement()
+                        try consume(.rightBrace, "expected } after computed property accessors")
+                    }
+                    else {
+                        _getter = try parseBlockStatement()
+                    }
+
+                    guard let getter = _getter else {
+                        throw error("expected getter")
+                    }
+
+                    computedProperties[propertyName] = ComputedPropertyDeclarationStatement(
                         name: name,
-                        getter: getter
+                        getter: getter,
+                        setter: setter
                     )
                 }
                 else {
@@ -124,7 +143,7 @@ private final class ParserImpl {
             name: name,
             initializer: initializer ?? .voidDoNothing(named: initializerName),
             storedProperties: Array(storedProperties.values).sorted(by: { $0.identifier.lexeme < $1.identifier.lexeme }),
-            readonlyComputedProperties: Array(readonlyComputedProperties.values).sorted(by: { $0.name.lexeme < $1.name.lexeme }),
+            computedProperties: Array(computedProperties.values).sorted(by: { $0.name.lexeme < $1.name.lexeme }),
             methods: Array(methods.values).sorted(by: { $0.name.lexeme < $1.name.lexeme })
         )
     }

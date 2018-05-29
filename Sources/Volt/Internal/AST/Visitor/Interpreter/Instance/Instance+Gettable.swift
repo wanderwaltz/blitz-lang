@@ -15,15 +15,15 @@ extension Instance: Gettable {
 extension Instance {
     func lookupProperty(named name: String, interpreter: ASTInterpreter) throws -> Value? {
         return try lookupStoredProperty(named: name)
-            ?? lookupReadonlyComputedProperty(named: name, interpreter: interpreter)
+            ?? lookupComputedProperty(named: name, interpreter: interpreter)
     }
 
     private func lookupStoredProperty(named name: String) -> Value? {
         return storedProperties[name]
     }
 
-    private func lookupReadonlyComputedProperty(named name: String, interpreter: ASTInterpreter) throws -> Value? {
-        guard let property = klass.readonlyComputedProperties[name] else {
+    private func lookupComputedProperty(named name: String, interpreter: ASTInterpreter) throws -> Value? {
+        guard let property = klass.computedProperties[name] else {
             return nil
         }
 

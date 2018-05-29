@@ -4,4 +4,8 @@ extension Token {
     static func `self`(at location: SourceLocation) -> Token {
         return Token(type: .self, lexeme: "self", location: location)
     }
+
+    static func newValue(at location: SourceLocation) -> Token {
+        return Token(type: .identifier, lexeme: "newValue", location: location)
+    }
 }

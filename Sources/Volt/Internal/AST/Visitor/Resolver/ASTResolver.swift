@@ -227,7 +227,7 @@ extension ASTResolver: ASTVisitor {
                 try resolve(property)
             }
 
-            for property in statement.readonlyComputedProperties {
+            for property in statement.computedProperties {
                 try resolve(property)
             }
 
@@ -236,6 +236,25 @@ extension ASTResolver: ASTVisitor {
             }
 
             endScope()
+        }
+    }
+
+    func visitComputedPropertyDeclarationStatement(_ statement: ComputedPropertyDeclarationStatement) -> Result {
+        return captureResult {
+            declare(statement.name)
+            beginScope(type: .property)
+            try resolve(statement.getter)
+            endScope()
+
+            beginScope(type: .property)
+            if let setter = statement.setter {
+                declare(.newValue(at: statement.name.location))
+                define(.newValue(at: statement.name.location))
+                try resolve(setter)
+            }
+            endScope()
+
+            define(statement.name)
         }
     }
 
@@ -278,17 +297,6 @@ extension ASTResolver: ASTVisitor {
     func visitPrintStatement(_ statement: PrintStatement) -> Result {
         return captureResult {
             try resolve(statement.expression)
-        }
-    }
-
-    func visitReadonlyComputedPropertyDeclarationStatement(_ statement: ReadonlyComputedPropertyDeclarationStatement) -> Result {
-        return captureResult {
-            declare(statement.name)
-            beginScope(type: .property)
-            try resolve(statement.getter)
-            endScope()
-            define(statement.name)
-
         }
     }
 
