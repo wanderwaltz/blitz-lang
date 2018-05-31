@@ -1,13 +1,29 @@
-func q() {
-    print "returned"
-}
+class Base {
+    var _property = "base"
 
-func test() {
-    defer {
-        print "deferred"
+    var property {
+        get {
+            return self._property
+        }
+
+        set {
+            self._property = newValue
+        }
     }
-
-    return q()
 }
 
-test()
+class Derived: Base {
+    var property {
+        get {
+            return super.property
+        }
+
+        set {
+            super.property = newValue + " overridden"
+        }
+    }
+}
+
+let instance = Derived()
+instance.property = "test"
+// print instance.property

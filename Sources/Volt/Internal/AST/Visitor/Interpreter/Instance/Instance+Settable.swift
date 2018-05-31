@@ -9,7 +9,7 @@ extension Instance: Settable {
                      value: Value,
                      inClass lookupClass: Class,
                      interpreter: ASTInterpreter) throws {
-        if let property = klass.storedProperties[name] {
+        if let property = lookupClass.lookupStoredProperty(named: name) {
             guard property.isMutable else {
                 throw InternalError.settingReadonlyProperty(named: name)
             }
@@ -31,6 +31,7 @@ extension Instance: Settable {
             return
         }
 
+        print("")
         throw InternalError.unknownProperty(named: name)
     }
 }
