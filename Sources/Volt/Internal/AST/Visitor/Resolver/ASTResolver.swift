@@ -184,6 +184,12 @@ extension ASTResolver: ASTVisitor {
         }
     }
 
+    func visitSuperExpression(_ expression: SuperExpression) -> Result {
+        return captureResult {
+            resolveLocal(expression.keyword)
+        }
+    }
+
     func visitUnaryExpression(_ expression: UnaryExpression) -> Result {
         return captureResult {
             try resolve(expression.expression)
@@ -218,6 +224,12 @@ extension ASTResolver: ASTVisitor {
             declare(statement.name)
             define(statement.name)
 
+            if let superclass = statement.superclass {
+                try resolve(superclass)
+                beginScope(type: .class)
+                scopes.last?.define("super")
+            }
+
             beginScope(type: .class)
             scopes.last?.define(.self(at: statement.name.location))
 
@@ -236,6 +248,10 @@ extension ASTResolver: ASTVisitor {
             }
 
             endScope()
+
+            if statement.superclass != nil {
+                endScope()
+            }
         }
     }
 

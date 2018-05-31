@@ -214,6 +214,35 @@ extension ASTInterpreter: ASTVisitor {
         }
     }
 
+    func visitSuperExpression(_ expression: SuperExpression) -> Result {
+        return captureValue {
+            guard let depth = locals[expression.keyword.location] else {
+                preconditionFailure("super is not defined in current context")
+            }
+
+            guard let superclass = try environment.get(at: depth, expression.keyword).any as? Class else {
+                preconditionFailure("super is not defined at depth \(depth)")
+            }
+
+            let selfToken = Token(
+                type: .self,
+                lexeme: "self",
+                location: expression.keyword.location
+            )
+
+            // "this" is always one level nearer than "super"'s environment.
+            guard let this = try environment.get(at: depth - 1, selfToken).any as? Instance else {
+                preconditionFailure("self is not defined at depth \(depth - 1)")
+            }
+
+            return try this.getProperty(
+                named: expression.name.lexeme,
+                inClass: superclass,
+                interpreter: self
+            )
+        }
+    }
+
     func visitGroupingExpression(_ expression: GroupingExpression) -> Result {
         return captureValue { try evaluate(expression.expression) }
     }
@@ -248,6 +277,33 @@ extension ASTInterpreter: ASTVisitor {
 
     func visitClassDeclarationStatement(_ statement: ClassDeclarationStatement) -> Result {
         return captureValue {
+            var superclass: Class?
+
+            if let superclassName = statement.superclass {
+                let value = try lookupVariable(named: superclassName.identifier)
+
+                guard case let .object(sc as Class) = value else {
+                    throw RuntimeError(
+                        code: .invalidSuperclass,
+                        message: "inheritance from non-class type \(value.typeName)",
+                        location: superclassName.identifier.location
+                    )
+                }
+
+                superclass = sc
+
+                environment = ASTInterpreterEnvironment(parent: environment)
+                environment.forceDefineVariable(
+                    named: .init(
+                        type: .super,
+                        lexeme: "super",
+                        location: statement.name.location
+                    ),
+                    value: .object(sc),
+                    isMutable: false
+                )
+            }
+
             let initializer = Function(
                 declaration: statement.initializer,
                 closure: environment
@@ -312,11 +368,20 @@ extension ASTInterpreter: ASTVisitor {
 
             let klass = Class(
                 name: statement.name.lexeme,
+                superclass: superclass,
                 initializer: initializer,
                 storedProperties: storedProperties,
                 computedProperties: computedProperties,
                 methods: methods
             )
+
+            if superclass != nil {
+                guard let parentEnvironment = environment.parent else {
+                    preconditionFailure("should have created an environment for `super`")
+                }
+
+                environment = parentEnvironment
+            }
 
             let value = Value.object(klass)
             try environment.defineVariable(named: statement.name, value: value, isMutable: false)

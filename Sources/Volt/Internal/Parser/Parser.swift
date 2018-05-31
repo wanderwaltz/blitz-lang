@@ -46,12 +46,19 @@ private final class ParserImpl {
 
     private func parseClassDeclaration() throws -> Statement {
         let name = try consume(.identifier, "expected class name")
+        var superclass: VariableExpression?
 
         let initializerName = Token(
             type: .initKeyword,
             lexeme: String(describing: TokenType.initKeyword),
             location: name.location
         )
+
+        if try match(.colon) {
+            superclass = VariableExpression(
+                identifier: try consume(.identifier, "expected superclass name")
+            )
+        }
 
         try consume(.leftBrace, "expected { before class body")
 
@@ -141,6 +148,7 @@ private final class ParserImpl {
 
         return ClassDeclarationStatement(
             name: name,
+            superclass: superclass,
             initializer: initializer ?? .voidDoNothing(named: initializerName),
             storedProperties: Array(storedProperties.values).sorted(by: { $0.identifier.lexeme < $1.identifier.lexeme }),
             computedProperties: Array(computedProperties.values).sorted(by: { $0.name.lexeme < $1.name.lexeme }),
@@ -384,6 +392,9 @@ private final class ParserImpl {
                 let name = getExpression.name
                 return SetExpression(object: object, name: name, op: op, value: value)
             }
+            else if expression is SuperExpression {
+                throw error("super assignment is not implemented yet")
+            }
 
             throw error("invalid assignment")
         }
@@ -550,6 +561,13 @@ private final class ParserImpl {
             }
 
             return LiteralExpression(literal: literal)
+        }
+
+        if try match(.super) {
+            let keyword = previous()
+            try consume(.dot, "expected . after super")
+            let name = try consume(.identifier, "expected property or method identifier after super")
+            return SuperExpression(keyword: keyword, name: name)
         }
 
         if try match(.self) {

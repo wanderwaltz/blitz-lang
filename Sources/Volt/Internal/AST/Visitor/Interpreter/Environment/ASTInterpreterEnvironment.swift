@@ -2,11 +2,12 @@ final class ASTInterpreterEnvironment {
     typealias Result = ASTInterpreterResult
     typealias RuntimeValue = ASTInterpteterRuntimeValue
 
+    let parent: ASTInterpreterEnvironment?
+
     init(parent: ASTInterpreterEnvironment? = nil) {
         self.parent = parent
     }
 
-    private let parent: ASTInterpreterEnvironment?
     private(set) var values: [String:RuntimeValue] = [:]
 }
 

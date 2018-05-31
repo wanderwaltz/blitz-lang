@@ -5,7 +5,7 @@ final class Instance {
     init(klass: Class) {
         self.klass = klass
 
-        for property in klass.storedProperties.values {
+        klass.enumerateStoredProperties { property in
             storedProperties[property.name] = property.initialValue
         }
     }

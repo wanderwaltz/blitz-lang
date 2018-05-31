@@ -16,8 +16,12 @@ extension ASTResolverScope {
         defined[name.lexeme] = .declared
     }
 
+    func define(_ name: String) {
+        defined[name] = .defined
+    }
+
     func define(_ name: Token) {
-        defined[name.lexeme] = .defined
+        define(name.lexeme)
     }
 
     func status(of name: Token) -> VariableStatus? {

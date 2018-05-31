@@ -8,6 +8,7 @@ case invalidGetExpression
 case invalidNumberOfArguments
 case invalidRedefenition
 case invalidSetExpression
+case invalidSuperclass
 case settingImmutableValue
 case typeError
 case unknownIdentifier

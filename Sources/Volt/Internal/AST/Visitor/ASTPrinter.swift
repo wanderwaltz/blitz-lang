@@ -53,6 +53,10 @@ extension ASTPrinter: ASTVisitor {
         return parenthesize("\(object).\(expression.name) \(expression.op) \(value)")
     }
 
+    func visitSuperExpression(_ expression: SuperExpression) -> String {
+        return parenthesize("\(expression.keyword.lexeme).\(expression.name.lexeme)")
+    }
+
     func visitGetExpression(_ expression: GetExpression) -> String {
         let object = print(expression.object)
         return parenthesize("\(object).\(expression.name)")
@@ -94,8 +98,14 @@ extension ASTPrinter: ASTVisitor {
     func visitClassDeclarationStatement(_ statement: ClassDeclarationStatement) -> String {
         var components: [String] = [
             statement.name.lexeme,
-            "{\n",
         ]
+
+        if let superclass = statement.superclass {
+            components.append(":")
+            components.append(print(superclass))
+        }
+
+        components.append("{\n")
 
         if !statement.storedProperties.isEmpty {
             components.append("\n\n")

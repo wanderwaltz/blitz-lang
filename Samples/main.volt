@@ -2,22 +2,54 @@ class Base {
     var property = "base property"
     var otherProperty
 
+    var computedReadonlyProperty {
+        "base computed readonly property"
+    }
+
+    var computedWritableProperty {
+        get {
+            self.property + " (computed)"
+        }
+
+        set {
+            self.property = newValue + " (base)"
+        }
+    }
+
     init(arg otherProperty) {
         self.otherProperty = otherProperty
     }
 
     func method() {
-        return "base method"
+        return self + " base method"
     }
 }
 
 
-class Derived {
-    func description() {
-        "text"
+class Derived: Base {
+    var property = "overridden property" // should be an error
+
+    var computedWritableProperty {
+        get {
+            super.computedWritableProperty + " (overridden)"
+        }
+
+        set {
+            super.computedWritableProperty = newValue + " (overridden)"
+        }
+    }
+
+    var computedReadonlyProperty {
+        super.computedReadonlyProperty + " + overridden computed readonly property"
+    }
+
+    func method() {
+        return super.method() + " overridden method"
     }
 }
 
 let instance = Derived()
 
-print instance
+// print instance.method()
+// print instance.computedReadonlyProperty
+print instance.computedWritableProperty
