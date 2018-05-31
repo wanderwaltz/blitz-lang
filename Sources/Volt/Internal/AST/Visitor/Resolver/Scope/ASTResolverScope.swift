@@ -1,13 +1,30 @@
 final class ASTResolverScope {
     typealias VariableStatus = ASTResolverScopeVariableStatus
+    typealias ClassContext = ASTResolverScopeClassContext
 
     let type: ASTResolverScopeType
+    var classContext: ASTResolverScopeClassContext = .none
 
     init(type: ASTResolverScopeType) {
         self.type = type
     }
 
     private(set) var defined: [String: VariableStatus] = [:]
+}
+
+
+extension ASTResolverScope {
+    var allowsReturnStatement: Bool {
+        return type.allowsReturnStatement
+    }
+
+    var allowsSelfExpression: Bool {
+        return type.allowsSelfExpression
+    }
+
+    var allowsSuperExpression: Bool {
+        return classContext == .subclass
+    }
 }
 
 

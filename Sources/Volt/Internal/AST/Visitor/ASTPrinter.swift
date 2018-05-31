@@ -116,7 +116,6 @@ extension ASTPrinter: ASTVisitor {
         components.append("{\n")
 
         if !statement.storedProperties.isEmpty {
-            components.append("\n\n")
             components.append(indentedStatements(statement.storedProperties))
         }
 

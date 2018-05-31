@@ -3,4 +3,5 @@ case cannotImportAtNonGlobalScope
 case readingLocalValueWithinItsOwnInitializer
 case returnStatementNotAllowed
 case selfExpressionNotAllowed
+case superExpressionNotAllowed
 }

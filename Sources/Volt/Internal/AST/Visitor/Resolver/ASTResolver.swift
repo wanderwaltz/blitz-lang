@@ -70,8 +70,8 @@ extension ASTResolver {
         return matchScope(where: { $0.type == type })
     }
 
-    private func matchScope(_ keyPath: KeyPath<ScopeType, Bool>) -> Bool {
-        return matchScope(where: { $0.type[keyPath: keyPath] })
+    private func matchScope(_ keyPath: KeyPath<Scope, Bool>) -> Bool {
+        return matchScope(where: { $0[keyPath: keyPath] })
     }
 
     private func matchScope(where predicate: (Scope) -> Bool) -> Bool {
@@ -186,12 +186,28 @@ extension ASTResolver: ASTVisitor {
 
     func visitSuperExpression(_ expression: SuperExpression) -> Result {
         return captureResult {
+            guard matchScope(\.allowsSuperExpression) else {
+                throw ResolverError(
+                    code: .superExpressionNotAllowed,
+                    message: "super is not allowed outside of a subclass",
+                    location: expression.keyword.location
+                )
+            }
+
             resolveLocal(expression.keyword)
         }
     }
 
     func visitSuperSetExpression(_ expression: SuperSetExpression) -> Result {
         return captureResult {
+            guard matchScope(\.allowsSuperExpression) else {
+                throw ResolverError(
+                    code: .superExpressionNotAllowed,
+                    message: "super is not allowed outside of a subclass",
+                    location: expression.keyword.location
+                )
+            }
+
             try resolve(expression.value)
             resolveLocal(expression.keyword)
         }
@@ -234,10 +250,12 @@ extension ASTResolver: ASTVisitor {
             if let superclass = statement.superclass {
                 try resolve(superclass)
                 beginScope(type: .class)
+                scopes.last?.classContext = .subclass
                 scopes.last?.define("super")
             }
 
             beginScope(type: .class)
+            scopes.last?.classContext = (statement.superclass != nil) ? .subclass : .rootClass
             scopes.last?.define(.self(at: statement.name.location))
 
             try resolveFunction(statement.initializer, .initializer)
