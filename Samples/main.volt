@@ -31,11 +31,11 @@ class Derived: Base {
 
     var computedWritableProperty {
         get {
-            super.computedWritableProperty + " (overridden)"
+            super.computedWritableProperty + " (1)"
         }
 
         set {
-            super.computedWritableProperty = newValue + " (overridden)"
+            super.computedWritableProperty = newValue + " (2)"
         }
     }
 
@@ -52,4 +52,6 @@ let instance = Derived()
 
 // print instance.method()
 // print instance.computedReadonlyProperty
+instance.computedWritableProperty = 123
 print instance.computedWritableProperty
+print instance.property

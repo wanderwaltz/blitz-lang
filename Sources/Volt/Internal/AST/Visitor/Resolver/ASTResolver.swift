@@ -190,6 +190,13 @@ extension ASTResolver: ASTVisitor {
         }
     }
 
+    func visitSuperSetExpression(_ expression: SuperSetExpression) -> Result {
+        return captureResult {
+            try resolve(expression.value)
+            resolveLocal(expression.keyword)
+        }
+    }
+
     func visitUnaryExpression(_ expression: UnaryExpression) -> Result {
         return captureResult {
             try resolve(expression.expression)

@@ -392,8 +392,13 @@ private final class ParserImpl {
                 let name = getExpression.name
                 return SetExpression(object: object, name: name, op: op, value: value)
             }
-            else if expression is SuperExpression {
-                throw error("super assignment is not implemented yet")
+            else if let superExpression = expression as? SuperExpression {
+                return SuperSetExpression(
+                    keyword: superExpression.keyword,
+                    name: superExpression.name,
+                    op: op,
+                    value: value
+                )
             }
 
             throw error("invalid assignment")

@@ -15,6 +15,7 @@ protocol ASTVisitor {
     func visitSelfExpression(_ expression: SelfExpression) -> ReturnValue
     func visitSetExpression(_ expression: SetExpression) -> ReturnValue
     func visitSuperExpression(_ expression: SuperExpression) -> ReturnValue
+    func visitSuperSetExpression(_ expression: SuperSetExpression) -> ReturnValue
     func visitUnaryExpression(_ expression: UnaryExpression) -> ReturnValue
     func visitVariableExpression(_ expression: VariableExpression) -> ReturnValue
 

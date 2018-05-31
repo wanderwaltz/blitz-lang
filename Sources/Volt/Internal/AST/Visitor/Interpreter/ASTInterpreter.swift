@@ -216,24 +216,7 @@ extension ASTInterpreter: ASTVisitor {
 
     func visitSuperExpression(_ expression: SuperExpression) -> Result {
         return captureValue {
-            guard let depth = locals[expression.keyword.location] else {
-                preconditionFailure("super is not defined in current context")
-            }
-
-            guard let superclass = try environment.get(at: depth, expression.keyword).any as? Class else {
-                preconditionFailure("super is not defined at depth \(depth)")
-            }
-
-            let selfToken = Token(
-                type: .self,
-                lexeme: "self",
-                location: expression.keyword.location
-            )
-
-            // "this" is always one level nearer than "super"'s environment.
-            guard let this = try environment.get(at: depth - 1, selfToken).any as? Instance else {
-                preconditionFailure("self is not defined at depth \(depth - 1)")
-            }
+            let (superclass, this) = try lookupSuperSelf(keyword: expression.keyword)
 
             return try this.getProperty(
                 named: expression.name.lexeme,
@@ -241,6 +224,58 @@ extension ASTInterpreter: ASTVisitor {
                 interpreter: self
             )
         }
+    }
+
+    func visitSuperSetExpression(_ expression: SuperSetExpression) -> Result {
+        return captureValue {
+            var value = try evaluate(expression.value)
+            let (superclass, this) = try lookupSuperSelf(keyword: expression.keyword)
+
+            if expression.op.type != .equal {
+                let existingValue = try this.getProperty(
+                    named: expression.name.lexeme,
+                    inClass: superclass,
+                    interpreter: self
+                )
+                value = try rawOpAssignment(
+                    existingValue: existingValue,
+                    op: expression.op,
+                    newValue: value
+                )
+            }
+
+            try this.setProperty(
+                named: expression.name.lexeme,
+                value: value,
+                inClass: superclass,
+                interpreter: self
+            )
+
+            return value
+        }
+    }
+
+    private func lookupSuperSelf(keyword: Token) throws -> (Class, Instance) {
+        guard let depth = locals[keyword.location] else {
+            preconditionFailure("super is not defined in current context")
+        }
+
+        guard let superclass = try environment.get(at: depth, keyword).any as? Class else {
+            preconditionFailure("super is not defined at depth \(depth)")
+        }
+
+        let selfToken = Token(
+            type: .self,
+            lexeme: "self",
+            location: keyword.location
+        )
+
+        // "this" is always one level nearer than "super"'s environment.
+        guard let this = try environment.get(at: depth - 1, selfToken).any as? Instance else {
+            preconditionFailure("self is not defined at depth \(depth - 1)")
+        }
+
+        return (superclass, this)
     }
 
     func visitGroupingExpression(_ expression: GroupingExpression) -> Result {

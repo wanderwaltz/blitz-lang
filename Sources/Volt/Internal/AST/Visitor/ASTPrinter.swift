@@ -57,6 +57,14 @@ extension ASTPrinter: ASTVisitor {
         return parenthesize("\(expression.keyword.lexeme).\(expression.name.lexeme)")
     }
 
+    func visitSuperSetExpression(_ expression: SuperSetExpression) -> String {
+        return parenthesize(
+            "\(expression.keyword.lexeme).\(expression.name.lexeme)",
+            expression.op.lexeme,
+            print(expression.value)
+        )
+    }
+
     func visitGetExpression(_ expression: GetExpression) -> String {
         let object = print(expression.object)
         return parenthesize("\(object).\(expression.name)")
