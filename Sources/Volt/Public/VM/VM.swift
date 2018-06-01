@@ -18,6 +18,7 @@ public final class VM {
         resolver = ASTResolver(interpreter: interpreter)
         interpreter.delegate = self
 
+        registerDefaultGlobals()
         typeDelegates.registerDefaultBindings(for: String.self)
     }
 
@@ -36,7 +37,7 @@ public final class VM {
 
     @discardableResult
     public func execute(_ program: Program) throws -> Value {
-        switch interpreter.execute(program.statements) {
+        switch resultOfExecuting(program) {
         case let .value(value):
             return value
 
@@ -50,6 +51,10 @@ public final class VM {
                 location: .unknown
             )
         }
+    }
+
+    func resultOfExecuting(_ program: Program) -> ASTInterpreterResult {
+        return interpreter.execute(program.statements)
     }
 
     private let resolver: ASTResolver

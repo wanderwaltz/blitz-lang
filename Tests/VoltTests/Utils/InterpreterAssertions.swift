@@ -103,10 +103,10 @@ func expect_source(_ source: String,
                    prints expectedStrings: [String],
                    file: StaticString = #file,
                    line: UInt = #line) {
-    with_result_of_interpreting(source, do: { result, delegate in
+    with_result_of_interpreting(source, do: { result, printedValues in
         switch result {
         case .value:
-            let printedStrings = delegate.printedValues.map({ String(describing: $0) })
+            let printedStrings = printedValues.map({ String(describing: $0) })
             XCTAssertEqual(expectedStrings, printedStrings, file: file, line: line)
 
         case let .runtimeError(error):
@@ -146,12 +146,9 @@ func expect_source(_ source: String,
                    file: StaticString = #file,
                    line: UInt = #line) {
      do {
-         let tokens = try Scanner().tokenStream(for: source)
-         let ast = try Parser().parse(tokens)
-         let interpreter = ASTInterpreter()
-         let resolver = ASTResolver(interpreter: interpreter)
-         try resolver.resolve(ast)
-         let result = interpreter.execute(ast)
+         let vm = VM()
+         let program = try vm.parse(source)
+         let result = try vm.execute(program)
          XCTFail("Unexpected result received: \(result) (expected a parser error)", file: file, line: line)
      }
      catch let parserError as ParserError {
@@ -163,18 +160,15 @@ func expect_source(_ source: String,
 }
 
 func with_result_of_interpreting(_ source: String,
-                                 do block: (ASTInterpreterResult, MockInterpreterDelegate) -> Void,
+                                 do block: (ASTInterpreterResult, [Value]) -> Void,
                                  file: StaticString = #file,
                                  line: UInt = #line) {
     do {
-        let tokens = try Scanner().tokenStream(for: source)
-        let ast = try Parser().parse(tokens)
-        let interpreter = ASTInterpreter()
-        let delegate = MockInterpreterDelegate()
-        interpreter.delegate = delegate
-        let resolver = ASTResolver(interpreter: interpreter)
-        try resolver.resolve(ast)
-        block(interpreter.execute(ast), delegate)
+        var printedValues: [Value] = []
+        let vm = VM()
+        vm.print = { printedValues.append($0) }
+        let program = try vm.parse(source)
+        block(vm.resultOfExecuting(program), printedValues)
     }
     catch let error {
         XCTFail("Unexpected error: \(error)", file: file, line: line)
