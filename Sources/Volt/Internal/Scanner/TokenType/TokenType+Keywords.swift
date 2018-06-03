@@ -28,7 +28,7 @@ extension TokenType {
             .`while`,
         ]
 
-        var result: [String:TokenType] = [:]
+        var result: [String: TokenType] = [:]
 
         for token in keywordTokens {
             result[token.description] = token
