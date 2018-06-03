@@ -185,9 +185,11 @@ extension ASTInterpreter: ASTVisitor {
 
     func visitGetExpression(_ expression: GetExpression) -> Result {
         return captureValue {
+            let object = try evaluate(expression.object)
+
             return try rawGet(
-                object: try evaluate(expression.object),
-                name: expression.name
+                propertyOf: object,
+                named: expression.name
             )
         }
     }
@@ -206,7 +208,7 @@ extension ASTInterpreter: ASTVisitor {
             var value = try evaluate(expression.value)
 
             if expression.op.type != .equal {
-                let existingValue = try rawGet(object: object, name: name)
+                let existingValue = try rawGet(propertyOf: object, named: name)
                 value = try rawOpAssignment(existingValue: existingValue, op: expression.op, newValue: value)
             }
 
@@ -669,19 +671,6 @@ extension ASTInterpreter {
         }
     }
 
-    private func rawGet(object: Value, name: Token) throws -> Value {
-        let location = name.location
-
-        let gettable = try lookupGettable(for: object, at: location)
-
-        do {
-            return try gettable.getProperty(named: name.lexeme, interpreter: self)
-        }
-        catch let internalError as InternalError {
-            throw internalError.makeRuntimeError(location: location)
-        }
-    }
-
     private func rawSet(object: Value, name: Token, value: Value) throws -> Value {
         let location = name.location
         let settable = try lookupSettable(for: object, at: location)
@@ -693,30 +682,6 @@ extension ASTInterpreter {
         catch let internalError as InternalError {
             throw internalError.makeRuntimeError(location: location)
         }
-    }
-
-    private func lookupGettable(for object: Value, at location: SourceLocation) throws -> Gettable {
-        if case let .object(gettable as Gettable) = object {
-            return gettable
-        }
-
-        guard let delegate = delegate else {
-            throw RuntimeError(
-                code: .invalidGetExpression,
-                message: "cannot read properties of type '\(object.typeName)': interpeter delegate is not set",
-                location: location
-            )
-        }
-
-        guard let gettable = delegate.interpreter(self, gettableFor: object) else {
-            throw RuntimeError(
-                code: .invalidGetExpression,
-                message: "cannot read properties on object of type \(object.typeName)",
-                location: location
-            )
-        }
-
-        return gettable
     }
 
     private func lookupSettable(for object: Value, at location: SourceLocation) throws -> Settable {
