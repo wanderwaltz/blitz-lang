@@ -56,7 +56,7 @@ final class ASTInterpreter {
 
     private typealias Depth = Int
 
-    private var environment: Environment
+    var environment: Environment
     private var locals: [SourceLocation: Depth] = [:]
 }
 
@@ -332,117 +332,7 @@ extension ASTInterpreter: ASTVisitor {
     }
 
     func visitClassDeclarationStatement(_ statement: ClassDeclarationStatement) -> Result {
-        return captureValue {
-            var superclass: Class?
-
-            if let superclassName = statement.superclass {
-                let value = try lookupVariable(named: superclassName.identifier)
-
-                guard case let .object(sc as Class) = value else {
-                    throw RuntimeError(
-                        code: .invalidSuperclass,
-                        message: "inheritance from non-class type \(value.typeName)",
-                        location: superclassName.identifier.location
-                    )
-                }
-
-                superclass = sc
-
-                environment = ASTInterpreterEnvironment(parent: environment)
-                environment.forceDefineVariable(
-                    named: .init(
-                        type: .super,
-                        lexeme: "super",
-                        location: statement.name.location
-                    ),
-                    value: .object(sc),
-                    isMutable: false
-                )
-            }
-
-            let initializer = Function(
-                declaration: statement.initializer,
-                closure: environment
-            )
-
-            let storedProperties = Dictionary<String, StoredProperty>(
-                uniqueKeysWithValues: try statement.storedProperties.map({ declaration in
-                    let name = declaration.identifier.lexeme
-                    let isMutable = declaration.keyword.type == .var
-                    let value = try evaluate(declaration.initializer)
-
-                    return (name, StoredProperty(
-                        name: name,
-                        isMutable: isMutable,
-                        initialValue: value
-                    ))
-                })
-            )
-
-            let computedProperties = Dictionary<String, ComputedProperty>(
-                uniqueKeysWithValues: statement.computedProperties.map({ declaration in
-                    let name = declaration.name.lexeme
-
-                    return (name, ComputedProperty(
-                        name: name,
-                        getter: Function(
-                            declaration: .init(
-                                name: declaration.name,
-                                parameters: [],
-                                body: declaration.getter
-                            ),
-                            closure: environment
-                        ),
-                        setter: declaration.setter.map({ setter in
-                            Function(
-                                declaration: .init(
-                                    name: declaration.name,
-                                    parameters: [
-                                        (
-                                            label: .init(
-                                                type: .identifier,
-                                                lexeme: "_",
-                                                location: declaration.name.location
-                                            ),
-                                            name: .newValue(at: declaration.name.location)
-                                        )
-                                    ],
-                                    body: setter
-                                ),
-                                closure: environment
-                            )
-                        })
-                    ))
-                })
-            )
-
-            let methods = Dictionary<String, Function>(
-                uniqueKeysWithValues: statement.methods.map({ declaration in
-                    (declaration.name.lexeme, Function(declaration: declaration, closure: environment))
-                })
-            )
-
-            let klass = Class(
-                name: statement.name.lexeme,
-                superclass: superclass,
-                initializer: initializer,
-                storedProperties: storedProperties,
-                computedProperties: computedProperties,
-                methods: methods
-            )
-
-            if superclass != nil {
-                guard let parentEnvironment = environment.parent else {
-                    preconditionFailure("should have created an environment for `super`")
-                }
-
-                environment = parentEnvironment
-            }
-
-            let value = Value.object(klass)
-            try environment.defineVariable(named: statement.name, value: value, isMutable: false)
-            return value
-        }
+        return captureValue { try defineClass(statement) }
     }
 
     func visitComputedPropertyDeclarationStatement(_ statement: ComputedPropertyDeclarationStatement) -> Result {
@@ -619,7 +509,7 @@ extension ASTInterpreter {
         locals[name.location] = depth
     }
 
-    private func lookupVariable(named name: Token) throws -> Value {
+    func lookupVariable(named name: Token) throws -> Value {
         if let depth = locals[name.location] {
             return try environment.get(at: depth, name)
         }
@@ -628,7 +518,7 @@ extension ASTInterpreter {
         }
     }
 
-    private func setVariable(named name: Token, value: Value) throws -> Value {
+    func setVariable(named name: Token, value: Value) throws -> Value {
         if let depth = locals[name.location] {
             return try environment.set(at: depth, name, value: value)
         }
