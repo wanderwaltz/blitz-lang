@@ -14,6 +14,7 @@ extension Value: CustomStringConvertible {
             }
 
         case let .string(value): return String(describing: value)
+        case let .array(values): return String(describing: values)
         case let .object(object): return String(describing: object)
         }
     }

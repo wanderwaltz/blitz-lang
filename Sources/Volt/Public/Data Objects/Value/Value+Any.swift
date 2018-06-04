@@ -5,17 +5,10 @@ extension Value {
         case let .bool(value): return value
         case let .number(value): return value
         case let .string(value): return value
-        case let .object(value): return value
+        case let .array(values): return values
+        case let .object(value):
+            return value
         }
-    }
-
-    public init<T>(_ any: T?) {
-        guard let any = any else {
-            self = .nil
-            return
-        }
-
-        self.init(any)
     }
 
     public init<T>(_ any: T) {

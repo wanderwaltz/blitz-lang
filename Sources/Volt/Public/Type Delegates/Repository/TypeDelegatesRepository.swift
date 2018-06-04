@@ -8,10 +8,9 @@ public final class TypeDelegatesRepository {
 extension TypeDelegatesRepository {
     public func withDelegate<T>(
         for type: T.Type,
+        key: String = String(describing: T.self),
         do block: (AnyTypeDelegate<T>) -> Void
     ) {
-        let key = String(describing: type)
-
         let existingDelegate = delegates[key]?.rawValue as? AnyTypeDelegate<T>
         let delegate = existingDelegate ?? AnyTypeDelegate(DefaultTypeDelegate())
 
@@ -22,8 +21,13 @@ extension TypeDelegatesRepository {
         block(delegate)
     }
 
-    public func registerTypeDelegate<Delegate: TypeDelegate>(_ delegate: Delegate) {
-        delegates[String(describing: Delegate.Object.self)] = BindableDelegate(AnyTypeDelegate(delegate))
+    @discardableResult
+    public func registerTypeDelegate<Delegate: TypeDelegate>
+        (_ delegate: Delegate, forKey key: String = String(describing: Delegate.Object.self))
+            -> AnyTypeDelegate<Delegate.Object> {
+                let anyDelegate = AnyTypeDelegate(delegate)
+                delegates[key] = BindableDelegate(anyDelegate)
+                return anyDelegate
     }
 
     public func registerDefaultBindings<T: DefaultBindingsProviding>(for type: T.Type) {

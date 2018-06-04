@@ -1,20 +1,28 @@
 extension Interpreter {
-    func captureValue(of block: () throws -> Value) -> Result {
-        return captureResult(of: { .value(try block()) })
+    func captureValue(at location: SourceLocation, of block: () throws -> Value) -> Result {
+        return captureResult(at: location, of: { .value(try block()) })
     }
 
-    func captureResult(of block: () throws -> Result) -> Result {
+    func captureResult(at location: SourceLocation, of block: () throws -> Result) -> Result {
         do {
             return try block()
         }
         catch let error as RuntimeError {
-            return .runtimeError(error)
+            return .runtimeError(error.defaultingLocation(to: location))
         }
         catch let command as ThrowableCommand {
             return .throwable(command)
         }
         catch let error {
-            preconditionFailure("unexpected error received: \(error)")
+            print(">>> \(error)")
+            return .runtimeError(
+                .init(
+                    code: .runtimeError,
+                    message: String(describing: error),
+                    location: location,
+                    underlyingError: error
+                )
+            )
         }
     }
 

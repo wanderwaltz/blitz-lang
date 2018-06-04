@@ -2,7 +2,7 @@ extension TypeDelegate {
     @discardableResult
     public func registerMethod<R>
                               (selector rawSelector: String,
-                               method getter: @escaping (Object) -> () -> R) -> Self {
+                               method getter: @escaping (Object) -> () throws -> R) -> Self {
         guard let selector = Selector(rawValue: rawSelector) else {
             preconditionFailure("invalid selector: '\(rawSelector)'")
         }
@@ -24,7 +24,7 @@ extension TypeDelegate {
 
                 return .object(
                     AnyCallable({ _, _, _ in
-                        .init(method())
+                        .init(try method())
                     })
                     .checkingArity(0)
                 )
@@ -48,7 +48,7 @@ _%>
     @discardableResult
     public func registerMethod<<%= generic_parameters %>, R>
                               (selector rawSelector: String,
-                               method getter: @escaping (Object) -> (<%= generic_parameters %>) -> R) -> Self {
+                               method getter: @escaping (Object) -> (<%= generic_parameters %>) throws -> R) -> Self {
         guard let selector = Selector(rawValue: rawSelector) else {
             preconditionFailure("invalid selector: '\(rawSelector)'")
         }
@@ -71,7 +71,7 @@ _%>
                 return .object(
                     AnyCallable({ _, _, args in
                         return try typecheck(args, <%= typecheck_arguments %>) {
-                            Value(method(<%= closure_arguments %>))
+                            Value(try method(<%= closure_arguments %>))
                         }
                     })
                     .checkingArity(<%= num_args %>)

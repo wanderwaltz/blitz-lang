@@ -20,6 +20,7 @@ public final class VM {
 
         registerDefaultGlobals()
         typeDelegates.registerDefaultBindings(for: String.self)
+        typeDelegates.registerDefaultArrayBindings()
     }
 
     @discardableResult

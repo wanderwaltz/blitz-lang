@@ -1,5 +1,6 @@
 public enum RuntimeErrorCode: Int {
-case cannotImportModule = 1
+case arrayIndexOutOfBounds = 1
+case cannotImportModule
 case cannotPrint
 case internalInconsistency
 case invalidCallee
@@ -9,6 +10,7 @@ case invalidNumberOfArguments
 case invalidRedefenition
 case invalidSetExpression
 case invalidSuperclass
+case runtimeError
 case settingImmutableValue
 case typeError
 case unknownIdentifier

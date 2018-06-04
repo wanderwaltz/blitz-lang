@@ -5,6 +5,7 @@ extension Value {
         case .bool: return "Bool"
         case .number: return "Number"
         case .string: return "String"
+        case .array: return "Array"
         case let .object(object):
             if let custom = object as? CustomRuntimeTypeNameProviding {
                 return custom.customRuntimeTypeName
