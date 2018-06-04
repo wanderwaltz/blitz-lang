@@ -160,7 +160,7 @@ func expect_source(_ source: String,
 }
 
 func with_result_of_interpreting(_ source: String,
-                                 do block: (ASTInterpreterResult, [Value]) -> Void,
+                                 do block: (InterpreterResult, [Value]) -> Void,
                                  file: StaticString = #file,
                                  line: UInt = #line) {
     do {

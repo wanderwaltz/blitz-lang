@@ -1,6 +1,6 @@
 extension Function {
     func bind(to instance: Instance) -> Function {
-        let environment = ASTInterpreterEnvironment(parent: closure)
+        let environment = InterpreterEnvironment(parent: closure)
 
         environment.forceDefineVariable(
             named: .self(at: declaration.name.location),

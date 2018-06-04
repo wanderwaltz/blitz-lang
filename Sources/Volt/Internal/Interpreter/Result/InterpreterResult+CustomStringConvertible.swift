@@ -1,4 +1,4 @@
-extension ASTInterpreterResult: CustomStringConvertible {
+extension InterpreterResult: CustomStringConvertible {
     var description: String {
         switch self {
         case let .value(value): return String(describing: value)

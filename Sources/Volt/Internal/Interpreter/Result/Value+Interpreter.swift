@@ -13,11 +13,11 @@ extension Value {
         return description
     }
 
-    var logicalNegated: ASTInterpreterResult {
+    var logicalNegated: InterpreterResult {
         return .value(.bool(!boolValue))
     }
 
-    func arithmeticalNegated(at location: SourceLocation) -> ASTInterpreterResult {
+    func arithmeticalNegated(at location: SourceLocation) -> InterpreterResult {
         switch self {
         case let .number(value):
             return .value(.number(-value))
@@ -27,7 +27,7 @@ extension Value {
         }
     }
 
-    func adding(_ other: Value, at location: SourceLocation) -> ASTInterpreterResult {
+    func adding(_ other: Value, at location: SourceLocation) -> InterpreterResult {
         switch (self, other) {
         case let (.number(ln), .number(rn)): return .value(.number(ln + rn))
         case let (.string(ls), _): return .value(.string(ls + other.stringValue))
@@ -37,7 +37,7 @@ extension Value {
         }
     }
 
-    func subtracting(_ other: Value, at location: SourceLocation) -> ASTInterpreterResult {
+    func subtracting(_ other: Value, at location: SourceLocation) -> InterpreterResult {
         switch (self, other) {
         case let (.number(ln), .number(rn)): return .value(.number(ln - rn))
         default:
@@ -45,7 +45,7 @@ extension Value {
         }
     }
 
-    func multiplying(by other: Value, at location: SourceLocation) -> ASTInterpreterResult {
+    func multiplying(by other: Value, at location: SourceLocation) -> InterpreterResult {
         switch (self, other) {
         case let (.number(ln), .number(rn)): return .value(.number(ln * rn))
         default:
@@ -53,7 +53,7 @@ extension Value {
         }
     }
 
-    func dividing(by other: Value, at location: SourceLocation) -> ASTInterpreterResult {
+    func dividing(by other: Value, at location: SourceLocation) -> InterpreterResult {
         switch (self, other) {
         case let (.number(ln), .number(rn)): return .value(.number(ln / rn))
         default:
@@ -61,7 +61,7 @@ extension Value {
         }
     }
 
-    func isGreater(than other: Value, at location: SourceLocation) -> ASTInterpreterResult {
+    func isGreater(than other: Value, at location: SourceLocation) -> InterpreterResult {
         switch (self, other) {
         case let (.number(ln), .number(rn)): return .value(.bool(ln > rn))
         default:
@@ -69,7 +69,7 @@ extension Value {
         }
     }
 
-    func isNotLess(than other: Value, at location: SourceLocation) -> ASTInterpreterResult {
+    func isNotLess(than other: Value, at location: SourceLocation) -> InterpreterResult {
         switch (self, other) {
         case let (.number(ln), .number(rn)): return .value(.bool(ln >= rn))
         default:
@@ -77,7 +77,7 @@ extension Value {
         }
     }
 
-    func isLess(than other: Value, at location: SourceLocation) -> ASTInterpreterResult {
+    func isLess(than other: Value, at location: SourceLocation) -> InterpreterResult {
         switch (self, other) {
         case let (.number(ln), .number(rn)): return .value(.bool(ln < rn))
         default:
@@ -85,7 +85,7 @@ extension Value {
         }
     }
 
-    func isNotGreater(than other: Value, at location: SourceLocation) -> ASTInterpreterResult {
+    func isNotGreater(than other: Value, at location: SourceLocation) -> InterpreterResult {
         switch (self, other) {
         case let (.number(ln), .number(rn)): return .value(.bool(ln <= rn))
         default:
@@ -95,7 +95,7 @@ extension Value {
 }
 
 private func unaryOperator(_ op: String, isNotApplicableTo type: String, _ location: SourceLocation)
-    -> ASTInterpreterResult {
+    -> InterpreterResult {
         return .runtimeError(
             .init(
                 code: .typeError,
@@ -106,7 +106,7 @@ private func unaryOperator(_ op: String, isNotApplicableTo type: String, _ locat
 }
 
 private func binaryOperator(_ op: String, isNotApplicableTo left: String, and right: String, _ location: SourceLocation)
-    -> ASTInterpreterResult {
+    -> InterpreterResult {
         return .runtimeError(
             .init(
                 code: .typeError,

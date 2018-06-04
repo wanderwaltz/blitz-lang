@@ -12,7 +12,7 @@ struct BoundTypeDelegate<Delegate: TypeDelegate> {
 
 
 extension BoundTypeDelegate: Gettable, Settable {
-    func getProperty(named name: String, interpreter: ASTInterpreter) throws -> Value {
+    func getProperty(named name: String, interpreter: Interpreter) throws -> Value {
         guard let getter = delegate.getterForProperty(named: name) else {
             throw InternalError.unknownProperty(named: name)
         }
@@ -20,7 +20,7 @@ extension BoundTypeDelegate: Gettable, Settable {
         return try getter(object)
     }
 
-    func setProperty(named name: String, value: Value, interpreter: ASTInterpreter) throws {
+    func setProperty(named name: String, value: Value, interpreter: Interpreter) throws {
         guard let setter = delegate.setterForProperty(named: name) else {
             if delegate.getterForProperty(named: name) != nil {
                 throw InternalError.settingReadonlyProperty(named: name)

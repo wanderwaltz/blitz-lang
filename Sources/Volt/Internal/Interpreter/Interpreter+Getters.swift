@@ -1,4 +1,4 @@
-extension ASTInterpreter {
+extension Interpreter {
     func rawGet(propertyOf object: Value, named name: Token) throws -> Value {
         let location = name.location
         let gettable = try lookupGettable(for: object, at: location)
@@ -19,7 +19,7 @@ extension ASTInterpreter {
         guard let delegate = delegate else {
             throw RuntimeError(
                 code: .invalidGetExpression,
-                message: "cannot read properties of type '\(object.typeName)': interpeter delegate is not set",
+                message: "cannot read properties of type '\(object.typeName)': interpreter delegate is not set",
                 location: location
             )
         }

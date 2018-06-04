@@ -1,4 +1,4 @@
-extension ASTInterpreter {
+extension Interpreter {
     /// Calculates result of performing x-assignment operators such as `+=`, `-=`, `/=` and `*=`
     /// given a right-hand side `newValue` and left-hand side `existingValue`, for example:
     ///

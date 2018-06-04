@@ -1,14 +1,14 @@
 extension Function: Callable {
-    func call(interpreter: ASTInterpreter, signature: CallSignature, arguments: [Value]) throws -> Value {
+    func call(interpreter: Interpreter, signature: CallSignature, arguments: [Value]) throws -> Value {
         guard signature == declaration.signature else {
             throw InternalError.invalidCallSignature(expected: declaration.signature, got: signature)
         }
-        
+
         guard arguments.count == arity else {
             throw InternalError.invalidNumberOfArguments(expected: arity, got: arguments.count)
         }
 
-        var environment = ASTInterpreterEnvironment(parent: closure)
+        var environment = InterpreterEnvironment(parent: closure)
 
         for i in 0..<arity {
             let parameter = declaration.parameters[i]
@@ -17,7 +17,7 @@ extension Function: Callable {
             try environment.defineVariable(named: parameter.name, value: value, isMutable: false)
         }
 
-        environment = ASTInterpreterEnvironment(parent: environment)
+        environment = InterpreterEnvironment(parent: environment)
 
         let result = interpreter.executeBlock(declaration.body, environment: environment)
 

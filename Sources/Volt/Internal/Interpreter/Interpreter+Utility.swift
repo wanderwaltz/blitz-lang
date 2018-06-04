@@ -1,4 +1,4 @@
-extension ASTInterpreter {
+extension Interpreter {
     func captureValue(of block: () throws -> Value) -> Result {
         return captureResult(of: { .value(try block()) })
     }

@@ -1,3 +1,3 @@
 protocol VoltStringConvertible {
-    func voltDescription(interpreter: ASTInterpreter) throws -> String?
+    func voltDescription(interpreter: Interpreter) throws -> String?
 }

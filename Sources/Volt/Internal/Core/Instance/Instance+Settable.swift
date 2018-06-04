@@ -1,14 +1,14 @@
 extension Instance: Settable {
     func setProperty(named name: String,
                      value: Value,
-                     interpreter: ASTInterpreter) throws {
+                     interpreter: Interpreter) throws {
         return try setProperty(named: name, value: value, inClass: klass, interpreter: interpreter)
     }
 
     func setProperty(named name: String,
                      value: Value,
                      inClass lookupClass: Class,
-                     interpreter: ASTInterpreter) throws {
+                     interpreter: Interpreter) throws {
         if let property = lookupClass.lookupStoredProperty(named: name) {
             guard property.isMutable else {
                 throw InternalError.settingReadonlyProperty(named: name)

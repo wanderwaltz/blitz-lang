@@ -1,10 +1,10 @@
-final class ASTInterpreterEnvironment {
-    typealias Result = ASTInterpreterResult
-    typealias RuntimeValue = ASTInterpteterRuntimeValue
+final class InterpreterEnvironment {
+    typealias Result = InterpreterResult
+    typealias RuntimeValue = InterpreterRuntimeValue
 
-    let parent: ASTInterpreterEnvironment?
+    let parent: InterpreterEnvironment?
 
-    init(parent: ASTInterpreterEnvironment? = nil) {
+    init(parent: InterpreterEnvironment? = nil) {
         self.parent = parent
     }
 
@@ -13,7 +13,7 @@ final class ASTInterpreterEnvironment {
 
 
 // MARK: - working with variables
-extension ASTInterpreterEnvironment {
+extension InterpreterEnvironment {
     func defineVariable(named name: Token, value: Value, isMutable: Bool) throws {
         guard values[name.lexeme] == nil else {
             throw error(.invalidRedefenition, "'\(name)' is already defined", name.location)
@@ -86,9 +86,9 @@ extension ASTInterpreterEnvironment {
 }
 
 
-extension ASTInterpreterEnvironment {
-    private func ancestor(depth: Int) -> ASTInterpreterEnvironment? {
-        var result: ASTInterpreterEnvironment? = self
+extension InterpreterEnvironment {
+    private func ancestor(depth: Int) -> InterpreterEnvironment? {
+        var result: InterpreterEnvironment? = self
 
         for _ in 0..<depth {
             result = result?.parent
@@ -100,7 +100,7 @@ extension ASTInterpreterEnvironment {
 
 
 // MARK: - errors
-extension ASTInterpreterEnvironment {
+extension InterpreterEnvironment {
     private func error(_ code: RuntimeError.Code, _ message: String, _ location: SourceLocation) -> RuntimeError {
         return RuntimeError(code: code, message: message, location: location)
     }

@@ -1,5 +1,5 @@
-extension ASTInterpreterResult {
-    func flatMap(_ mapping: (Value) -> ASTInterpreterResult) -> ASTInterpreterResult {
+extension InterpreterResult {
+    func flatMap(_ mapping: (Value) -> InterpreterResult) -> InterpreterResult {
         switch self {
         case let .value(value):
             return mapping(value)

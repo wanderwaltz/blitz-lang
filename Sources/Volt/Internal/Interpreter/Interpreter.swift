@@ -1,10 +1,10 @@
-// MARK: - ASTInterpreter
-final class ASTInterpreter {
-    typealias Result = ASTInterpreterResult
-    typealias ThrowableCommand = ASTInterpreterThrowableCommand
-    typealias Environment = ASTInterpreterEnvironment
+// MARK: - Interpreter
+final class Interpreter {
+    typealias Result = InterpreterResult
+    typealias ThrowableCommand = InterpreterThrowableCommand
+    typealias Environment = InterpreterEnvironment
 
-    weak var delegate: ASTInterpreterDelegate?
+    weak var delegate: InterpreterDelegate?
 
     let rootEnvironment = Environment()
 
@@ -64,7 +64,7 @@ final class ASTInterpreter {
 
 
 // MARK: - ASTVisitor
-extension ASTInterpreter: ASTVisitor {
+extension Interpreter: ASTVisitor {
     typealias ReturnValue = Result
 
     func visitAssignmentExpression(_ expression: AssignmentExpression) -> Result {
@@ -404,7 +404,7 @@ extension ASTInterpreter: ASTVisitor {
             guard let delegate = delegate else {
                 throw RuntimeError(
                     code: .cannotPrint,
-                    message: "cannot print '\(value)': interpeter delegate is not set",
+                    message: "cannot print '\(value)': interpreter delegate is not set",
                     location: statement.keyword.location
                 )
             }
@@ -504,7 +504,7 @@ extension ASTInterpreter: ASTVisitor {
 
 
 // MARK: - resolver support
-extension ASTInterpreter {
+extension Interpreter {
     func resolve(_ name: Token, depth: Int) {
         locals[name.location] = depth
     }

@@ -1,11 +1,11 @@
-final class ASTResolverScope {
-    typealias VariableStatus = ASTResolverScopeVariableStatus
-    typealias ClassContext = ASTResolverScopeClassContext
+final class ResolverScope {
+    typealias VariableStatus = ResolverScopeVariableStatus
+    typealias ClassContext = ResolverScopeClassContext
 
-    let type: ASTResolverScopeType
-    var classContext: ASTResolverScopeClassContext = .none
+    let type: ResolverScopeType
+    var classContext: ResolverScopeClassContext = .none
 
-    init(type: ASTResolverScopeType) {
+    init(type: ResolverScopeType) {
         self.type = type
     }
 
@@ -13,7 +13,7 @@ final class ASTResolverScope {
 }
 
 
-extension ASTResolverScope {
+extension ResolverScope {
     var allowsReturnStatement: Bool {
         return type.allowsReturnStatement
     }
@@ -28,7 +28,7 @@ extension ASTResolverScope {
 }
 
 
-extension ASTResolverScope {
+extension ResolverScope {
     func declare(_ name: Token) {
         defined[name.lexeme] = .declared
     }

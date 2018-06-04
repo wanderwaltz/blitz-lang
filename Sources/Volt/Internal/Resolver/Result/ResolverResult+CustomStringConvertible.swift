@@ -1,4 +1,4 @@
-extension ASTResolverResult: CustomStringConvertible {
+extension ResolverResult: CustomStringConvertible {
     var description: String {
         switch self {
         case .ok: return "ok"

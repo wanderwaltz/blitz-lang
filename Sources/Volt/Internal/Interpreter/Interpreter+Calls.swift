@@ -1,4 +1,4 @@
-extension ASTInterpreter {
+extension Interpreter {
     func lookupCallable(for callee: Expression, at location: SourceLocation) throws -> Callable {
         let calleeValue = try evaluate(callee)
 

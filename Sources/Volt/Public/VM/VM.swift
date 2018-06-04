@@ -14,8 +14,8 @@ public final class VM {
     public let typeDelegates = TypeDelegatesRepository()
 
     public init() {
-        interpreter = ASTInterpreter()
-        resolver = ASTResolver(interpreter: interpreter)
+        interpreter = Interpreter()
+        resolver = Resolver(interpreter: interpreter)
         interpreter.delegate = self
 
         registerDefaultGlobals()
@@ -53,12 +53,12 @@ public final class VM {
         }
     }
 
-    func resultOfExecuting(_ program: Program) -> ASTInterpreterResult {
+    func resultOfExecuting(_ program: Program) -> InterpreterResult {
         return interpreter.execute(program.statements)
     }
 
-    private let resolver: ASTResolver
-    private let interpreter: ASTInterpreter
+    private let resolver: Resolver
+    private let interpreter: Interpreter
     private let importedModulesProvider = ImportedModulesProvider()
 }
 
@@ -78,8 +78,8 @@ extension VM {
 }
 
 
-extension VM: ASTInterpreterDelegate {
-    func interpreter(_ interpreter: ASTInterpreter, importModuleNamed name: String) throws
+extension VM: InterpreterDelegate {
+    func interpreter(_ interpreter: Interpreter, importModuleNamed name: String) throws
         -> ImportedModulesProvider.Result {
             let result = try importedModulesProvider.importModule(named: name)
 
@@ -90,15 +90,15 @@ extension VM: ASTInterpreterDelegate {
             return result
     }
 
-    func interpreter(_ interpreter: ASTInterpreter, print value: Value) {
+    func interpreter(_ interpreter: Interpreter, print value: Value) {
         print(value)
     }
 
-    func interpreter(_ interpreter: ASTInterpreter, gettableFor value: Value) -> Gettable? {
+    func interpreter(_ interpreter: Interpreter, gettableFor value: Value) -> Gettable? {
         return typeDelegates.gettable(for: value)
     }
 
-    func interpreter(_ interpreter: ASTInterpreter, settableFor value: Value) -> Settable? {
+    func interpreter(_ interpreter: Interpreter, settableFor value: Value) -> Settable? {
         return typeDelegates.settable(for: value)
     }
 }

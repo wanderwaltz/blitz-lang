@@ -1,4 +1,4 @@
-enum ASTResolverResult {
+enum ResolverResult {
 case ok
 case error(ResolverError)
 }

@@ -1,5 +1,5 @@
 extension Instance: Gettable {
-    func getProperty(named name: String, interpreter: ASTInterpreter) throws -> Value {
+    func getProperty(named name: String, interpreter: Interpreter) throws -> Value {
         return try getProperty(named: name, inClass: klass, interpreter: interpreter)
     }
 
@@ -7,7 +7,7 @@ extension Instance: Gettable {
     /// be the `superclass` of the `klass`.
     func getProperty(named name: String,
                      inClass lookupClass: Class,
-                     interpreter: ASTInterpreter) throws -> Value {
+                     interpreter: Interpreter) throws -> Value {
         let optionalValue = try lookupProperty(named: name, inClass: lookupClass, interpreter: interpreter)
             ?? lookupMethod(named: name, inClass: lookupClass)
 
@@ -23,7 +23,7 @@ extension Instance: Gettable {
 extension Instance {
     func lookupProperty(named name: String,
                         inClass lookupClass: Class,
-                        interpreter: ASTInterpreter) throws -> Value? {
+                        interpreter: Interpreter) throws -> Value? {
         return try lookupStoredProperty(named: name)
             ?? lookupComputedProperty(named: name, inClass: lookupClass, interpreter: interpreter)
     }
@@ -34,7 +34,7 @@ extension Instance {
 
     private func lookupComputedProperty(named name: String,
                                         inClass lookupClass: Class,
-                                        interpreter: ASTInterpreter) throws -> Value? {
+                                        interpreter: Interpreter) throws -> Value? {
         guard let property = lookupClass.lookupComputedProperty(named: name) else {
             return nil
         }

@@ -1,9 +1,8 @@
-// MARK: - ASTResolver
-final class ASTResolver {
-    typealias Interpreter = ASTInterpreter
-    typealias Scope = ASTResolverScope
-    typealias ScopeType = ASTResolverScopeType
-    typealias Result = ASTResolverResult
+// MARK: - Resolver
+final class Resolver {
+    typealias Result = ResolverResult
+    typealias Scope = ResolverScope
+    typealias ScopeType = ResolverScopeType
 
     init(interpreter: Interpreter) {
         self.interpreter = interpreter
@@ -15,7 +14,7 @@ final class ASTResolver {
 
 
 // MARK: - utility methods
-extension ASTResolver {
+extension Resolver {
     func resolve(_ statements: [Statement]) throws {
         for statement in statements {
             try resolve(statement)
@@ -33,7 +32,7 @@ extension ASTResolver {
 
 
 // MARK: - result/throw conversion
-extension ASTResolver {
+extension Resolver {
     private func captureResult(_ block: () throws -> Void) -> Result {
         do {
             try block()
@@ -57,7 +56,7 @@ extension ASTResolver {
 
 
 // MARK: - working with sopes
-extension ASTResolver {
+extension Resolver {
     private func beginScope(type: ScopeType) {
         scopes.append(.init(type: type))
     }
@@ -81,7 +80,7 @@ extension ASTResolver {
 
 
 // MARK: - private utility methods
-extension ASTResolver {
+extension Resolver {
     private func declare(_ name: Token) {
         scopes.last?.declare(name)
     }
@@ -115,7 +114,7 @@ extension ASTResolver {
 
 
 // MARK: - ASTVisitor
-extension ASTResolver: ASTVisitor {
+extension Resolver: ASTVisitor {
     func visitAssignmentExpression(_ expression: AssignmentExpression) -> Result {
         return captureResult {
             try resolve(expression.value)

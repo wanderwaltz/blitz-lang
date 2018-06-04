@@ -1,4 +1,4 @@
-enum ASTResolverScopeType: Int {
+enum ResolverScopeType: Int {
 case global
 case `default`
 case `class`
@@ -9,7 +9,7 @@ case property
 }
 
 
-extension ASTResolverScopeType {
+extension ResolverScopeType {
     var allowsReturnStatement: Bool {
         switch self {
         case .function, .method, .initializer, .property: return true

@@ -1,4 +1,4 @@
-extension ASTInterpreter {
+extension Interpreter {
     func defineClass(_ classDeclaration: ClassDeclarationStatement) throws -> Value {
         let className = classDeclaration.name
         let location = className.location
@@ -47,7 +47,7 @@ extension ASTInterpreter {
             return try block()
         }
 
-        environment = ASTInterpreterEnvironment(parent: environment)
+        environment = InterpreterEnvironment(parent: environment)
         environment.forceDefineVariable(
             named: .init(
                 type: .super,
