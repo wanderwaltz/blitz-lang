@@ -50,7 +50,7 @@ final class ASTInterpreter {
         return result
     }
 
-    private func evaluate(_ ast: ASTVisitable) throws -> Value {
+    func evaluate(_ ast: ASTVisitable) throws -> Value {
         return try unwrap(ast.accept(self))
     }
 
@@ -608,26 +608,6 @@ extension ASTInterpreter: ASTVisitor {
             }
 
             return value
-        }
-    }
-}
-
-
-// MARK: - call support
-extension ASTInterpreter {
-    private func lookupCallable(for callee: Expression, at location: SourceLocation) throws -> Callable {
-        let calleeValue = try evaluate(callee)
-
-        switch calleeValue {
-        case let .object(callable as Callable):
-            return callable
-
-        default:
-            throw RuntimeError(
-                code: .invalidCallee,
-                message: "cannot call \(callee)",
-                location: location
-            )
         }
     }
 }
