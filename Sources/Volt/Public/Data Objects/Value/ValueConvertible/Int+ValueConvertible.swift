@@ -2,23 +2,6 @@
 // DO NOT EDIT
 
 
-// MARK: - Int
-extension Int: ValueConvertible {
-    public var voltValue: Value {
-        return .number(Number(self))
-    }
-}
-
-extension Int: ReverseValueConvertible {
-    public static func fromVoltValue(_ value: Value) -> Any? {
-        switch value {
-        case let .number(value): return Int(value)
-        default: return typecast<Int>.any(value.any)
-        }
-    }
-}
-
-
 // MARK: - Int8
 extension Int8: ValueConvertible {
     public var voltValue: Value {
@@ -31,6 +14,23 @@ extension Int8: ReverseValueConvertible {
         switch value {
         case let .number(value): return Int8(value)
         default: return typecast<Int8>.any(value.any)
+        }
+    }
+}
+
+
+// MARK: - Int16
+extension Int16: ValueConvertible {
+    public var voltValue: Value {
+        return .number(Number(self))
+    }
+}
+
+extension Int16: ReverseValueConvertible {
+    public static func fromVoltValue(_ value: Value) -> Any? {
+        switch value {
+        case let .number(value): return Int16(value)
+        default: return typecast<Int16>.any(value.any)
         }
     }
 }
@@ -70,6 +70,23 @@ extension Int64: ReverseValueConvertible {
 }
 
 
+// MARK: - Int
+extension Int: ValueConvertible {
+    public var voltValue: Value {
+        return .number(Number(self))
+    }
+}
+
+extension Int: ReverseValueConvertible {
+    public static func fromVoltValue(_ value: Value) -> Any? {
+        switch value {
+        case let .number(value): return Int(value)
+        default: return typecast<Int>.any(value.any)
+        }
+    }
+}
+
+
 // MARK: - UInt
 extension UInt: ValueConvertible {
     public var voltValue: Value {
@@ -99,6 +116,23 @@ extension UInt8: ReverseValueConvertible {
         switch value {
         case let .number(value): return UInt8(value)
         default: return typecast<UInt8>.any(value.any)
+        }
+    }
+}
+
+
+// MARK: - UInt16
+extension UInt16: ValueConvertible {
+    public var voltValue: Value {
+        return .number(Number(self))
+    }
+}
+
+extension UInt16: ReverseValueConvertible {
+    public static func fromVoltValue(_ value: Value) -> Any? {
+        switch value {
+        case let .number(value): return UInt16(value)
+        default: return typecast<UInt16>.any(value.any)
         }
     }
 }

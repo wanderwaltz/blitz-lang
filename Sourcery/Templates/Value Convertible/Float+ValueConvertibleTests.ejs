@@ -1,8 +1,9 @@
 import XCTest
 @testable import Volt
 
-<%
-    for (type of ["Float", "Double"]) {
+<% include("KnownFloatTypes.ejs") _%>
+<%_
+    for (type of float_types) {
 
         type_lowercase = type.toLowerCase()
 _%>

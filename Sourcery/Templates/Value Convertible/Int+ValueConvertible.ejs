@@ -1,4 +1,5 @@
-<%_ for (type of ["Int", "Int8", "Int32", "Int64", "UInt", "UInt8", "UInt32", "UInt64"]) { _%>
+<%_ include("KnownIntegerTypes.ejs") _%>
+<%_ for (type in integer_types) { _%>
 // MARK: - <%= type %>
 extension <%= type _%>: ValueConvertible {
     public var voltValue: Value {

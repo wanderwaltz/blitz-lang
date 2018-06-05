@@ -17,7 +17,7 @@ desc "run code generation"
 task :sourcery => SOURCERY_BINARY do
   configs = Dir["Sourcery/Configs/**/*.yml"]
   configs.each do |config|
-    sh "#{SOURCERY_BINARY} --config #{File.expand_path(config)}"
+    sh "#{SOURCERY_BINARY} --config \"#{File.expand_path(config)}\""
   end
 end
 

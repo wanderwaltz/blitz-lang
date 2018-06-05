@@ -1,4 +1,5 @@
-<%_ for (type of ["Float", "Double"]) { _%>
+<%_ include("KnownFloatTypes.ejs") _%>
+<%_ for (type of float_types) { _%>
 // MARK: - <%= type %>
 extension <%= type _%>: ValueConvertible {
     public var voltValue: Value {

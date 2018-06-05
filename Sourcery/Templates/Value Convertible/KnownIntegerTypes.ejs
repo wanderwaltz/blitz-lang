@@ -1,0 +1,30 @@
+<%_
+    int8_examples = [
+        1, 2, 3, 42, 100
+    ]
+
+    int16_examples = [
+        1024, 2000, 32000
+    ]
+
+    int32_examples = [
+        1000000, 2000000000
+    ]
+
+    int64_examples = [
+        1000000000000
+    ]
+
+    integer_types = {}
+    integer_types.Int8 = int8_examples
+    integer_types.Int16 = integer_types.Int8.concat(int16_examples)
+    integer_types.Int32 = integer_types.Int16.concat(int32_examples)
+    integer_types.Int64 = integer_types.Int32.concat(int64_examples)
+    integer_types.Int = integer_types.Int32
+
+    integer_types.UInt= integer_types.Int
+    integer_types.UInt8 = integer_types.Int8
+    integer_types.UInt16 = integer_types.Int16
+    integer_types.UInt32 = integer_types.Int32
+    integer_types.UInt64 = integer_types.Int64
+_%>

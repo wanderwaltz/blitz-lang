@@ -1,23 +1,24 @@
 import XCTest
 @testable import Volt
 
-<%
-    for (type of ["Int", "Int8", "Int32", "Int64", "UInt", "UInt8", "UInt32", "UInt64"]) {
+<% include("KnownIntegerTypes.ejs") _%>
+<%_
+    for (type in integer_types) {
 
         type_lowercase = type.toLowerCase()
-        allows_negative = type[0] != "U"
+        examples = integer_types[type]
+
+        if (type[0] != "U") {
+            examples = examples.concat(examples.map(x => -x))
+        }
 _%>
 // MARK: - <%= type %>
 final class <%= type _%>ValueConvertibleTests: XCTestCase {
     func test_<%= type_lowercase %>_to_value() {
         validate_<%= type_lowercase %>_convertible(0)
-        validate_<%= type_lowercase %>_convertible(1)
-        validate_<%= type_lowercase %>_convertible(5)
-        validate_<%= type_lowercase %>_convertible(127)
-        <%_ if (allows_negative) { _%>
-        validate_<%= type_lowercase %>_convertible(-42)
-        validate_<%= type_lowercase %>_convertible(-127)
-        <%_ } _%>
+        <% for (example of examples) { _%>
+        validate_<%= type_lowercase %>_convertible(<%= example %>)
+        <% } _%>
     }
 
     private func validate_<%= type_lowercase %>_convertible(_ <%= type_lowercase %>: <%= type %>, file: StaticString = #file, line: UInt = #line) {
