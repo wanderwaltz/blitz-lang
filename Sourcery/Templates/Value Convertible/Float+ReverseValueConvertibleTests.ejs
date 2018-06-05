@@ -1,30 +1,25 @@
 import XCTest
 @testable import Volt
 
-<% include("KnownIntegerTypes.ejs") _%>
+<% include("KnownFloatTypes.ejs") _%>
 <%_
-    for (type in integer_types) {
+    for (type of float_types) {
 
         type_lowercase = type.toLowerCase()
-        examples = integer_types[type]
-
-        if (type[0] != "U") {
-            examples = examples.concat(examples.map(x => -x))
-        }
 _%>
 // MARK: - <%= type %>
 final class <%= type _%>ReverseValueConvertibleTests: XCTestCase {
     func test_<%= type_lowercase %>_from_value() {
-        validate_<%= type_lowercase %>_reverse_convertible(0)
-        <%_ for (example of examples) { _%>
+        <%_ for (example of float_examples) { _%>
         validate_<%= type_lowercase %>_reverse_convertible(<%= example %>)
         <%_ } _%>
     }
 
     private func validate_<%= type_lowercase %>_reverse_convertible(_ <%= type_lowercase %>: <%= type %>, file: StaticString = #file, line: UInt = #line) {
         let value = Value.number(Number(<%= type_lowercase %>))
+
         guard let reverse_any = <%= type %>.fromVoltValue(value) else {
-            XCTFail("conversion failed for \(<%= type_lowercase %>)", file: file, line: line)
+            XCTFail("failed generating Any? for \(<%= type_lowercase %>)", file: file, line: line)
             return
         }
 
@@ -33,7 +28,7 @@ final class <%= type _%>ReverseValueConvertibleTests: XCTestCase {
             return
         }
 
-        XCTAssertEqual(<%= type_lowercase %>, cast, file: file, line: line)
+        XCTAssertEqual(<%= type_lowercase %>, cast, accuracy: <%= type %>(FLOAT_TOLERANCE), file: file, line: line)
     }
 }
 

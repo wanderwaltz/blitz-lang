@@ -7,7 +7,7 @@ import XCTest
 
 // MARK: - Int8
 final class Int8ReverseValueConvertibleTests: XCTestCase {
-    func test_int8_to_value() {
+    func test_int8_from_value() {
         validate_int8_reverse_convertible(0)
         validate_int8_reverse_convertible(1)
         validate_int8_reverse_convertible(2)
@@ -23,8 +23,17 @@ final class Int8ReverseValueConvertibleTests: XCTestCase {
 
     private func validate_int8_reverse_convertible(_ int8: Int8, file: StaticString = #file, line: UInt = #line) {
         let value = Value.number(Number(int8))
-        let reverse_any = Int8.fromVoltValue(value)
-        XCTAssertEqual(int8, typecast<Int8>.any(reverse_any), file: file, line: line)
+        guard let reverse_any = Int8.fromVoltValue(value) else {
+            XCTFail("conversion failed for \(int8)", file: file, line: line)
+            return
+        }
+
+        guard let cast = typecast<Int8>.any(reverse_any) else {
+            XCTFail("failed casting \(int8)", file: file, line: line)
+            return
+        }
+
+        XCTAssertEqual(int8, cast, file: file, line: line)
     }
 }
 
@@ -32,7 +41,7 @@ final class Int8ReverseValueConvertibleTests: XCTestCase {
 
 // MARK: - Int16
 final class Int16ReverseValueConvertibleTests: XCTestCase {
-    func test_int16_to_value() {
+    func test_int16_from_value() {
         validate_int16_reverse_convertible(0)
         validate_int16_reverse_convertible(1)
         validate_int16_reverse_convertible(2)
@@ -54,8 +63,17 @@ final class Int16ReverseValueConvertibleTests: XCTestCase {
 
     private func validate_int16_reverse_convertible(_ int16: Int16, file: StaticString = #file, line: UInt = #line) {
         let value = Value.number(Number(int16))
-        let reverse_any = Int16.fromVoltValue(value)
-        XCTAssertEqual(int16, typecast<Int16>.any(reverse_any), file: file, line: line)
+        guard let reverse_any = Int16.fromVoltValue(value) else {
+            XCTFail("conversion failed for \(int16)", file: file, line: line)
+            return
+        }
+
+        guard let cast = typecast<Int16>.any(reverse_any) else {
+            XCTFail("failed casting \(int16)", file: file, line: line)
+            return
+        }
+
+        XCTAssertEqual(int16, cast, file: file, line: line)
     }
 }
 
@@ -63,7 +81,7 @@ final class Int16ReverseValueConvertibleTests: XCTestCase {
 
 // MARK: - Int32
 final class Int32ReverseValueConvertibleTests: XCTestCase {
-    func test_int32_to_value() {
+    func test_int32_from_value() {
         validate_int32_reverse_convertible(0)
         validate_int32_reverse_convertible(1)
         validate_int32_reverse_convertible(2)
@@ -89,8 +107,17 @@ final class Int32ReverseValueConvertibleTests: XCTestCase {
 
     private func validate_int32_reverse_convertible(_ int32: Int32, file: StaticString = #file, line: UInt = #line) {
         let value = Value.number(Number(int32))
-        let reverse_any = Int32.fromVoltValue(value)
-        XCTAssertEqual(int32, typecast<Int32>.any(reverse_any), file: file, line: line)
+        guard let reverse_any = Int32.fromVoltValue(value) else {
+            XCTFail("conversion failed for \(int32)", file: file, line: line)
+            return
+        }
+
+        guard let cast = typecast<Int32>.any(reverse_any) else {
+            XCTFail("failed casting \(int32)", file: file, line: line)
+            return
+        }
+
+        XCTAssertEqual(int32, cast, file: file, line: line)
     }
 }
 
@@ -98,7 +125,7 @@ final class Int32ReverseValueConvertibleTests: XCTestCase {
 
 // MARK: - Int64
 final class Int64ReverseValueConvertibleTests: XCTestCase {
-    func test_int64_to_value() {
+    func test_int64_from_value() {
         validate_int64_reverse_convertible(0)
         validate_int64_reverse_convertible(1)
         validate_int64_reverse_convertible(2)
@@ -126,8 +153,17 @@ final class Int64ReverseValueConvertibleTests: XCTestCase {
 
     private func validate_int64_reverse_convertible(_ int64: Int64, file: StaticString = #file, line: UInt = #line) {
         let value = Value.number(Number(int64))
-        let reverse_any = Int64.fromVoltValue(value)
-        XCTAssertEqual(int64, typecast<Int64>.any(reverse_any), file: file, line: line)
+        guard let reverse_any = Int64.fromVoltValue(value) else {
+            XCTFail("conversion failed for \(int64)", file: file, line: line)
+            return
+        }
+
+        guard let cast = typecast<Int64>.any(reverse_any) else {
+            XCTFail("failed casting \(int64)", file: file, line: line)
+            return
+        }
+
+        XCTAssertEqual(int64, cast, file: file, line: line)
     }
 }
 
@@ -135,7 +171,7 @@ final class Int64ReverseValueConvertibleTests: XCTestCase {
 
 // MARK: - Int
 final class IntReverseValueConvertibleTests: XCTestCase {
-    func test_int_to_value() {
+    func test_int_from_value() {
         validate_int_reverse_convertible(0)
         validate_int_reverse_convertible(1)
         validate_int_reverse_convertible(2)
@@ -161,8 +197,17 @@ final class IntReverseValueConvertibleTests: XCTestCase {
 
     private func validate_int_reverse_convertible(_ int: Int, file: StaticString = #file, line: UInt = #line) {
         let value = Value.number(Number(int))
-        let reverse_any = Int.fromVoltValue(value)
-        XCTAssertEqual(int, typecast<Int>.any(reverse_any), file: file, line: line)
+        guard let reverse_any = Int.fromVoltValue(value) else {
+            XCTFail("conversion failed for \(int)", file: file, line: line)
+            return
+        }
+
+        guard let cast = typecast<Int>.any(reverse_any) else {
+            XCTFail("failed casting \(int)", file: file, line: line)
+            return
+        }
+
+        XCTAssertEqual(int, cast, file: file, line: line)
     }
 }
 
@@ -170,7 +215,7 @@ final class IntReverseValueConvertibleTests: XCTestCase {
 
 // MARK: - UInt
 final class UIntReverseValueConvertibleTests: XCTestCase {
-    func test_uint_to_value() {
+    func test_uint_from_value() {
         validate_uint_reverse_convertible(0)
         validate_uint_reverse_convertible(1)
         validate_uint_reverse_convertible(2)
@@ -186,8 +231,17 @@ final class UIntReverseValueConvertibleTests: XCTestCase {
 
     private func validate_uint_reverse_convertible(_ uint: UInt, file: StaticString = #file, line: UInt = #line) {
         let value = Value.number(Number(uint))
-        let reverse_any = UInt.fromVoltValue(value)
-        XCTAssertEqual(uint, typecast<UInt>.any(reverse_any), file: file, line: line)
+        guard let reverse_any = UInt.fromVoltValue(value) else {
+            XCTFail("conversion failed for \(uint)", file: file, line: line)
+            return
+        }
+
+        guard let cast = typecast<UInt>.any(reverse_any) else {
+            XCTFail("failed casting \(uint)", file: file, line: line)
+            return
+        }
+
+        XCTAssertEqual(uint, cast, file: file, line: line)
     }
 }
 
@@ -195,7 +249,7 @@ final class UIntReverseValueConvertibleTests: XCTestCase {
 
 // MARK: - UInt8
 final class UInt8ReverseValueConvertibleTests: XCTestCase {
-    func test_uint8_to_value() {
+    func test_uint8_from_value() {
         validate_uint8_reverse_convertible(0)
         validate_uint8_reverse_convertible(1)
         validate_uint8_reverse_convertible(2)
@@ -206,8 +260,17 @@ final class UInt8ReverseValueConvertibleTests: XCTestCase {
 
     private func validate_uint8_reverse_convertible(_ uint8: UInt8, file: StaticString = #file, line: UInt = #line) {
         let value = Value.number(Number(uint8))
-        let reverse_any = UInt8.fromVoltValue(value)
-        XCTAssertEqual(uint8, typecast<UInt8>.any(reverse_any), file: file, line: line)
+        guard let reverse_any = UInt8.fromVoltValue(value) else {
+            XCTFail("conversion failed for \(uint8)", file: file, line: line)
+            return
+        }
+
+        guard let cast = typecast<UInt8>.any(reverse_any) else {
+            XCTFail("failed casting \(uint8)", file: file, line: line)
+            return
+        }
+
+        XCTAssertEqual(uint8, cast, file: file, line: line)
     }
 }
 
@@ -215,7 +278,7 @@ final class UInt8ReverseValueConvertibleTests: XCTestCase {
 
 // MARK: - UInt16
 final class UInt16ReverseValueConvertibleTests: XCTestCase {
-    func test_uint16_to_value() {
+    func test_uint16_from_value() {
         validate_uint16_reverse_convertible(0)
         validate_uint16_reverse_convertible(1)
         validate_uint16_reverse_convertible(2)
@@ -229,8 +292,17 @@ final class UInt16ReverseValueConvertibleTests: XCTestCase {
 
     private func validate_uint16_reverse_convertible(_ uint16: UInt16, file: StaticString = #file, line: UInt = #line) {
         let value = Value.number(Number(uint16))
-        let reverse_any = UInt16.fromVoltValue(value)
-        XCTAssertEqual(uint16, typecast<UInt16>.any(reverse_any), file: file, line: line)
+        guard let reverse_any = UInt16.fromVoltValue(value) else {
+            XCTFail("conversion failed for \(uint16)", file: file, line: line)
+            return
+        }
+
+        guard let cast = typecast<UInt16>.any(reverse_any) else {
+            XCTFail("failed casting \(uint16)", file: file, line: line)
+            return
+        }
+
+        XCTAssertEqual(uint16, cast, file: file, line: line)
     }
 }
 
@@ -238,7 +310,7 @@ final class UInt16ReverseValueConvertibleTests: XCTestCase {
 
 // MARK: - UInt32
 final class UInt32ReverseValueConvertibleTests: XCTestCase {
-    func test_uint32_to_value() {
+    func test_uint32_from_value() {
         validate_uint32_reverse_convertible(0)
         validate_uint32_reverse_convertible(1)
         validate_uint32_reverse_convertible(2)
@@ -254,8 +326,17 @@ final class UInt32ReverseValueConvertibleTests: XCTestCase {
 
     private func validate_uint32_reverse_convertible(_ uint32: UInt32, file: StaticString = #file, line: UInt = #line) {
         let value = Value.number(Number(uint32))
-        let reverse_any = UInt32.fromVoltValue(value)
-        XCTAssertEqual(uint32, typecast<UInt32>.any(reverse_any), file: file, line: line)
+        guard let reverse_any = UInt32.fromVoltValue(value) else {
+            XCTFail("conversion failed for \(uint32)", file: file, line: line)
+            return
+        }
+
+        guard let cast = typecast<UInt32>.any(reverse_any) else {
+            XCTFail("failed casting \(uint32)", file: file, line: line)
+            return
+        }
+
+        XCTAssertEqual(uint32, cast, file: file, line: line)
     }
 }
 
@@ -263,7 +344,7 @@ final class UInt32ReverseValueConvertibleTests: XCTestCase {
 
 // MARK: - UInt64
 final class UInt64ReverseValueConvertibleTests: XCTestCase {
-    func test_uint64_to_value() {
+    func test_uint64_from_value() {
         validate_uint64_reverse_convertible(0)
         validate_uint64_reverse_convertible(1)
         validate_uint64_reverse_convertible(2)
@@ -280,7 +361,19 @@ final class UInt64ReverseValueConvertibleTests: XCTestCase {
 
     private func validate_uint64_reverse_convertible(_ uint64: UInt64, file: StaticString = #file, line: UInt = #line) {
         let value = Value.number(Number(uint64))
-        let reverse_any = UInt64.fromVoltValue(value)
-        XCTAssertEqual(uint64, typecast<UInt64>.any(reverse_any), file: file, line: line)
+        guard let reverse_any = UInt64.fromVoltValue(value) else {
+            XCTFail("conversion failed for \(uint64)", file: file, line: line)
+            return
+        }
+
+        guard let cast = typecast<UInt64>.any(reverse_any) else {
+            XCTFail("failed casting \(uint64)", file: file, line: line)
+            return
+        }
+
+        XCTAssertEqual(uint64, cast, file: file, line: line)
     }
 }
+
+
+

@@ -10,11 +10,9 @@ _%>
 // MARK: - <%= type %>
 final class <%= type _%>ValueConvertibleTests: XCTestCase {
     func test_<%= type_lowercase %>_to_value() {
-        validate_<%= type_lowercase %>_convertible(0.0)
-        validate_<%= type_lowercase %>_convertible(0.1)
-        validate_<%= type_lowercase %>_convertible(5.0)
-        validate_<%= type_lowercase %>_convertible(-42.0)
-        validate_<%= type_lowercase %>_convertible(1e3)
+        <%_ for (example of float_examples) { _%>
+        validate_<%= type_lowercase %>_convertible(<%= example %>)
+        <%_ } _%>
     }
 
     private func validate_<%= type_lowercase %>_convertible(_ <%= type_lowercase %>: <%= type %>, file: StaticString = #file, line: UInt = #line) {
