@@ -8,10 +8,7 @@ func typecheck<T, R>
     }
 
     guard let v = typecast<T>.any(value.any) else {
-        throw RuntimeError(
-            code: .typeError,
-            message: "type error: expected \(String(describing: T.self)), got: \(value.typeName)"
-        )
+        throw RuntimeError.typeError(expected: T.self, got: value.typeName)
     }
 
     return try block(v)
@@ -22,10 +19,7 @@ func typecheck<T0, R>
                _ type0: T0.Type,
                _ block: (T0) throws -> R) throws -> R {
     guard args.count == 1 else {
-        throw RuntimeError(
-            code: .invalidNumberOfArguments,
-            message: "invalid number of arguments: expected 1, got: \(args.count)"
-        )
+        throw RuntimeError.invalidNumberOfArguments(expected: 1, got: args.count)
     }
 
     return try typecheck(args[0], type0, block)
@@ -54,10 +48,7 @@ func typecheck<<%= generic_parameters %>, R>
                <%= type_arguments_singature %>,
                _ block: (<%= block_arguments_signature %>) throws -> R) throws -> R {
     guard args.count == <%= args_count %> else {
-        throw RuntimeError(
-            code: .invalidNumberOfArguments,
-            message: "invalid number of arguments: expected <%= args_count %>, got: \(args.count)"
-        )
+        throw RuntimeError.invalidNumberOfArguments(expected: <%= args_count %>, got: args.count)
     }
 
     let subargs = [<%= super_arguments_array %>]

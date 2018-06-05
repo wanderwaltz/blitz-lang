@@ -13,7 +13,6 @@ print type(of: foo.nullableString)
 print foo.nullableString = "qwerty"
 print type(of: foo.nullableString)
 
-
 print type(of: foo.intArray)
 print foo.intArray.count
 print foo.intArray.isEmpty

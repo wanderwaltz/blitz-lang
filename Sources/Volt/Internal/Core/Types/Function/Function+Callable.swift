@@ -1,11 +1,11 @@
 extension Function: Callable {
     func call(interpreter: Interpreter, signature: CallSignature, arguments: [Value]) throws -> Value {
         guard signature == declaration.signature else {
-            throw InternalError.invalidCallSignature(expected: declaration.signature, got: signature)
+            throw RuntimeError.invalidCallSignature(expected: declaration.signature, got: signature)
         }
 
         guard arguments.count == arity else {
-            throw InternalError.invalidNumberOfArguments(expected: arity, got: arguments.count)
+            throw RuntimeError.invalidNumberOfArguments(expected: arity, got: arguments.count)
         }
 
         var environment = InterpreterEnvironment(parent: closure)

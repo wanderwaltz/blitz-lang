@@ -1,11 +1,11 @@
 extension Callable {
     func checkingSignature(_ expectedSignature: CallSignature) -> AnyCallable {
-        return AnyCallable({ interpeter, signature, args in
+        return AnyCallable({ interpreter, signature, args in
             guard signature == expectedSignature else {
-                throw InternalError.invalidCallSignature(expected: expectedSignature, got: signature)
+                throw RuntimeError.invalidCallSignature(expected: expectedSignature, got: signature)
             }
 
-            return try self.call(interpreter: interpeter, signature: signature, arguments: args)
+            return try self.call(interpreter: interpreter, signature: signature, arguments: args)
         })
     }
 }

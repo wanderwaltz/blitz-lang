@@ -11,7 +11,7 @@ extension Instance: Settable {
                      interpreter: Interpreter) throws {
         if let property = lookupClass.lookupStoredProperty(named: name) {
             guard property.isMutable else {
-                throw InternalError.settingReadonlyProperty(named: name)
+                throw RuntimeError.settingReadonlyProperty(named: name)
             }
 
             storedProperties[name] = value
@@ -20,7 +20,7 @@ extension Instance: Settable {
 
         if let property = lookupClass.lookupComputedProperty(named: name) {
             guard let setter = property.setter else {
-                throw InternalError.settingReadonlyProperty(named: name)
+                throw RuntimeError.settingReadonlyProperty(named: name)
             }
 
             _ = try setter.bind(to: self).call(
@@ -31,7 +31,6 @@ extension Instance: Settable {
             return
         }
 
-        print("")
-        throw InternalError.unknownProperty(named: name)
+        throw RuntimeError.unknownProperty(named: name)
     }
 }

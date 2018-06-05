@@ -1,5 +1,5 @@
 extension Interpreter {
-    func lookupCallable(for callee: Expression, at location: SourceLocation) throws -> Callable {
+    func lookupCallable(for callee: Expression) throws -> Callable {
         let calleeValue = try evaluate(callee)
 
         switch calleeValue {
@@ -7,11 +7,7 @@ extension Interpreter {
             return callable
 
         default:
-            throw RuntimeError(
-                code: .invalidCallee,
-                message: "cannot call \(callee)",
-                location: location
-            )
+            throw RuntimeError.invalidCallee(calleeValue)
         }
     }
 }

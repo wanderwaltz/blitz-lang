@@ -15,10 +15,7 @@ extension TypeDelegatesRepository {
 
             .registerMethod(selector: "inserting(_:at:)", method: { array in { (value: Any, index: Int) -> [Value] in
                 guard array.indices ~= index else {
-                    throw RuntimeError(
-                        code: .arrayIndexOutOfBounds,
-                        message: "index \(index) is out of bounds: \(array.indices)"
-                    )
+                    throw RuntimeError.arrayIndex(index, outOf: array.indices)
                 }
 
                 var result = array
@@ -28,10 +25,7 @@ extension TypeDelegatesRepository {
 
             .registerMethod(selector: "removing(at:)", method: { array in { (index: Int) -> [Value] in
                 guard array.indices ~= index else {
-                    throw RuntimeError(
-                        code: .arrayIndexOutOfBounds,
-                        message: "index \(index) is out of bounds: \(array.indices)"
-                    )
+                    throw RuntimeError.arrayIndex(index, outOf: array.indices)
                 }
 
                 var result = array

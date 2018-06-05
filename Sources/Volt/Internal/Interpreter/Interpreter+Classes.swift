@@ -27,11 +27,7 @@ extension Interpreter {
         let value = try lookupVariable(named: superclassName.identifier)
 
         guard case let .object(superclass as Class) = value else {
-            throw RuntimeError(
-                code: .invalidSuperclass,
-                message: "inheritance from non-class type \(value.typeName)",
-                location: superclassName.identifier.location
-            )
+            throw RuntimeError.invalidSuperclass(value)
         }
 
         return superclass

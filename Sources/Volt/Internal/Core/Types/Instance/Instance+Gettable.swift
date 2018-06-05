@@ -12,7 +12,7 @@ extension Instance: Gettable {
             ?? lookupMethod(named: name, inClass: lookupClass)
 
         guard let value = optionalValue else {
-            throw InternalError.unknownProperty(named: name)
+            throw RuntimeError.unknownProperty(named: name)
         }
 
         return value

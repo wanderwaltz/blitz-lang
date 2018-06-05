@@ -10,4 +10,3 @@ TODOs:
 - тесты для Value+Interpreter
 - тесты для ValueConvertible
 - тесты для ReverseValueConvertible
-- убрать InternalError, работать напрямую с RuntimeError

@@ -135,22 +135,16 @@ extension Interpreter: ASTVisitor {
 
     func visitCallExpression(_ expression: CallExpression) -> Result {
         return captureValue(at: expression.location) {
-            let location = expression.paren.location
-            let callable = try lookupCallable(for: expression.callee, at: location)
+            let callable = try lookupCallable(for: expression.callee)
             let arguments = try expression.arguments.map({ arg in
                 try evaluate(arg.value)
             })
 
-            do {
-                return try callable.call(
-                    interpreter: self,
-                    signature: expression.signature,
-                    arguments: arguments
-                )
-            }
-            catch let internalError as InternalError {
-                throw internalError.makeRuntimeError(location: location)
-            }
+            return try callable.call(
+                interpreter: self,
+                signature: expression.signature,
+                arguments: arguments
+            )
         }
     }
 
@@ -378,10 +372,9 @@ extension Interpreter: ASTVisitor {
             let moduleName = statement.identifier.lexeme
 
             guard let delegate = delegate else {
-                throw RuntimeError(
-                    code: .cannotImportModule,
-                    message: "cannot import module '\(moduleName)': interpreter delegate is not set",
-                    location: statement.identifier.location
+                throw RuntimeError.cannotImportModule(
+                    named: moduleName,
+                    reason: "interpreter delegate is not set"
                 )
             }
 
@@ -402,23 +395,14 @@ extension Interpreter: ASTVisitor {
             let value = try evaluate(statement.expression)
 
             guard let delegate = delegate else {
-                throw RuntimeError(
-                    code: .cannotPrint,
-                    message: "cannot print '\(value)': interpreter delegate is not set",
-                    location: statement.keyword.location
-                )
+                throw RuntimeError.cannotPrint(value, reason: "interpreter delegate is not set")
             }
 
             var valueToPrint = value
 
             if case let .object(convertible as VoltStringConvertible) = value {
-                do {
-                    let string = try convertible.voltDescription(interpreter: self)
-                    valueToPrint = string.map({ Value.string($0) }) ?? valueToPrint
-                }
-                catch let internalError as InternalError {
-                    throw internalError.makeRuntimeError(location: statement.keyword.location)
-                }
+                let string = try convertible.voltDescription(interpreter: self)
+                valueToPrint = string.map({ Value.string($0) }) ?? valueToPrint
             }
 
             delegate.interpreter(self, print: valueToPrint)

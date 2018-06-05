@@ -12,10 +12,7 @@ func typecheck<T, R>
     }
 
     guard let v = typecast<T>.any(value.any) else {
-        throw RuntimeError(
-            code: .typeError,
-            message: "type error: expected \(String(describing: T.self)), got: \(value.typeName)"
-        )
+        throw RuntimeError.typeError(expected: T.self, got: value.typeName)
     }
 
     return try block(v)
@@ -26,10 +23,7 @@ func typecheck<T0, R>
                _ type0: T0.Type,
                _ block: (T0) throws -> R) throws -> R {
     guard args.count == 1 else {
-        throw RuntimeError(
-            code: .invalidNumberOfArguments,
-            message: "invalid number of arguments: expected 1, got: \(args.count)"
-        )
+        throw RuntimeError.invalidNumberOfArguments(expected: 1, got: args.count)
     }
 
     return try typecheck(args[0], type0, block)
@@ -41,10 +35,7 @@ func typecheck<T0, T1, R>
                _ type1: T1.Type,
                _ block: (T0, T1) throws -> R) throws -> R {
     guard args.count == 2 else {
-        throw RuntimeError(
-            code: .invalidNumberOfArguments,
-            message: "invalid number of arguments: expected 2, got: \(args.count)"
-        )
+        throw RuntimeError.invalidNumberOfArguments(expected: 2, got: args.count)
     }
 
     let subargs = [args[0]]
@@ -62,10 +53,7 @@ func typecheck<T0, T1, T2, R>
                _ type2: T2.Type,
                _ block: (T0, T1, T2) throws -> R) throws -> R {
     guard args.count == 3 else {
-        throw RuntimeError(
-            code: .invalidNumberOfArguments,
-            message: "invalid number of arguments: expected 3, got: \(args.count)"
-        )
+        throw RuntimeError.invalidNumberOfArguments(expected: 3, got: args.count)
     }
 
     let subargs = [args[0], args[1]]
@@ -84,10 +72,7 @@ func typecheck<T0, T1, T2, T3, R>
                _ type3: T3.Type,
                _ block: (T0, T1, T2, T3) throws -> R) throws -> R {
     guard args.count == 4 else {
-        throw RuntimeError(
-            code: .invalidNumberOfArguments,
-            message: "invalid number of arguments: expected 4, got: \(args.count)"
-        )
+        throw RuntimeError.invalidNumberOfArguments(expected: 4, got: args.count)
     }
 
     let subargs = [args[0], args[1], args[2]]
@@ -107,10 +92,7 @@ func typecheck<T0, T1, T2, T3, T4, R>
                _ type4: T4.Type,
                _ block: (T0, T1, T2, T3, T4) throws -> R) throws -> R {
     guard args.count == 5 else {
-        throw RuntimeError(
-            code: .invalidNumberOfArguments,
-            message: "invalid number of arguments: expected 5, got: \(args.count)"
-        )
+        throw RuntimeError.invalidNumberOfArguments(expected: 5, got: args.count)
     }
 
     let subargs = [args[0], args[1], args[2], args[3]]
@@ -131,10 +113,7 @@ func typecheck<T0, T1, T2, T3, T4, T5, R>
                _ type5: T5.Type,
                _ block: (T0, T1, T2, T3, T4, T5) throws -> R) throws -> R {
     guard args.count == 6 else {
-        throw RuntimeError(
-            code: .invalidNumberOfArguments,
-            message: "invalid number of arguments: expected 6, got: \(args.count)"
-        )
+        throw RuntimeError.invalidNumberOfArguments(expected: 6, got: args.count)
     }
 
     let subargs = [args[0], args[1], args[2], args[3], args[4]]
@@ -156,10 +135,7 @@ func typecheck<T0, T1, T2, T3, T4, T5, T6, R>
                _ type6: T6.Type,
                _ block: (T0, T1, T2, T3, T4, T5, T6) throws -> R) throws -> R {
     guard args.count == 7 else {
-        throw RuntimeError(
-            code: .invalidNumberOfArguments,
-            message: "invalid number of arguments: expected 7, got: \(args.count)"
-        )
+        throw RuntimeError.invalidNumberOfArguments(expected: 7, got: args.count)
     }
 
     let subargs = [args[0], args[1], args[2], args[3], args[4], args[5]]
@@ -182,10 +158,7 @@ func typecheck<T0, T1, T2, T3, T4, T5, T6, T7, R>
                _ type7: T7.Type,
                _ block: (T0, T1, T2, T3, T4, T5, T6, T7) throws -> R) throws -> R {
     guard args.count == 8 else {
-        throw RuntimeError(
-            code: .invalidNumberOfArguments,
-            message: "invalid number of arguments: expected 8, got: \(args.count)"
-        )
+        throw RuntimeError.invalidNumberOfArguments(expected: 8, got: args.count)
     }
 
     let subargs = [args[0], args[1], args[2], args[3], args[4], args[5], args[6]]
@@ -209,10 +182,7 @@ func typecheck<T0, T1, T2, T3, T4, T5, T6, T7, T8, R>
                _ type8: T8.Type,
                _ block: (T0, T1, T2, T3, T4, T5, T6, T7, T8) throws -> R) throws -> R {
     guard args.count == 9 else {
-        throw RuntimeError(
-            code: .invalidNumberOfArguments,
-            message: "invalid number of arguments: expected 9, got: \(args.count)"
-        )
+        throw RuntimeError.invalidNumberOfArguments(expected: 9, got: args.count)
     }
 
     let subargs = [args[0], args[1], args[2], args[3], args[4], args[5], args[6], args[7]]
@@ -237,10 +207,7 @@ func typecheck<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, R>
                _ type9: T9.Type,
                _ block: (T0, T1, T2, T3, T4, T5, T6, T7, T8, T9) throws -> R) throws -> R {
     guard args.count == 10 else {
-        throw RuntimeError(
-            code: .invalidNumberOfArguments,
-            message: "invalid number of arguments: expected 10, got: \(args.count)"
-        )
+        throw RuntimeError.invalidNumberOfArguments(expected: 10, got: args.count)
     }
 
     let subargs = [args[0], args[1], args[2], args[3], args[4], args[5], args[6], args[7], args[8]]

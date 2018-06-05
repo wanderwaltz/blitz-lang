@@ -26,37 +26,22 @@ extension Interpreter {
     }
 
     func rawSet(propertyOf object: Value, named name: Token, newValue value: Value) throws -> Value {
-        let location = name.location
-        let settable = try lookupSettable(for: object, at: location)
-
-        do {
-            try settable.setProperty(named: name.lexeme, value: value, interpreter: self)
-            return value
-        }
-        catch let internalError as InternalError {
-            throw internalError.makeRuntimeError(location: location)
-        }
+        let settable = try lookupSettable(for: object)
+        try settable.setProperty(named: name.lexeme, value: value, interpreter: self)
+        return value
     }
 
-    private func lookupSettable(for object: Value, at location: SourceLocation) throws -> Settable {
+    private func lookupSettable(for object: Value) throws -> Settable {
         if case let .object(settable as Settable) = object {
             return settable
         }
 
         guard let delegate = delegate else {
-            throw RuntimeError(
-                code: .invalidSetExpression,
-                message: "cannot write properties of type '\(object.typeName)': interpreter delegate is not set",
-                location: location
-            )
+            throw RuntimeError.invalidSetProperty(of: object, reason: "interpreter delegate is not set")
         }
 
         guard let settable = delegate.interpreter(self, settableFor: object) else {
-            throw RuntimeError(
-                code: .invalidGetExpression,
-                message: "cannot write properties on object of type \(object.typeName)",
-                location: location
-            )
+            throw RuntimeError.invalidSetProperty(of: object)
         }
 
         return settable
