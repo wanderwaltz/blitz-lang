@@ -1,0 +1,38 @@
+import XCTest
+@testable import Volt
+
+<%
+    for (type of ["Int", "Int8", "Int32", "Int64", "UInt", "UInt8", "UInt32", "UInt64"]) {
+
+        type_lowercase = type.toLowerCase()
+        allows_negative = type[0] != "U"
+_%>
+// MARK: - <%= type %>
+final class <%= type _%>ValueConvertibleTests: XCTestCase {
+    func test_<%= type_lowercase %>_to_value() {
+        validate_<%= type_lowercase %>_convertible(0)
+        validate_<%= type_lowercase %>_convertible(1)
+        validate_<%= type_lowercase %>_convertible(5)
+        validate_<%= type_lowercase %>_convertible(127)
+        <%_ if (allows_negative) { _%>
+        validate_<%= type_lowercase %>_convertible(-42)
+        validate_<%= type_lowercase %>_convertible(-127)
+        <%_ } _%>
+    }
+
+    private func validate_<%= type_lowercase %>_convertible(_ <%= type_lowercase %>: <%= type %>, file: StaticString = #file, line: UInt = #line) {
+        let value = <%= type_lowercase %>.voltValue
+
+        switch value {
+        case let .number(numberValue):
+            XCTAssertEqual(<%= type_lowercase %>, <%= type %>(numberValue), file: file, line: line)
+
+        default:
+            XCTFail("expected <%= type %> to be convertible to .number")
+        }
+    }
+}
+
+
+
+<% } _%>

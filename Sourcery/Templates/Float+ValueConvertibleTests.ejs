@@ -1,0 +1,34 @@
+import XCTest
+@testable import Volt
+
+<%
+    for (type of ["Float", "Double"]) {
+
+        type_lowercase = type.toLowerCase()
+_%>
+// MARK: - <%= type %>
+final class <%= type _%>ValueConvertibleTests: XCTestCase {
+    func test_<%= type_lowercase %>_to_value() {
+        validate_<%= type_lowercase %>_convertible(0.0)
+        validate_<%= type_lowercase %>_convertible(0.1)
+        validate_<%= type_lowercase %>_convertible(5.0)
+        validate_<%= type_lowercase %>_convertible(-42.0)
+        validate_<%= type_lowercase %>_convertible(1e3)
+    }
+
+    private func validate_<%= type_lowercase %>_convertible(_ <%= type_lowercase %>: <%= type %>, file: StaticString = #file, line: UInt = #line) {
+        let value = <%= type_lowercase %>.voltValue
+
+        switch value {
+        case let .number(numberValue):
+            XCTAssertEqual(<%= type_lowercase %>, <%= type %>(numberValue), accuracy: <%= type %>(FLOAT_TOLERANCE), file: file, line: line)
+
+        default:
+            XCTFail("expected <%= type %> to be convertible to .number")
+        }
+    }
+}
+
+
+
+<% } _%>

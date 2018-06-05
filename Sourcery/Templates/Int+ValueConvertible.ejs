@@ -1,0 +1,19 @@
+<%_ for (type of ["Int", "Int8", "Int32", "Int64", "UInt", "UInt8", "UInt32", "UInt64"]) { _%>
+// MARK: - <%= type %>
+extension <%= type _%>: ValueConvertible {
+    public var voltValue: Value {
+        return .number(Number(self))
+    }
+}
+
+extension <%= type _%>: ReverseValueConvertible {
+    public static func fromVoltValue(_ value: Value) -> Any? {
+        switch value {
+        case let .number(value): return <%= type _%>(value)
+        default: return typecast<<%= type _%>>.any(value.any)
+        }
+    }
+}
+
+
+<% } _%>
