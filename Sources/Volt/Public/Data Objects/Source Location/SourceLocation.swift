@@ -6,4 +6,5 @@ public struct SourceLocation {
 
 extension SourceLocation {
     public static let unknown = SourceLocation(line: -1, offset: 0)
+    public static let zero = SourceLocation(line: 0, offset: 0)
 }

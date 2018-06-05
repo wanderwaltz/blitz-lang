@@ -5,7 +5,10 @@ struct BlockStatement: Statement {
     /// even if a runtime error has occurred
     let atExit: [Statement]
 
-    init(statements: [Statement], atExit: [Statement] = []) {
+    let location: SourceLocation
+
+    init(location: SourceLocation, statements: [Statement], atExit: [Statement] = []) {
+        self.location = location
         self.statements = statements
         self.atExit = atExit
     }

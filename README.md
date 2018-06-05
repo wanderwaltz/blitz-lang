@@ -1,7 +1,6 @@
 # Volt
 
 TODOs:
-- добавить location к каждому Statement и Expression для лучшего отображения ошибок (ищи `at: .unknown` в Interpreter.swift)
 - парсинг литералов массивов
 - операторы для массивов: +, += и т.д.
 - VoltEquatable

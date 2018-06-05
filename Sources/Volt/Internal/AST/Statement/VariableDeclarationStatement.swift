@@ -3,6 +3,10 @@ struct VariableDeclarationStatement: Statement {
     let identifier: Token
     let initializer: Expression
 
+    var location: SourceLocation {
+        return identifier.location
+    }
+
     init(keyword: Token, identifier: Token, initializer: Expression) {
         precondition(keyword.type == .var || keyword.type == .let, "expected var or let keyword")
         self.keyword = keyword

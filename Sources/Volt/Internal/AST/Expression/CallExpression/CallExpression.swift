@@ -5,6 +5,10 @@ struct CallExpression: Expression {
     let paren: Token
     let arguments: [Argument]
 
+    var location: SourceLocation {
+        return paren.location
+    }
+
     func accept<Visitor: ASTVisitor>(_ visitor: Visitor) -> Visitor.ReturnValue {
         return visitor.visitCallExpression(self)
     }

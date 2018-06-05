@@ -1,9 +1,9 @@
 extension FunctionDeclarationStatement {
-    static func voidDoNothing(named name: Token) -> FunctionDeclarationStatement {
+    static func voidDoNothing(named name: Token, at location: SourceLocation) -> FunctionDeclarationStatement {
         return .init(
             name: name,
             parameters: [],
-            body: .empty
+            body: .empty(at: location)
         )
     }
 }

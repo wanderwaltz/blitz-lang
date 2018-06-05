@@ -14,7 +14,7 @@ final class Interpreter {
 
     @discardableResult
     func execute(_ program: [Statement]) -> Result {
-        let block = BlockStatement(statements: program)
+        let block = BlockStatement(location: .zero, statements: program)
         return executeBlock(block, environment: rootEnvironment)
     }
 
@@ -68,7 +68,7 @@ extension Interpreter: ASTVisitor {
     typealias ReturnValue = Result
 
     func visitAssignmentExpression(_ expression: AssignmentExpression) -> Result {
-        return captureValue(at: expression.op.location) {
+        return captureValue(at: expression.location) {
             var newValue = try evaluate(expression.value)
 
             if expression.op.type != .equal {
@@ -91,7 +91,7 @@ extension Interpreter: ASTVisitor {
     }
 
     func visitBinaryExpression(_ expression: BinaryExpression) -> Result {
-        return captureResult(at: expression.op.location) {
+        return captureResult(at: expression.location) {
             let left = try evaluate(expression.left)
             let right = try evaluate(expression.right)
             let location = expression.op.location
@@ -134,7 +134,7 @@ extension Interpreter: ASTVisitor {
     }
 
     func visitCallExpression(_ expression: CallExpression) -> Result {
-        return captureValue(at: expression.paren.location) {
+        return captureValue(at: expression.location) {
             let location = expression.paren.location
             let callable = try lookupCallable(for: expression.callee, at: location)
             let arguments = try expression.arguments.map({ arg in
@@ -155,11 +155,11 @@ extension Interpreter: ASTVisitor {
     }
 
     func visitLiteralExpression(_ expression: LiteralExpression) -> Result {
-        return captureValue(at: .unknown) { expression.literal.value }
+        return captureValue(at: expression.location) { expression.literal.value }
     }
 
     func visitLogicalExpression(_ expression: LogicalExpression) -> Result {
-        return captureValue(at: expression.op.location) {
+        return captureValue(at: expression.location) {
             let left = try evaluate(expression.left)
 
             switch expression.op.type {
@@ -194,7 +194,7 @@ extension Interpreter: ASTVisitor {
     }
 
     func visitGetExpression(_ expression: GetExpression) -> Result {
-        return captureValue(at: expression.name.location) {
+        return captureValue(at: expression.location) {
             let object = try evaluate(expression.object)
 
             return try rawGet(
@@ -205,13 +205,13 @@ extension Interpreter: ASTVisitor {
     }
 
     func visitSelfExpression(_ expression: SelfExpression) -> Result {
-        return captureValue(at: expression.keyword.location) {
+        return captureValue(at: expression.location) {
             return try lookupVariable(named: expression.keyword)
         }
     }
 
     func visitSetExpression(_ expression: SetExpression) -> Result {
-        return captureValue(at: expression.name.location) {
+        return captureValue(at: expression.location) {
             let object = try evaluate(expression.object)
             let name = expression.name
 
@@ -235,7 +235,7 @@ extension Interpreter: ASTVisitor {
     }
 
     func visitSuperExpression(_ expression: SuperExpression) -> Result {
-        return captureValue(at: expression.name.location) {
+        return captureValue(at: expression.location) {
             let (superclass, this) = try lookupSuperSelf(keyword: expression.keyword)
 
             return try this.getProperty(
@@ -247,7 +247,7 @@ extension Interpreter: ASTVisitor {
     }
 
     func visitSuperSetExpression(_ expression: SuperSetExpression) -> Result {
-        return captureValue(at: expression.op.location) {
+        return captureValue(at: expression.location) {
             var newValue = try evaluate(expression.value)
             let (superclass, this) = try lookupSuperSelf(keyword: expression.keyword)
 
@@ -300,11 +300,11 @@ extension Interpreter: ASTVisitor {
     }
 
     func visitGroupingExpression(_ expression: GroupingExpression) -> Result {
-        return captureValue(at: .unknown) { try evaluate(expression.expression) }
+        return captureValue(at: expression.location) { try evaluate(expression.expression) }
     }
 
     func visitUnaryExpression(_ expression: UnaryExpression) -> Result {
-        return captureResult(at: expression.op.location) {
+        return captureResult(at: expression.location) {
             let value = try evaluate(expression.expression)
             let location = expression.op.location
 
@@ -322,7 +322,7 @@ extension Interpreter: ASTVisitor {
     }
 
     func visitVariableExpression(_ expression: VariableExpression) -> Result {
-        return captureValue(at: expression.identifier.location) {
+        return captureValue(at: expression.location) {
             try lookupVariable(named: expression.identifier)
         }
     }
@@ -332,7 +332,7 @@ extension Interpreter: ASTVisitor {
     }
 
     func visitClassDeclarationStatement(_ statement: ClassDeclarationStatement) -> Result {
-        return captureValue(at: statement.name.location) { try defineClass(statement) }
+        return captureValue(at: statement.location) { try defineClass(statement) }
     }
 
     func visitComputedPropertyDeclarationStatement(_ statement: ComputedPropertyDeclarationStatement) -> Result {
@@ -340,11 +340,11 @@ extension Interpreter: ASTVisitor {
     }
 
     func visitExpressionStatement(_ statement: ExpressionStatement) -> Result {
-        return captureValue(at: .unknown) { try evaluate(statement.expression) }
+        return captureValue(at: statement.location) { try evaluate(statement.expression) }
     }
 
     func visitFunctionDeclarationStatement(_ statement: FunctionDeclarationStatement) -> Result {
-        return captureValue(at: statement.name.location) {
+        return captureValue(at: statement.location) {
             let function = Function(
                 declaration: statement,
                 closure: environment
@@ -357,7 +357,7 @@ extension Interpreter: ASTVisitor {
     }
 
     func visitIfStatement(_ statement: IfStatement) -> Result {
-        return captureValue(at: .unknown) {
+        return captureValue(at: statement.location) {
             var result: Value = .nil
 
             let condition = try evaluate(statement.condition)
@@ -374,7 +374,7 @@ extension Interpreter: ASTVisitor {
     }
 
     func visitImportStatement(_ statement: ImportStatement) -> Result {
-        return captureValue(at: statement.identifier.location) {
+        return captureValue(at: statement.location) {
             let moduleName = statement.identifier.lexeme
 
             guard let delegate = delegate else {
@@ -398,7 +398,7 @@ extension Interpreter: ASTVisitor {
     }
 
     func visitPrintStatement(_ statement: PrintStatement) -> Result {
-        return captureResult(at: statement.keyword.location) {
+        return captureResult(at: statement.location) {
             let value = try evaluate(statement.expression)
 
             guard let delegate = delegate else {
@@ -428,14 +428,14 @@ extension Interpreter: ASTVisitor {
     }
 
     func visitReturnStatement(_ statement: ReturnStatement) -> Result {
-        return captureResult(at: statement.keyword.location) {
+        return captureResult(at: statement.location) {
             let value = try statement.value.map({ try evaluate($0) }) ?? .nil
             throw ThrowableCommand.return(value)
         }
     }
 
     func visitSingleKeywordStatement(_ statement: SingleKeywordStatement) -> Result {
-        return captureValue(at: statement.keyword.location) {
+        return captureValue(at: statement.location) {
             switch statement.keyword.type {
             case .break:
                 throw ThrowableCommand.break
@@ -450,7 +450,7 @@ extension Interpreter: ASTVisitor {
     }
 
     func visitVariableDeclarationStatement(_ statement: VariableDeclarationStatement) -> Result {
-        return captureValue(at: statement.identifier.location) {
+        return captureValue(at: statement.location) {
             let value = try evaluate(statement.initializer)
 
             try environment.defineVariable(
@@ -464,7 +464,7 @@ extension Interpreter: ASTVisitor {
     }
 
     func visitWhileStatement(_ statement: WhileStatement) -> Result {
-        return captureValue(at: .unknown) {
+        return captureValue(at: statement.location) {
             var value: Value = .nil
 
             var condition = try evaluate(statement.condition)

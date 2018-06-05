@@ -1,3 +1,5 @@
 extension BlockStatement {
-    static let empty = BlockStatement(statements: [])
+    static func empty(at location: SourceLocation) -> BlockStatement {
+        return BlockStatement(location: location, statements: [])
+    }
 }

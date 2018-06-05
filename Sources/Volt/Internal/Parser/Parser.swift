@@ -149,7 +149,7 @@ private final class ParserImpl {
         return ClassDeclarationStatement(
             name: name,
             superclass: superclass,
-            initializer: initializer ?? .voidDoNothing(named: initializerName),
+            initializer: initializer ?? .voidDoNothing(named: initializerName, at: name.location),
             storedProperties: Array(storedProperties.values).sorted(by: { $0.identifier.lexeme < $1.identifier.lexeme }),
             computedProperties: Array(computedProperties.values).sorted(by: { $0.name.lexeme < $1.name.lexeme }),
             methods: Array(methods.values).sorted(by: { $0.name.lexeme < $1.name.lexeme })
@@ -187,7 +187,7 @@ private final class ParserImpl {
                                      name _name: Token? = nil) throws -> VariableDeclarationStatement {
         let keyword = _keyword ?? previous()
         let name = try _name ?? consume(.identifier, "expected an identifier")
-        var initializer: Expression = LiteralExpression.nil
+        var initializer: Expression = LiteralExpression(literal: .nil, location: name.location)
 
         if try match(.equal) {
             initializer = try parseExpression()
@@ -229,6 +229,7 @@ private final class ParserImpl {
     }
 
     private func parseIfStatement() throws -> Statement {
+        let location = previous().location
         let condition = try parseExpression()
         try consume(.leftBrace, "expected { after if condition")
         let thenStatement = try parseBlockStatement()
@@ -244,7 +245,12 @@ private final class ParserImpl {
             }
         }
 
-        return IfStatement(condition: condition, thenStatement: thenStatement, elseStatement: elseStatement)
+        return IfStatement(
+            condition: condition,
+            thenStatement: thenStatement,
+            elseStatement: elseStatement,
+            location: location
+        )
     }
 
     private func parsePrintStatement() throws -> Statement {
@@ -300,6 +306,7 @@ private final class ParserImpl {
 
         if let increment = increment {
             body = BlockStatement(
+                location: increment.location,
                 statements: [
                     body
                 ],
@@ -310,12 +317,13 @@ private final class ParserImpl {
         }
 
         body = WhileStatement(
-            condition: condition ?? LiteralExpression(literal: .true),
+            condition: condition ?? LiteralExpression(literal: .true, location: body.location),
             body: body
         )
 
         if let initializer = initializer {
             body = BlockStatement(
+                location: initializer.location,
                 statements: [
                     initializer,
                     body
@@ -327,6 +335,7 @@ private final class ParserImpl {
     }
 
     private func parseBlockStatement() throws -> BlockStatement {
+        let location = previous().location
         var statements: [Statement] = []
         var atExit: [Statement] = []
 
@@ -350,7 +359,11 @@ private final class ParserImpl {
         }
 
         try consume(.rightBrace, "expected } after block")
-        return BlockStatement(statements: statements, atExit: atExit)
+        return BlockStatement(
+            location: location,
+            statements: statements,
+            atExit: atExit
+        )
     }
 
     private func parseExpressionStatement() throws -> ExpressionStatement {
@@ -549,15 +562,15 @@ private final class ParserImpl {
 
     private func parsePrimary() throws -> Expression {
         if try match(.nil) {
-            return LiteralExpression.nil
+            return LiteralExpression(literal: .nil, location: previous().location)
         }
 
         if try match(.false) {
-            return LiteralExpression.false
+            return LiteralExpression(literal: .false, location: previous().location)
         }
 
         if try match(.true) {
-            return LiteralExpression.true
+            return LiteralExpression(literal: .true, location: previous().location)
         }
 
         if try match(.number, .string) {
@@ -565,7 +578,7 @@ private final class ParserImpl {
                 preconditionFailure("expected a literal value")
             }
 
-            return LiteralExpression(literal: literal)
+            return LiteralExpression(literal: literal, location: previous().location)
         }
 
         if try match(.super) {

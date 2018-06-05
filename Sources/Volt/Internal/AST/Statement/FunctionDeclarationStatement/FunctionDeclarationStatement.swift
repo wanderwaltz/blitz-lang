@@ -5,6 +5,10 @@ struct FunctionDeclarationStatement: Statement {
     let parameters: [ParamDecl]
     let body: BlockStatement
 
+    var location: SourceLocation {
+        return name.location
+    }
+
     func accept<Visitor: ASTVisitor>(_ visitor: Visitor) -> Visitor.ReturnValue {
         return visitor.visitFunctionDeclarationStatement(self)
     }

@@ -1,1 +1,3 @@
-protocol Expression: ASTVisitable {}
+protocol Expression: ASTVisitable {
+    var location: SourceLocation { get }
+}
