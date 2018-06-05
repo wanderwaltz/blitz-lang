@@ -16,9 +16,9 @@ _%>
 final class <%= type _%>ValueConvertibleTests: XCTestCase {
     func test_<%= type_lowercase %>_to_value() {
         validate_<%= type_lowercase %>_convertible(0)
-        <% for (example of examples) { _%>
+        <%_ for (example of examples) { _%>
         validate_<%= type_lowercase %>_convertible(<%= example %>)
-        <% } _%>
+        <%_ } _%>
     }
 
     private func validate_<%= type_lowercase %>_convertible(_ <%= type_lowercase %>: <%= type %>, file: StaticString = #file, line: UInt = #line) {
