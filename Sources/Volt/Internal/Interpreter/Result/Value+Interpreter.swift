@@ -5,7 +5,7 @@ extension Value {
         case let .bool(value): return value
         case let .number(value): return value != 0
         case let .string(value): return !value.isEmpty
-        case .array: return true
+        case let .array(array): return !array.isEmpty
         case .object: return true
         }
     }
