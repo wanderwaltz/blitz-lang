@@ -10,7 +10,7 @@ print type(of: foo.nullableInt)
 print foo.nullableString
 print type(of: foo.nullableString)
 
-print foo.nullableString = "qwerty"
+print foo.nullableString = 123.456
 print type(of: foo.nullableString)
 
 print type(of: foo.intArray)
