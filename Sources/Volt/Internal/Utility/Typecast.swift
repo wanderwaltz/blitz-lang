@@ -18,11 +18,11 @@ enum typecast<T> {
         }
     }
 
-    static func castAsNSObject(_ v: Any) -> T? {
+    private static func castAsNSObject(_ v: Any) -> T? {
         return (v as? NSObject) as? T
     }
 
-    static func nilCast() -> T? {
+    private static func nilCast() -> T? {
         if T.self is ExpressibleByNilLiteral.Type {
             return ((T.self as! ExpressibleByNilLiteral.Type).init(nilLiteral: ()) as! T)
         }
@@ -31,7 +31,7 @@ enum typecast<T> {
         }
     }
 
-    static func nullCast(_ v: Any) -> T? {
+    private static func nullCast(_ v: Any) -> T? {
         if T.self is ExpressibleByNilLiteral.Type && v is NSNull {
             return ((T.self as! ExpressibleByNilLiteral.Type).init(nilLiteral: ()) as! T)
         }
@@ -40,7 +40,7 @@ enum typecast<T> {
         }
     }
 
-    static func voidCast(_ v: Any?) -> T? {
+    private static func voidCast(_ v: Any?) -> T? {
         if T.self == Void.self {
             return (() as! T)
         }
