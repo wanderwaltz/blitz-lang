@@ -7,5 +7,3 @@ TODOs:
 - поддержка Dictionary
 - учитывать signature при лукапе методов (overload)
 - тесты для Value+Interpreter
-- тесты для ValueConvertible
-- тесты для ReverseValueConvertible
