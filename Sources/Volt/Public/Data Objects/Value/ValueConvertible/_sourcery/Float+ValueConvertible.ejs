@@ -1,4 +1,4 @@
-<%_ include("KnownFloatTypes.ejs") _%>
+<%_ include(argument.common_templates_path + "KnownFloatTypes.ejs") _%>
 <%_ for (type of float_types) { _%>
 // MARK: - <%= type %>
 extension <%= type _%>: ConvertibleToVoltValue {

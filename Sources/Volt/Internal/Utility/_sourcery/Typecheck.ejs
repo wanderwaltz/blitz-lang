@@ -1,3 +1,4 @@
+<%_ include(argument.common_templates_path + "GenericsDepth.ejs") _%>
 /// Type-checking a single value
 func typecheck<T, R>
               (_ value: Value, _ type: T.Type,
@@ -26,7 +27,7 @@ func typecheck<T0, R>
 }
 
 <%_
-    depth_range = Array.from({length: argument.generics_depth}, (x, i) => i);
+    depth_range = Array.from({length: generics_depth}, (x, i) => i);
 
     for (depth of depth_range) {
       if (depth == 0) { continue; }

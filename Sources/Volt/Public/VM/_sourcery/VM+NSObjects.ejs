@@ -1,3 +1,4 @@
+<%_ include(argument.common_templates_path + "GenericsDepth.ejs") _%>
 import Foundation
 
 extension VM {
@@ -10,7 +11,7 @@ extension VM {
     }
 
 <%
-    depth_range = Array.from({length: argument.generics_depth + 1}, (x, i) => i).map(x => Number(x));
+    depth_range = Array.from({length: generics_depth + 1}, (x, i) => i).map(x => Number(x));
 
     for (depth of depth_range) {
         if (depth == 0) { continue; }

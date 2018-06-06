@@ -1,3 +1,4 @@
+<%_ include(argument.common_templates_path + "GenericsDepth.ejs") _%>
 extension TypeDelegate {
     @discardableResult
     public func registerMethod<R>
@@ -34,7 +35,7 @@ extension TypeDelegate {
     }
 
 <%_
-    depth_range = Array.from({length: argument.generics_depth}, (x, i) => i).map(x => Number(x));
+    depth_range = Array.from({length: generics_depth}, (x, i) => i).map(x => Number(x));
 
     for (depth of depth_range) {
       indices = Array.from({length: depth + 1}, (x, i) => i);

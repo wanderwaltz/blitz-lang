@@ -1,4 +1,4 @@
-<%_ include("KnownIntegerTypes.ejs") _%>
+<%_ include(argument.common_templates_path + "KnownIntegerTypes.ejs") _%>
 <%_ for (type in integer_types) { _%>
 // MARK: - <%= type %>
 extension <%= type _%>: ConvertibleToVoltValue {

@@ -15,10 +15,24 @@ end
 
 desc "run code generation"
 task :sourcery => SOURCERY_BINARY do
-  configs = Dir["Sourcery/Configs/**/*.yml"]
-  configs.each do |config|
-    sh "#{SOURCERY_BINARY} --config \"#{File.expand_path(config)}\""
-  end
+    templates = Dir["**/_sourcery/*.ejs"]
+
+    templates.each do |path_to_ejs|
+        file_name = File.basename(path_to_ejs).ext("swift")
+        dir = File.dirname(path_to_ejs)
+        generated_file_dir = File.join(dir, "..", file_name)
+        common_templates_path = Pathname.new("_sourcery-common").relative_path_from(Pathname.new(dir)).to_s + "/"
+
+        command = [
+            SOURCERY_BINARY,
+            "--templates \"#{path_to_ejs}\"",
+            "--sources \".\"",
+            "--args common_templates_path=#{common_templates_path}",
+            "--output \"#{generated_file_dir}\""
+        ].join(" ")
+
+        sh command
+    end
 end
 
 directory BIN_DIR

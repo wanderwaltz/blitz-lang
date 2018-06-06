@@ -1,7 +1,7 @@
 import XCTest
 @testable import Volt
 
-<% include("KnownIntegerTypes.ejs") _%>
+<% include(argument.common_templates_path + "KnownIntegerTypes.ejs") _%>
 <%_
     for (type in integer_types) {
 
