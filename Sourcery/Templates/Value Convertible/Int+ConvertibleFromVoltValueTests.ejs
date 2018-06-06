@@ -13,7 +13,7 @@ import XCTest
         }
 _%>
 // MARK: - <%= type %>
-final class <%= type _%>ReverseValueConvertibleTests: XCTestCase {
+final class <%= type _%>ConvertibleFromVoltValueTests: XCTestCase {
     func test_<%= type_lowercase %>_from_value() {
         validate_<%= type_lowercase %>_reverse_convertible(0)
         <%_ for (example of examples) { _%>

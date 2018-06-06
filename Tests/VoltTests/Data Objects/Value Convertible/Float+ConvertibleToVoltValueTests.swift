@@ -6,7 +6,7 @@ import XCTest
 @testable import Volt
 
 // MARK: - Float
-final class FloatValueConvertibleTests: XCTestCase {
+final class FloatConvertibleToVoltValueTests: XCTestCase {
     func test_float_to_value() {
         validate_float_convertible(0.0)
         validate_float_convertible(0.1)
@@ -35,7 +35,7 @@ final class FloatValueConvertibleTests: XCTestCase {
 
 
 // MARK: - Double
-final class DoubleValueConvertibleTests: XCTestCase {
+final class DoubleConvertibleToVoltValueTests: XCTestCase {
     func test_double_to_value() {
         validate_double_convertible(0.0)
         validate_double_convertible(0.1)

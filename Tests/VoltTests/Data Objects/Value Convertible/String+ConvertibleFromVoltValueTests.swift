@@ -1,7 +1,7 @@
 import XCTest
 @testable import Volt
 
-final class StringReverseValueConvertibleTests: XCTestCase {
+final class StringConvertibleFromVoltValueTests: XCTestCase {
     func test_string_from_value() {
         validate_value(.string(""), is_convertible_to: "")
         validate_value(.string("qwerty"), is_convertible_to: "qwerty")

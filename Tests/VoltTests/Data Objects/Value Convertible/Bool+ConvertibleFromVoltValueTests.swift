@@ -1,7 +1,7 @@
 import XCTest
 @testable import Volt
 
-final class BoolReverseValueConvertibleTests: XCTestCase {
+final class BoolConvertibleFromVoltValueTests: XCTestCase {
     func test_true_from_value() {
         verify_value(.bool(true), is_convertible_to: true)
         verify_value(.number(123), is_convertible_to: true)

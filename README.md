@@ -9,5 +9,3 @@ TODOs:
 - тесты для Value+Interpreter
 - тесты для ValueConvertible
 - тесты для ReverseValueConvertible
-- переименовать ValueConvertible в ConvertibleToVoltValue
-- переименовать ReverseValueConvertible в ConvertibleFromVoltValue

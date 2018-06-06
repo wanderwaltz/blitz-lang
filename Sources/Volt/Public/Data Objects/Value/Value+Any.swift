@@ -12,7 +12,7 @@ extension Value {
     }
 
     public init<T>(_ any: T) {
-        if let convertible = any as? ValueConvertible {
+        if let convertible = any as? ConvertibleToVoltValue {
             self = convertible.voltValue
         }
         else {

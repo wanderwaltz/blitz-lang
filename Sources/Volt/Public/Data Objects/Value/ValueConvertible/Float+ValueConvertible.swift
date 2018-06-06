@@ -3,13 +3,13 @@
 
 
 // MARK: - Float
-extension Float: ValueConvertible {
+extension Float: ConvertibleToVoltValue {
     public var voltValue: Value {
         return .number(Number(self))
     }
 }
 
-extension Float: ReverseValueConvertible {
+extension Float: ConvertibleFromVoltValue {
     public static func fromVoltValue(_ value: Value) -> Any? {
         switch value {
         case let .number(value): return Float(value)
@@ -20,13 +20,13 @@ extension Float: ReverseValueConvertible {
 
 
 // MARK: - Double
-extension Double: ValueConvertible {
+extension Double: ConvertibleToVoltValue {
     public var voltValue: Value {
         return .number(Number(self))
     }
 }
 
-extension Double: ReverseValueConvertible {
+extension Double: ConvertibleFromVoltValue {
     public static func fromVoltValue(_ value: Value) -> Any? {
         switch value {
         case let .number(value): return Double(value)

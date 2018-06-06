@@ -1,4 +1,4 @@
-extension Optional: ValueConvertible {
+extension Optional: ConvertibleToVoltValue {
     public var voltValue: Value {
         switch self {
         case .none: return .nil
@@ -8,12 +8,12 @@ extension Optional: ValueConvertible {
 }
 
 
-extension Optional: ReverseValueConvertible {
+extension Optional: ConvertibleFromVoltValue {
     public static func fromVoltValue(_ value: Value) -> Any? {
         switch value {
         case .nil: return Optional<Wrapped>.none
         default:
-            if let convertible = Wrapped.self as? ReverseValueConvertible.Type {
+            if let convertible = Wrapped.self as? ConvertibleFromVoltValue.Type {
                 return convertible.fromVoltValue(value)
             }
 

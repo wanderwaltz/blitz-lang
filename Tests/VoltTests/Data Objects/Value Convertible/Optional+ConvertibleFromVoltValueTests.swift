@@ -1,7 +1,7 @@
 import XCTest
 @testable import Volt
 
-final class OptionalReverseValueConvertibleTests: XCTestCase {
+final class OptionalConvertibleFromVoltValueTests: XCTestCase {
     func test_optional_int_from_value() {
         validate_value(.number(0), is_convertible_to: 0 as Int?)
         validate_value(.number(123), is_convertible_to: 123 as Int?)
@@ -68,7 +68,7 @@ final class OptionalReverseValueConvertibleTests: XCTestCase {
         validate_value(.number(-42), is_convertible_to: true as Bool?)
 
     }
-    
+
     private func validate_value<T: Equatable>(_ value: Value, is_convertible_to optional: Optional<T>, file: StaticString = #file, line: UInt = #line) {
         let any = Optional<T>.fromVoltValue(value)
         XCTAssertEqual(optional, typecast<T?>.any(any), file: file, line: line)

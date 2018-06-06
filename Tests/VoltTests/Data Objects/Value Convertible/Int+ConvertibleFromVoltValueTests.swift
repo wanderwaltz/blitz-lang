@@ -6,7 +6,7 @@ import XCTest
 @testable import Volt
 
 // MARK: - Int8
-final class Int8ReverseValueConvertibleTests: XCTestCase {
+final class Int8ConvertibleFromVoltValueTests: XCTestCase {
     func test_int8_from_value() {
         validate_int8_reverse_convertible(0)
         validate_int8_reverse_convertible(1)
@@ -40,7 +40,7 @@ final class Int8ReverseValueConvertibleTests: XCTestCase {
 
 
 // MARK: - Int16
-final class Int16ReverseValueConvertibleTests: XCTestCase {
+final class Int16ConvertibleFromVoltValueTests: XCTestCase {
     func test_int16_from_value() {
         validate_int16_reverse_convertible(0)
         validate_int16_reverse_convertible(1)
@@ -80,7 +80,7 @@ final class Int16ReverseValueConvertibleTests: XCTestCase {
 
 
 // MARK: - Int32
-final class Int32ReverseValueConvertibleTests: XCTestCase {
+final class Int32ConvertibleFromVoltValueTests: XCTestCase {
     func test_int32_from_value() {
         validate_int32_reverse_convertible(0)
         validate_int32_reverse_convertible(1)
@@ -124,7 +124,7 @@ final class Int32ReverseValueConvertibleTests: XCTestCase {
 
 
 // MARK: - Int64
-final class Int64ReverseValueConvertibleTests: XCTestCase {
+final class Int64ConvertibleFromVoltValueTests: XCTestCase {
     func test_int64_from_value() {
         validate_int64_reverse_convertible(0)
         validate_int64_reverse_convertible(1)
@@ -170,7 +170,7 @@ final class Int64ReverseValueConvertibleTests: XCTestCase {
 
 
 // MARK: - Int
-final class IntReverseValueConvertibleTests: XCTestCase {
+final class IntConvertibleFromVoltValueTests: XCTestCase {
     func test_int_from_value() {
         validate_int_reverse_convertible(0)
         validate_int_reverse_convertible(1)
@@ -214,7 +214,7 @@ final class IntReverseValueConvertibleTests: XCTestCase {
 
 
 // MARK: - UInt
-final class UIntReverseValueConvertibleTests: XCTestCase {
+final class UIntConvertibleFromVoltValueTests: XCTestCase {
     func test_uint_from_value() {
         validate_uint_reverse_convertible(0)
         validate_uint_reverse_convertible(1)
@@ -248,7 +248,7 @@ final class UIntReverseValueConvertibleTests: XCTestCase {
 
 
 // MARK: - UInt8
-final class UInt8ReverseValueConvertibleTests: XCTestCase {
+final class UInt8ConvertibleFromVoltValueTests: XCTestCase {
     func test_uint8_from_value() {
         validate_uint8_reverse_convertible(0)
         validate_uint8_reverse_convertible(1)
@@ -277,7 +277,7 @@ final class UInt8ReverseValueConvertibleTests: XCTestCase {
 
 
 // MARK: - UInt16
-final class UInt16ReverseValueConvertibleTests: XCTestCase {
+final class UInt16ConvertibleFromVoltValueTests: XCTestCase {
     func test_uint16_from_value() {
         validate_uint16_reverse_convertible(0)
         validate_uint16_reverse_convertible(1)
@@ -309,7 +309,7 @@ final class UInt16ReverseValueConvertibleTests: XCTestCase {
 
 
 // MARK: - UInt32
-final class UInt32ReverseValueConvertibleTests: XCTestCase {
+final class UInt32ConvertibleFromVoltValueTests: XCTestCase {
     func test_uint32_from_value() {
         validate_uint32_reverse_convertible(0)
         validate_uint32_reverse_convertible(1)
@@ -343,7 +343,7 @@ final class UInt32ReverseValueConvertibleTests: XCTestCase {
 
 
 // MARK: - UInt64
-final class UInt64ReverseValueConvertibleTests: XCTestCase {
+final class UInt64ConvertibleFromVoltValueTests: XCTestCase {
     func test_uint64_from_value() {
         validate_uint64_reverse_convertible(0)
         validate_uint64_reverse_convertible(1)

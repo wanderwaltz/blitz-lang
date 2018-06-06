@@ -1,9 +1,0 @@
-sources:
-  include:
-    - ../../../Sources
-
-templates:
-  - ../../Templates/Value Convertible/Int+ReverseValueConvertibleTests.ejs
-
-output:
-  ../../../Tests/VoltTests/Data Objects/Value Convertible/Int+ReverseValueConvertibleTests.swift

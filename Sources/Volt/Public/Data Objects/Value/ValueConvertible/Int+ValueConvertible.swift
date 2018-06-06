@@ -3,13 +3,13 @@
 
 
 // MARK: - Int8
-extension Int8: ValueConvertible {
+extension Int8: ConvertibleToVoltValue {
     public var voltValue: Value {
         return .number(Number(self))
     }
 }
 
-extension Int8: ReverseValueConvertible {
+extension Int8: ConvertibleFromVoltValue {
     public static func fromVoltValue(_ value: Value) -> Any? {
         switch value {
         case let .number(value): return Int8(value)
@@ -20,13 +20,13 @@ extension Int8: ReverseValueConvertible {
 
 
 // MARK: - Int16
-extension Int16: ValueConvertible {
+extension Int16: ConvertibleToVoltValue {
     public var voltValue: Value {
         return .number(Number(self))
     }
 }
 
-extension Int16: ReverseValueConvertible {
+extension Int16: ConvertibleFromVoltValue {
     public static func fromVoltValue(_ value: Value) -> Any? {
         switch value {
         case let .number(value): return Int16(value)
@@ -37,13 +37,13 @@ extension Int16: ReverseValueConvertible {
 
 
 // MARK: - Int32
-extension Int32: ValueConvertible {
+extension Int32: ConvertibleToVoltValue {
     public var voltValue: Value {
         return .number(Number(self))
     }
 }
 
-extension Int32: ReverseValueConvertible {
+extension Int32: ConvertibleFromVoltValue {
     public static func fromVoltValue(_ value: Value) -> Any? {
         switch value {
         case let .number(value): return Int32(value)
@@ -54,13 +54,13 @@ extension Int32: ReverseValueConvertible {
 
 
 // MARK: - Int64
-extension Int64: ValueConvertible {
+extension Int64: ConvertibleToVoltValue {
     public var voltValue: Value {
         return .number(Number(self))
     }
 }
 
-extension Int64: ReverseValueConvertible {
+extension Int64: ConvertibleFromVoltValue {
     public static func fromVoltValue(_ value: Value) -> Any? {
         switch value {
         case let .number(value): return Int64(value)
@@ -71,13 +71,13 @@ extension Int64: ReverseValueConvertible {
 
 
 // MARK: - Int
-extension Int: ValueConvertible {
+extension Int: ConvertibleToVoltValue {
     public var voltValue: Value {
         return .number(Number(self))
     }
 }
 
-extension Int: ReverseValueConvertible {
+extension Int: ConvertibleFromVoltValue {
     public static func fromVoltValue(_ value: Value) -> Any? {
         switch value {
         case let .number(value): return Int(value)
@@ -88,13 +88,13 @@ extension Int: ReverseValueConvertible {
 
 
 // MARK: - UInt
-extension UInt: ValueConvertible {
+extension UInt: ConvertibleToVoltValue {
     public var voltValue: Value {
         return .number(Number(self))
     }
 }
 
-extension UInt: ReverseValueConvertible {
+extension UInt: ConvertibleFromVoltValue {
     public static func fromVoltValue(_ value: Value) -> Any? {
         switch value {
         case let .number(value): return UInt(value)
@@ -105,13 +105,13 @@ extension UInt: ReverseValueConvertible {
 
 
 // MARK: - UInt8
-extension UInt8: ValueConvertible {
+extension UInt8: ConvertibleToVoltValue {
     public var voltValue: Value {
         return .number(Number(self))
     }
 }
 
-extension UInt8: ReverseValueConvertible {
+extension UInt8: ConvertibleFromVoltValue {
     public static func fromVoltValue(_ value: Value) -> Any? {
         switch value {
         case let .number(value): return UInt8(value)
@@ -122,13 +122,13 @@ extension UInt8: ReverseValueConvertible {
 
 
 // MARK: - UInt16
-extension UInt16: ValueConvertible {
+extension UInt16: ConvertibleToVoltValue {
     public var voltValue: Value {
         return .number(Number(self))
     }
 }
 
-extension UInt16: ReverseValueConvertible {
+extension UInt16: ConvertibleFromVoltValue {
     public static func fromVoltValue(_ value: Value) -> Any? {
         switch value {
         case let .number(value): return UInt16(value)
@@ -139,13 +139,13 @@ extension UInt16: ReverseValueConvertible {
 
 
 // MARK: - UInt32
-extension UInt32: ValueConvertible {
+extension UInt32: ConvertibleToVoltValue {
     public var voltValue: Value {
         return .number(Number(self))
     }
 }
 
-extension UInt32: ReverseValueConvertible {
+extension UInt32: ConvertibleFromVoltValue {
     public static func fromVoltValue(_ value: Value) -> Any? {
         switch value {
         case let .number(value): return UInt32(value)
@@ -156,13 +156,13 @@ extension UInt32: ReverseValueConvertible {
 
 
 // MARK: - UInt64
-extension UInt64: ValueConvertible {
+extension UInt64: ConvertibleToVoltValue {
     public var voltValue: Value {
         return .number(Number(self))
     }
 }
 
-extension UInt64: ReverseValueConvertible {
+extension UInt64: ConvertibleFromVoltValue {
     public static func fromVoltValue(_ value: Value) -> Any? {
         switch value {
         case let .number(value): return UInt64(value)

@@ -1,7 +1,7 @@
 import XCTest
 @testable import Volt
 
-final class BoolValueConvertibleTests: XCTestCase {
+final class BoolConvertibleToVoltValueTests: XCTestCase {
     func test_true_to_value() {
         let value = true.voltValue
 

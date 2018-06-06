@@ -5,8 +5,8 @@
 /// This is needed for custom conversions like Floats being
 /// converted to Volt's Number (aka Double) etc.
 ///
-/// If type T does not conform to ValueConvertible, it still
+/// If type T does not conform to ConvertibleToVoltValue, it still
 /// can be represented as .object(T) in Volt.
-public protocol ValueConvertible {
+public protocol ConvertibleToVoltValue {
     var voltValue: Value { get }
 }

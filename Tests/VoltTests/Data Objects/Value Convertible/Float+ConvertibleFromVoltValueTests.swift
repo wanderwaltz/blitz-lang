@@ -6,7 +6,7 @@ import XCTest
 @testable import Volt
 
 // MARK: - Float
-final class FloatReverseValueConvertibleTests: XCTestCase {
+final class FloatConvertibleFromVoltValueTests: XCTestCase {
     func test_float_from_value() {
         validate_float_reverse_convertible(0.0)
         validate_float_reverse_convertible(0.1)
@@ -39,7 +39,7 @@ final class FloatReverseValueConvertibleTests: XCTestCase {
 
 
 // MARK: - Double
-final class DoubleReverseValueConvertibleTests: XCTestCase {
+final class DoubleConvertibleFromVoltValueTests: XCTestCase {
     func test_double_from_value() {
         validate_double_reverse_convertible(0.0)
         validate_double_reverse_convertible(0.1)

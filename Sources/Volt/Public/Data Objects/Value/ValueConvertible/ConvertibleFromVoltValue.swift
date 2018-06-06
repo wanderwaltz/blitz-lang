@@ -8,21 +8,21 @@
 ///
 ///    static func fromVoltValue(_ value: Value) -> Self?
 ///
-/// but this would make the ReverseValueConvertible a
+/// but this would make the ConvertibleFromVoltValue a
 /// generic protocol from Swift's type system standpoint
 /// and would forbid dynamic casts such as
 ///
-///    if let convertible = T0.self as? ReverseValueConvertible.Type,
+///    if let convertible = T0.self as? ConvertibleFromVoltValue.Type,
 ///
 /// which is used in `typecheck` function.
 ///
 /// Returning Any? here allows us to perform this cast and furthemore
 /// check that the returned value has the expected type:
 ///
-///    if let convertible = T0.self as? ReverseValueConvertible.Type,
+///    if let convertible = T0.self as? ConvertibleFromVoltValue.Type,
 ///       let v0 = convertible.fromVoltValue(args[0]) as? T0 {
 ///
 /// See Typecheck.swift for more info.
-public protocol ReverseValueConvertible {
+public protocol ConvertibleFromVoltValue {
     static func fromVoltValue(_ value: Value) -> Any?
 }

@@ -6,7 +6,7 @@
 func typecheck<T, R>
               (_ value: Value, _ type: T.Type,
                _ block: (T) throws -> R) throws -> R {
-    if let convertible = T.self as? ReverseValueConvertible.Type,
+    if let convertible = T.self as? ConvertibleFromVoltValue.Type,
        let v = convertible.fromVoltValue(value) as? T {
            return try block(v)
     }

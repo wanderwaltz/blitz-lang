@@ -6,7 +6,7 @@ import XCTest
 @testable import Volt
 
 // MARK: - Int8
-final class Int8ValueConvertibleTests: XCTestCase {
+final class Int8ConvertibleToVoltValueTests: XCTestCase {
     func test_int8_to_value() {
         validate_int8_convertible(0)
         validate_int8_convertible(1)
@@ -37,7 +37,7 @@ final class Int8ValueConvertibleTests: XCTestCase {
 
 
 // MARK: - Int16
-final class Int16ValueConvertibleTests: XCTestCase {
+final class Int16ConvertibleToVoltValueTests: XCTestCase {
     func test_int16_to_value() {
         validate_int16_convertible(0)
         validate_int16_convertible(1)
@@ -74,7 +74,7 @@ final class Int16ValueConvertibleTests: XCTestCase {
 
 
 // MARK: - Int32
-final class Int32ValueConvertibleTests: XCTestCase {
+final class Int32ConvertibleToVoltValueTests: XCTestCase {
     func test_int32_to_value() {
         validate_int32_convertible(0)
         validate_int32_convertible(1)
@@ -115,7 +115,7 @@ final class Int32ValueConvertibleTests: XCTestCase {
 
 
 // MARK: - Int64
-final class Int64ValueConvertibleTests: XCTestCase {
+final class Int64ConvertibleToVoltValueTests: XCTestCase {
     func test_int64_to_value() {
         validate_int64_convertible(0)
         validate_int64_convertible(1)
@@ -158,7 +158,7 @@ final class Int64ValueConvertibleTests: XCTestCase {
 
 
 // MARK: - Int
-final class IntValueConvertibleTests: XCTestCase {
+final class IntConvertibleToVoltValueTests: XCTestCase {
     func test_int_to_value() {
         validate_int_convertible(0)
         validate_int_convertible(1)
@@ -199,7 +199,7 @@ final class IntValueConvertibleTests: XCTestCase {
 
 
 // MARK: - UInt
-final class UIntValueConvertibleTests: XCTestCase {
+final class UIntConvertibleToVoltValueTests: XCTestCase {
     func test_uint_to_value() {
         validate_uint_convertible(0)
         validate_uint_convertible(1)
@@ -230,7 +230,7 @@ final class UIntValueConvertibleTests: XCTestCase {
 
 
 // MARK: - UInt8
-final class UInt8ValueConvertibleTests: XCTestCase {
+final class UInt8ConvertibleToVoltValueTests: XCTestCase {
     func test_uint8_to_value() {
         validate_uint8_convertible(0)
         validate_uint8_convertible(1)
@@ -256,7 +256,7 @@ final class UInt8ValueConvertibleTests: XCTestCase {
 
 
 // MARK: - UInt16
-final class UInt16ValueConvertibleTests: XCTestCase {
+final class UInt16ConvertibleToVoltValueTests: XCTestCase {
     func test_uint16_to_value() {
         validate_uint16_convertible(0)
         validate_uint16_convertible(1)
@@ -285,7 +285,7 @@ final class UInt16ValueConvertibleTests: XCTestCase {
 
 
 // MARK: - UInt32
-final class UInt32ValueConvertibleTests: XCTestCase {
+final class UInt32ConvertibleToVoltValueTests: XCTestCase {
     func test_uint32_to_value() {
         validate_uint32_convertible(0)
         validate_uint32_convertible(1)
@@ -316,7 +316,7 @@ final class UInt32ValueConvertibleTests: XCTestCase {
 
 
 // MARK: - UInt64
-final class UInt64ValueConvertibleTests: XCTestCase {
+final class UInt64ConvertibleToVoltValueTests: XCTestCase {
     func test_uint64_to_value() {
         validate_uint64_convertible(0)
         validate_uint64_convertible(1)

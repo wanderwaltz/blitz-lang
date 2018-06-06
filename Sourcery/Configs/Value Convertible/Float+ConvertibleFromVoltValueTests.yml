@@ -1,0 +1,9 @@
+sources:
+  include:
+    - ../../../Sources
+
+templates:
+  - ../../Templates/Value Convertible/Float+ConvertibleFromVoltValueTests.ejs
+
+output:
+  ../../../Tests/VoltTests/Data Objects/Value Convertible/Float+ConvertibleFromVoltValueTests.swift

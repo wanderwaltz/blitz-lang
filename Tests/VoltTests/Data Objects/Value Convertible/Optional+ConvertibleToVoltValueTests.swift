@@ -1,7 +1,7 @@
 import XCTest
 @testable import Volt
 
-final class OptionalValueConvertibleTests: XCTestCase {
+final class OptionalConvertibleToVoltValueTests: XCTestCase {
     func test_optional_int_to_value() {
         validate_optional_convertible(0, to: .number(0))
         validate_optional_convertible(123, to: .number(123))

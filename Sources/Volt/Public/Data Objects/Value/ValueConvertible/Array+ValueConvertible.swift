@@ -1,11 +1,11 @@
-extension Array: ValueConvertible {
+extension Array: ConvertibleToVoltValue {
     public var voltValue: Value {
         return .array(self.map({ .init($0) }))
     }
 }
 
 
-extension Array: ReverseValueConvertible {
+extension Array: ConvertibleFromVoltValue {
     public static func fromVoltValue(_ value: Value) -> Any? {
         switch value {
         case let .array(values):

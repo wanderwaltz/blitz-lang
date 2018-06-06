@@ -1,11 +1,11 @@
-extension String: ValueConvertible {
+extension String: ConvertibleToVoltValue {
     public var voltValue: Value {
         return .string(self)
     }
 }
 
 
-extension String: ReverseValueConvertible {
+extension String: ConvertibleFromVoltValue {
     public static func fromVoltValue(_ value: Value) -> Any? {
         return value.stringValue
     }

@@ -1,16 +1,22 @@
 import XCTest
 @testable import Volt
 
-<% include("KnownFloatTypes.ejs") _%>
+<% include("KnownIntegerTypes.ejs") _%>
 <%_
-    for (type of float_types) {
+    for (type in integer_types) {
 
         type_lowercase = type.toLowerCase()
+        examples = integer_types[type]
+
+        if (type[0] != "U") {
+            examples = examples.concat(examples.map(x => -x))
+        }
 _%>
 // MARK: - <%= type %>
-final class <%= type _%>ValueConvertibleTests: XCTestCase {
+final class <%= type _%>ConvertibleToVoltValueTests: XCTestCase {
     func test_<%= type_lowercase %>_to_value() {
-        <%_ for (example of float_examples) { _%>
+        validate_<%= type_lowercase %>_convertible(0)
+        <%_ for (example of examples) { _%>
         validate_<%= type_lowercase %>_convertible(<%= example %>)
         <%_ } _%>
     }
@@ -20,7 +26,7 @@ final class <%= type _%>ValueConvertibleTests: XCTestCase {
 
         switch value {
         case let .number(numberValue):
-            XCTAssertEqual(<%= type_lowercase %>, <%= type %>(numberValue), accuracy: <%= type %>(FLOAT_TOLERANCE), file: file, line: line)
+            XCTAssertEqual(<%= type_lowercase %>, <%= type %>(numberValue), file: file, line: line)
 
         default:
             XCTFail("expected <%= type %> to be convertible to .number")
