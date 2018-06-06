@@ -12,7 +12,12 @@ extension Optional: ReverseValueConvertible {
     public static func fromVoltValue(_ value: Value) -> Any? {
         switch value {
         case .nil: return Optional<Wrapped>.none
-        default: return value.any
+        default:
+            if let convertible = Wrapped.self as? ReverseValueConvertible.Type {
+                return convertible.fromVoltValue(value)
+            }
+
+            return value.any
         }
     }
 }
