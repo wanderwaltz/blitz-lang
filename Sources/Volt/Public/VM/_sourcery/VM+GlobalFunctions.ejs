@@ -20,10 +20,9 @@ extension VM {
 
         defineGlobal(
             named: selector.name,
-            value: AnyCallable({ _, _, _ in
+            value: AnyCallable(signature: .void, { _, _, _ in
                 .init(`func`())
             })
-            .checkingArity(0)
         )
     }
 
@@ -59,13 +58,11 @@ _%>
 
         defineGlobal(
             named: selector.name,
-            value: AnyCallable({ _, _, args in
+            value: AnyCallable(signature: selector.signature, { _, _, args in
                 return try typecheck(args, <%= typecheck_arguments %>) {
                     .init(`func`(<%= closure_arguments %>))
                 }
             })
-            .checkingArity(<%= num_args %>)
-            .checkingSignature(selector.signature)
         )
     }
 

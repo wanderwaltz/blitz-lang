@@ -46,10 +46,9 @@ extension TypeDelegate {
             named: name,
             getter: { object in
                 return .object(
-                    AnyCallable({ _, _, _ in
+                    AnyCallable(signature: .void, { _, _, _ in
                         .init(object[keyPath: keyPath])
                     })
-                    .checkingArity(0)
                 )
             },
             setter: nil
@@ -62,10 +61,9 @@ extension TypeDelegate {
             named: name,
             getter: { object in
                 return .object(
-                    AnyCallable({ _, _, _ in
+                    AnyCallable(signature: .void, { _, _, _ in
                         .init(object[keyPath: keyPath])
                     })
-                    .checkingArity(0)
                 )
             },
             setter: nil

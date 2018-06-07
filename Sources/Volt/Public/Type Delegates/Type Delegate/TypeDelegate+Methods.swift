@@ -27,10 +27,9 @@ extension TypeDelegate {
                 let method = getter(object)
 
                 return .object(
-                    AnyCallable({ _, _, _ in
+                    AnyCallable(signature: .void, { _, _, _ in
                         .init(try method())
                     })
-                    .checkingArity(0)
                 )
             },
             setter: nil
@@ -61,13 +60,11 @@ extension TypeDelegate {
                 let method = getter(object)
 
                 return .object(
-                    AnyCallable({ _, _, args in
+                    AnyCallable(signature: selector.signature, { _, _, args in
                         return try typecheck(args, T0.self) {
                             Value(try method($0))
                         }
                     })
-                    .checkingArity(1)
-                    .checkingSignature(selector.signature)
                 )
             },
             setter: nil
@@ -98,13 +95,11 @@ extension TypeDelegate {
                 let method = getter(object)
 
                 return .object(
-                    AnyCallable({ _, _, args in
+                    AnyCallable(signature: selector.signature, { _, _, args in
                         return try typecheck(args, T0.self, T1.self) {
                             Value(try method($0, $1))
                         }
                     })
-                    .checkingArity(2)
-                    .checkingSignature(selector.signature)
                 )
             },
             setter: nil
@@ -135,13 +130,11 @@ extension TypeDelegate {
                 let method = getter(object)
 
                 return .object(
-                    AnyCallable({ _, _, args in
+                    AnyCallable(signature: selector.signature, { _, _, args in
                         return try typecheck(args, T0.self, T1.self, T2.self) {
                             Value(try method($0, $1, $2))
                         }
                     })
-                    .checkingArity(3)
-                    .checkingSignature(selector.signature)
                 )
             },
             setter: nil
@@ -172,13 +165,11 @@ extension TypeDelegate {
                 let method = getter(object)
 
                 return .object(
-                    AnyCallable({ _, _, args in
+                    AnyCallable(signature: selector.signature, { _, _, args in
                         return try typecheck(args, T0.self, T1.self, T2.self, T3.self) {
                             Value(try method($0, $1, $2, $3))
                         }
                     })
-                    .checkingArity(4)
-                    .checkingSignature(selector.signature)
                 )
             },
             setter: nil
@@ -209,13 +200,11 @@ extension TypeDelegate {
                 let method = getter(object)
 
                 return .object(
-                    AnyCallable({ _, _, args in
+                    AnyCallable(signature: selector.signature, { _, _, args in
                         return try typecheck(args, T0.self, T1.self, T2.self, T3.self, T4.self) {
                             Value(try method($0, $1, $2, $3, $4))
                         }
                     })
-                    .checkingArity(5)
-                    .checkingSignature(selector.signature)
                 )
             },
             setter: nil
@@ -246,13 +235,11 @@ extension TypeDelegate {
                 let method = getter(object)
 
                 return .object(
-                    AnyCallable({ _, _, args in
+                    AnyCallable(signature: selector.signature, { _, _, args in
                         return try typecheck(args, T0.self, T1.self, T2.self, T3.self, T4.self, T5.self) {
                             Value(try method($0, $1, $2, $3, $4, $5))
                         }
                     })
-                    .checkingArity(6)
-                    .checkingSignature(selector.signature)
                 )
             },
             setter: nil
@@ -283,13 +270,11 @@ extension TypeDelegate {
                 let method = getter(object)
 
                 return .object(
-                    AnyCallable({ _, _, args in
+                    AnyCallable(signature: selector.signature, { _, _, args in
                         return try typecheck(args, T0.self, T1.self, T2.self, T3.self, T4.self, T5.self, T6.self) {
                             Value(try method($0, $1, $2, $3, $4, $5, $6))
                         }
                     })
-                    .checkingArity(7)
-                    .checkingSignature(selector.signature)
                 )
             },
             setter: nil
@@ -320,13 +305,11 @@ extension TypeDelegate {
                 let method = getter(object)
 
                 return .object(
-                    AnyCallable({ _, _, args in
+                    AnyCallable(signature: selector.signature, { _, _, args in
                         return try typecheck(args, T0.self, T1.self, T2.self, T3.self, T4.self, T5.self, T6.self, T7.self) {
                             Value(try method($0, $1, $2, $3, $4, $5, $6, $7))
                         }
                     })
-                    .checkingArity(8)
-                    .checkingSignature(selector.signature)
                 )
             },
             setter: nil
@@ -357,13 +340,11 @@ extension TypeDelegate {
                 let method = getter(object)
 
                 return .object(
-                    AnyCallable({ _, _, args in
+                    AnyCallable(signature: selector.signature, { _, _, args in
                         return try typecheck(args, T0.self, T1.self, T2.self, T3.self, T4.self, T5.self, T6.self, T7.self, T8.self) {
                             Value(try method($0, $1, $2, $3, $4, $5, $6, $7, $8))
                         }
                     })
-                    .checkingArity(9)
-                    .checkingSignature(selector.signature)
                 )
             },
             setter: nil
@@ -394,13 +375,11 @@ extension TypeDelegate {
                 let method = getter(object)
 
                 return .object(
-                    AnyCallable({ _, _, args in
+                    AnyCallable(signature: selector.signature, { _, _, args in
                         return try typecheck(args, T0.self, T1.self, T2.self, T3.self, T4.self, T5.self, T6.self, T7.self, T8.self, T9.self) {
                             Value(try method($0, $1, $2, $3, $4, $5, $6, $7, $8, $9))
                         }
                     })
-                    .checkingArity(10)
-                    .checkingSignature(selector.signature)
                 )
             },
             setter: nil

@@ -23,10 +23,9 @@ extension VM {
 
         defineGlobal(
             named: selector.name,
-            value: AnyCallable({ _, _, _ in
+            value: AnyCallable(signature: .void, { _, _, _ in
                 .init(`func`())
             })
-            .checkingArity(0)
         )
     }
 
@@ -50,13 +49,11 @@ extension VM {
 
         defineGlobal(
             named: selector.name,
-            value: AnyCallable({ _, _, args in
+            value: AnyCallable(signature: selector.signature, { _, _, args in
                 return try typecheck(args, P0.self) {
                     .init(`func`($0))
                 }
             })
-            .checkingArity(1)
-            .checkingSignature(selector.signature)
         )
     }
 
@@ -80,13 +77,11 @@ extension VM {
 
         defineGlobal(
             named: selector.name,
-            value: AnyCallable({ _, _, args in
+            value: AnyCallable(signature: selector.signature, { _, _, args in
                 return try typecheck(args, P0.self, P1.self) {
                     .init(`func`($0, $1))
                 }
             })
-            .checkingArity(2)
-            .checkingSignature(selector.signature)
         )
     }
 
@@ -110,13 +105,11 @@ extension VM {
 
         defineGlobal(
             named: selector.name,
-            value: AnyCallable({ _, _, args in
+            value: AnyCallable(signature: selector.signature, { _, _, args in
                 return try typecheck(args, P0.self, P1.self, P2.self) {
                     .init(`func`($0, $1, $2))
                 }
             })
-            .checkingArity(3)
-            .checkingSignature(selector.signature)
         )
     }
 
@@ -140,13 +133,11 @@ extension VM {
 
         defineGlobal(
             named: selector.name,
-            value: AnyCallable({ _, _, args in
+            value: AnyCallable(signature: selector.signature, { _, _, args in
                 return try typecheck(args, P0.self, P1.self, P2.self, P3.self) {
                     .init(`func`($0, $1, $2, $3))
                 }
             })
-            .checkingArity(4)
-            .checkingSignature(selector.signature)
         )
     }
 
@@ -170,13 +161,11 @@ extension VM {
 
         defineGlobal(
             named: selector.name,
-            value: AnyCallable({ _, _, args in
+            value: AnyCallable(signature: selector.signature, { _, _, args in
                 return try typecheck(args, P0.self, P1.self, P2.self, P3.self, P4.self) {
                     .init(`func`($0, $1, $2, $3, $4))
                 }
             })
-            .checkingArity(5)
-            .checkingSignature(selector.signature)
         )
     }
 
@@ -200,13 +189,11 @@ extension VM {
 
         defineGlobal(
             named: selector.name,
-            value: AnyCallable({ _, _, args in
+            value: AnyCallable(signature: selector.signature, { _, _, args in
                 return try typecheck(args, P0.self, P1.self, P2.self, P3.self, P4.self, P5.self) {
                     .init(`func`($0, $1, $2, $3, $4, $5))
                 }
             })
-            .checkingArity(6)
-            .checkingSignature(selector.signature)
         )
     }
 
@@ -230,13 +217,11 @@ extension VM {
 
         defineGlobal(
             named: selector.name,
-            value: AnyCallable({ _, _, args in
+            value: AnyCallable(signature: selector.signature, { _, _, args in
                 return try typecheck(args, P0.self, P1.self, P2.self, P3.self, P4.self, P5.self, P6.self) {
                     .init(`func`($0, $1, $2, $3, $4, $5, $6))
                 }
             })
-            .checkingArity(7)
-            .checkingSignature(selector.signature)
         )
     }
 
@@ -260,13 +245,11 @@ extension VM {
 
         defineGlobal(
             named: selector.name,
-            value: AnyCallable({ _, _, args in
+            value: AnyCallable(signature: selector.signature, { _, _, args in
                 return try typecheck(args, P0.self, P1.self, P2.self, P3.self, P4.self, P5.self, P6.self, P7.self) {
                     .init(`func`($0, $1, $2, $3, $4, $5, $6, $7))
                 }
             })
-            .checkingArity(8)
-            .checkingSignature(selector.signature)
         )
     }
 
@@ -290,13 +273,11 @@ extension VM {
 
         defineGlobal(
             named: selector.name,
-            value: AnyCallable({ _, _, args in
+            value: AnyCallable(signature: selector.signature, { _, _, args in
                 return try typecheck(args, P0.self, P1.self, P2.self, P3.self, P4.self, P5.self, P6.self, P7.self, P8.self) {
                     .init(`func`($0, $1, $2, $3, $4, $5, $6, $7, $8))
                 }
             })
-            .checkingArity(9)
-            .checkingSignature(selector.signature)
         )
     }
 
@@ -320,13 +301,11 @@ extension VM {
 
         defineGlobal(
             named: selector.name,
-            value: AnyCallable({ _, _, args in
+            value: AnyCallable(signature: selector.signature, { _, _, args in
                 return try typecheck(args, P0.self, P1.self, P2.self, P3.self, P4.self, P5.self, P6.self, P7.self, P8.self, P9.self) {
                     .init(`func`($0, $1, $2, $3, $4, $5, $6, $7, $8, $9))
                 }
             })
-            .checkingArity(10)
-            .checkingSignature(selector.signature)
         )
     }
 

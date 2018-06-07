@@ -10,10 +10,9 @@ extension VM {
 
         defineGlobal(
             named: selector.name,
-            value: AnyCallable({ _, _, args in
+            value: AnyCallable(signature: selector.signature, { _, _, args in
                 .string(String(describing: args[0].typeName))
             })
-            .checkingSignature(selector.signature)
         )
     }
 }

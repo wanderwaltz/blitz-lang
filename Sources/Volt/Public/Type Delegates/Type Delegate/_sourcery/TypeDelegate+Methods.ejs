@@ -24,10 +24,9 @@ extension TypeDelegate {
                 let method = getter(object)
 
                 return .object(
-                    AnyCallable({ _, _, _ in
+                    AnyCallable(signature: .void, { _, _, _ in
                         .init(try method())
                     })
-                    .checkingArity(0)
                 )
             },
             setter: nil
@@ -70,13 +69,11 @@ _%>
                 let method = getter(object)
 
                 return .object(
-                    AnyCallable({ _, _, args in
+                    AnyCallable(signature: selector.signature, { _, _, args in
                         return try typecheck(args, <%= typecheck_arguments %>) {
                             Value(try method(<%= closure_arguments %>))
                         }
                     })
-                    .checkingArity(<%= num_args %>)
-                    .checkingSignature(selector.signature)
                 )
             },
             setter: nil
