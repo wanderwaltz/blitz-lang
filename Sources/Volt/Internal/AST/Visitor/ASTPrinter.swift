@@ -14,6 +14,10 @@ final class ASTPrinter {
 extension ASTPrinter: ASTVisitor {
     typealias ReturnValue = String
 
+    func visitArrayLiteralExpression(_ expression: ArrayLiteralExpression) -> String {
+        return parenthesize(expression.elements.map(print))
+    }
+
     func visitAssignmentExpression(_ expression: AssignmentExpression) -> String {
         return parenthesize(expression.identifier, expression.op, print(expression.value))
     }

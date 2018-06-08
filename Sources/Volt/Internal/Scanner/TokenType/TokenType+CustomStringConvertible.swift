@@ -6,8 +6,10 @@ extension TokenType: CustomStringConvertible {
         case .comma: return ","
         case .dot: return "."
         case .leftBrace: return "{"
+        case .leftBracket: return "["
         case .leftParen: return "("
         case .rightBrace: return "}"
+        case .rightBracket: return "]"
         case .rightParen: return ")"
         case .semicolon: return ";"
 

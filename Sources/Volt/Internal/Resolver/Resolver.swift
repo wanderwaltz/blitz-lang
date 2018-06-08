@@ -115,6 +115,14 @@ extension Resolver {
 
 // MARK: - ASTVisitor
 extension Resolver: ASTVisitor {
+    func visitArrayLiteralExpression(_ expression: ArrayLiteralExpression) -> Result {
+        return captureResult {
+            for element in expression.elements {
+                try resolve(element)
+            }
+        }
+    }
+
     func visitAssignmentExpression(_ expression: AssignmentExpression) -> Result {
         return captureResult {
             try resolve(expression.value)

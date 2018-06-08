@@ -67,6 +67,13 @@ final class Interpreter {
 extension Interpreter: ASTVisitor {
     typealias ReturnValue = Result
 
+    func visitArrayLiteralExpression(_ expression: ArrayLiteralExpression) -> Result {
+        return captureValue(at: expression.location) {
+            let values = try expression.elements.map({ try evaluate($0) })
+            return .array(values)
+        }
+    }
+
     func visitAssignmentExpression(_ expression: AssignmentExpression) -> Result {
         return captureValue(at: expression.location) {
             var newValue = try evaluate(expression.value)

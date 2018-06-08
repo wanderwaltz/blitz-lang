@@ -42,6 +42,8 @@ private final class ScannerImpl {
         case ")": addToken(.rightParen)
         case "{": addToken(.leftBrace)
         case "}": addToken(.rightBrace)
+        case "[": addToken(.leftBracket)
+        case "]": addToken(.rightBracket)
 
         // one or two character tokens
         case "!": addToken(match("=") ? .bangEqual : .bang)

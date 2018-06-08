@@ -5,6 +5,7 @@ protocol ASTVisitable {
 protocol ASTVisitor {
     associatedtype ReturnValue
 
+    func visitArrayLiteralExpression(_ expression: ArrayLiteralExpression) -> ReturnValue
     func visitAssignmentExpression(_ expression: AssignmentExpression) -> ReturnValue
     func visitBinaryExpression(_ expression: BinaryExpression) -> ReturnValue
     func visitCallExpression(_ expression: CallExpression) -> ReturnValue

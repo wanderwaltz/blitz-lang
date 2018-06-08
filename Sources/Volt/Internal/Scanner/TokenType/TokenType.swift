@@ -4,8 +4,10 @@ case colon
 case comma
 case dot
 case leftBrace
+case leftBracket
 case leftParen
 case rightBrace
+case rightBracket
 case rightParen
 case semicolon
 

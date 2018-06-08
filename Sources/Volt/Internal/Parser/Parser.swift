@@ -596,6 +596,10 @@ private final class ParserImpl {
             return VariableExpression(identifier: previous())
         }
 
+        if try match(.leftBracket) {
+            return try parseArrayLiteral()
+        }
+
         if try match(.leftParen) {
             let expr = try parseExpression()
             try consume(.rightParen, "expected ')' after expression")
@@ -603,6 +607,25 @@ private final class ParserImpl {
         }
 
         throw error("expected expression")
+    }
+
+    private func parseArrayLiteral() throws -> Expression {
+        let location = previous().location
+        var elements: [Expression] = []
+
+        while true {
+            if try match(.comma) {
+                continue
+            }
+            else if try match(.rightBracket) {
+                break
+            }
+            else {
+                elements.append(try parseExpression())
+            }
+        }
+
+        return ArrayLiteralExpression(location: location, elements: elements)
     }
 
     @discardableResult
