@@ -10,6 +10,10 @@ struct ArraySubscriptable {
 
 
 extension ArraySubscriptable: Subscriptable {
+    var validCallSignatures: [CallSignature] {
+        return [signature]
+    }
+
     func `subscript`(interpreter: Interpreter, signature: CallSignature, arguments: [Value]) throws -> Value {
         guard signature == self.signature else {
             throw RuntimeError.invalidCallSignature(expected: self.signature, got: signature)
