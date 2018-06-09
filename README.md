@@ -10,3 +10,4 @@ TODOs:
 - унифицировать нативные классы и Class
    - Class станет генериком от InstanceType
 - validCallSignatures можно сделать сетом
+- тесты на Array
