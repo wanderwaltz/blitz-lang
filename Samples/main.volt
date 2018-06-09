@@ -33,13 +33,16 @@
 // print arr[1]
 // print arr[2]
 
-func overloaded(first arg) {
-    print ">>> " + arg
+class Bar {
+    func overloaded(first arg) {
+        print ">>> " + arg
+    }
+
+    func overloaded(second arg) {
+        print "]]] " + arg
+    }
 }
 
-func overloaded(second arg) {
-    print "]]] " + arg
-}
 
-overloaded(first: 123)
-overloaded(second: 123)
+Bar().overloaded(first: 123)
+Bar().overloaded(second: 123)
