@@ -1,5 +1,6 @@
 final class Class {
     typealias Method = Volt.Method<Instance>
+    typealias ComputedProperty = Volt.ComputedProperty<Instance>
 
     let name: String
     let superclass: Class?

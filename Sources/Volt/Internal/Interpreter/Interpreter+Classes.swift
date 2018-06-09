@@ -94,7 +94,7 @@ extension Interpreter {
         )
     }
 
-    private func computedProperties(for classDeclaration: ClassDeclarationStatement) -> [String: ComputedProperty] {
+    private func computedProperties(for classDeclaration: ClassDeclarationStatement) -> [String: Class.ComputedProperty] {
         return .init(
             uniqueKeysWithValues: classDeclaration.computedProperties.map({ declaration in
                 let property = computedProperty(for: declaration)
@@ -103,10 +103,10 @@ extension Interpreter {
         )
     }
 
-    private func computedProperty(for declaration: ComputedPropertyDeclarationStatement) -> ComputedProperty {
+    private func computedProperty(for declaration: ComputedPropertyDeclarationStatement) -> Class.ComputedProperty {
         let name = declaration.name.lexeme
 
-        return ComputedProperty(
+        return Class.ComputedProperty(
             name: name,
             getter: getter(for: declaration),
             setter: setter(for: declaration)
