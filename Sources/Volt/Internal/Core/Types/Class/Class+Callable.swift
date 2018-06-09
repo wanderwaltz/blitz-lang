@@ -1,19 +1,9 @@
 extension Class: Callable {
     var validCallSignatures: [CallSignature] {
-        return initializer.validBoundCallSignatures
+        return instantiator.validCallSignatures
     }
 
     func call(with parameters: CallParameters) throws -> Value {
-        guard validCallSignatures.contains(parameters.signature) else {
-            throw RuntimeError.invalidCallSignature(expected: validCallSignatures, got: parameters.signature)
-        }
-
-        let instance = Instance(klass: self)
-
-        _ = try initializer
-            .bind(to: instance)
-            .call(with: parameters)
-
-        return .object(instance)
+        return .object(try instantiator.instantiate(klass: self, with: parameters))
     }
 }

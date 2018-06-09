@@ -9,3 +9,4 @@ TODOs:
 - метаметоды а-ля Squirrel
 - унифицировать нативные классы и Class
    - Class станет генериком от InstanceType
+- validCallSignatures можно сделать сетом
