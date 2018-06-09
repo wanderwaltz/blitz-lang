@@ -23,7 +23,7 @@ extension VM {
 
         defineGlobal(
             named: selector.name,
-            value: AnyCallable(signature: .void, { _, _, _ in
+            value: AnyCallable(signature: .void, { _ in
                 .init(`func`())
             })
         )
@@ -49,8 +49,8 @@ extension VM {
 
         defineGlobal(
             named: selector.name,
-            value: AnyCallable(signature: selector.signature, { _, _, args in
-                return try typecheck(args, P0.self) {
+            value: AnyCallable(signature: selector.signature, { parameters in
+                return try typecheck(parameters.arguments, P0.self) {
                     .init(`func`($0))
                 }
             })
@@ -77,8 +77,8 @@ extension VM {
 
         defineGlobal(
             named: selector.name,
-            value: AnyCallable(signature: selector.signature, { _, _, args in
-                return try typecheck(args, P0.self, P1.self) {
+            value: AnyCallable(signature: selector.signature, { parameters in
+                return try typecheck(parameters.arguments, P0.self, P1.self) {
                     .init(`func`($0, $1))
                 }
             })
@@ -105,8 +105,8 @@ extension VM {
 
         defineGlobal(
             named: selector.name,
-            value: AnyCallable(signature: selector.signature, { _, _, args in
-                return try typecheck(args, P0.self, P1.self, P2.self) {
+            value: AnyCallable(signature: selector.signature, { parameters in
+                return try typecheck(parameters.arguments, P0.self, P1.self, P2.self) {
                     .init(`func`($0, $1, $2))
                 }
             })
@@ -133,8 +133,8 @@ extension VM {
 
         defineGlobal(
             named: selector.name,
-            value: AnyCallable(signature: selector.signature, { _, _, args in
-                return try typecheck(args, P0.self, P1.self, P2.self, P3.self) {
+            value: AnyCallable(signature: selector.signature, { parameters in
+                return try typecheck(parameters.arguments, P0.self, P1.self, P2.self, P3.self) {
                     .init(`func`($0, $1, $2, $3))
                 }
             })
@@ -161,8 +161,8 @@ extension VM {
 
         defineGlobal(
             named: selector.name,
-            value: AnyCallable(signature: selector.signature, { _, _, args in
-                return try typecheck(args, P0.self, P1.self, P2.self, P3.self, P4.self) {
+            value: AnyCallable(signature: selector.signature, { parameters in
+                return try typecheck(parameters.arguments, P0.self, P1.self, P2.self, P3.self, P4.self) {
                     .init(`func`($0, $1, $2, $3, $4))
                 }
             })
@@ -189,8 +189,8 @@ extension VM {
 
         defineGlobal(
             named: selector.name,
-            value: AnyCallable(signature: selector.signature, { _, _, args in
-                return try typecheck(args, P0.self, P1.self, P2.self, P3.self, P4.self, P5.self) {
+            value: AnyCallable(signature: selector.signature, { parameters in
+                return try typecheck(parameters.arguments, P0.self, P1.self, P2.self, P3.self, P4.self, P5.self) {
                     .init(`func`($0, $1, $2, $3, $4, $5))
                 }
             })
@@ -217,8 +217,8 @@ extension VM {
 
         defineGlobal(
             named: selector.name,
-            value: AnyCallable(signature: selector.signature, { _, _, args in
-                return try typecheck(args, P0.self, P1.self, P2.self, P3.self, P4.self, P5.self, P6.self) {
+            value: AnyCallable(signature: selector.signature, { parameters in
+                return try typecheck(parameters.arguments, P0.self, P1.self, P2.self, P3.self, P4.self, P5.self, P6.self) {
                     .init(`func`($0, $1, $2, $3, $4, $5, $6))
                 }
             })
@@ -245,8 +245,8 @@ extension VM {
 
         defineGlobal(
             named: selector.name,
-            value: AnyCallable(signature: selector.signature, { _, _, args in
-                return try typecheck(args, P0.self, P1.self, P2.self, P3.self, P4.self, P5.self, P6.self, P7.self) {
+            value: AnyCallable(signature: selector.signature, { parameters in
+                return try typecheck(parameters.arguments, P0.self, P1.self, P2.self, P3.self, P4.self, P5.self, P6.self, P7.self) {
                     .init(`func`($0, $1, $2, $3, $4, $5, $6, $7))
                 }
             })
@@ -273,8 +273,8 @@ extension VM {
 
         defineGlobal(
             named: selector.name,
-            value: AnyCallable(signature: selector.signature, { _, _, args in
-                return try typecheck(args, P0.self, P1.self, P2.self, P3.self, P4.self, P5.self, P6.self, P7.self, P8.self) {
+            value: AnyCallable(signature: selector.signature, { parameters in
+                return try typecheck(parameters.arguments, P0.self, P1.self, P2.self, P3.self, P4.self, P5.self, P6.self, P7.self, P8.self) {
                     .init(`func`($0, $1, $2, $3, $4, $5, $6, $7, $8))
                 }
             })
@@ -301,8 +301,8 @@ extension VM {
 
         defineGlobal(
             named: selector.name,
-            value: AnyCallable(signature: selector.signature, { _, _, args in
-                return try typecheck(args, P0.self, P1.self, P2.self, P3.self, P4.self, P5.self, P6.self, P7.self, P8.self, P9.self) {
+            value: AnyCallable(signature: selector.signature, { parameters in
+                return try typecheck(parameters.arguments, P0.self, P1.self, P2.self, P3.self, P4.self, P5.self, P6.self, P7.self, P8.self, P9.self) {
                     .init(`func`($0, $1, $2, $3, $4, $5, $6, $7, $8, $9))
                 }
             })

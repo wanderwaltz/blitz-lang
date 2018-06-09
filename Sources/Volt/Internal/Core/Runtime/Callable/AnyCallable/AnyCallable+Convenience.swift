@@ -1,6 +1,6 @@
 extension AnyCallable {
     init(signature: CallSignature,
-         _ call: @escaping (Interpreter, CallSignature, [Value]) throws -> Value) {
+         _ call: @escaping (CallParameters) throws -> Value) {
             self.init(
                 validCallSignatures: [signature],
                 call

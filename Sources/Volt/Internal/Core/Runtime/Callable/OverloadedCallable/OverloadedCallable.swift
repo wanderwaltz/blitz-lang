@@ -13,15 +13,11 @@ extension OverloadedCallable: Callable {
         return Array(overloads.keys)
     }
 
-    func call(interpreter: Interpreter, signature: CallSignature, arguments: [Value]) throws -> Value {
-        guard let callable = overloads[signature] else {
-            throw RuntimeError.invalidCallSignature(expected: validCallSignatures, got: signature)
+    func call(with parameters: CallParameters) throws -> Value {
+        guard let callable = overloads[parameters.signature] else {
+            throw RuntimeError.invalidCallSignature(expected: validCallSignatures, got: parameters.signature)
         }
 
-        return try callable.call(
-            interpreter: interpreter,
-            signature: signature,
-            arguments: arguments
-        )
+        return try callable.call(with: parameters)
     }
 }

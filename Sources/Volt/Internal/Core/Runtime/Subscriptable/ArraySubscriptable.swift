@@ -14,16 +14,16 @@ extension ArraySubscriptable: Subscriptable {
         return [signature]
     }
 
-    func `subscript`(interpreter: Interpreter, signature: CallSignature, arguments: [Value]) throws -> Value {
-        guard signature == self.signature else {
-            throw RuntimeError.invalidCallSignature(expected: self.signature, got: signature)
+    func `subscript`(with parameters: SubscriptParameters) throws -> Value {
+        guard parameters.signature == self.signature else {
+            throw RuntimeError.invalidCallSignature(expected: self.signature, got: parameters.signature)
         }
 
-        guard arguments.count == 1 else {
-            throw RuntimeError.invalidNumberOfArguments(expected: 1, got: arguments.count)
+        guard parameters.arguments.count == 1 else {
+            throw RuntimeError.invalidNumberOfArguments(expected: 1, got: parameters.arguments.count)
         }
 
-        let index = arguments[0]
+        let index = parameters.arguments[0]
 
         switch index {
         case let .number(value):

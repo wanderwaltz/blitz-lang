@@ -3,16 +3,16 @@ extension Method: Callable {
         return [unboundCallSignature]
     }
 
-    func call(interpreter: Interpreter, signature: CallSignature, arguments: [Value]) throws -> Value {
-        guard signature == unboundCallSignature else {
-            throw RuntimeError.invalidCallSignature(expected: unboundCallSignature, got: signature)
+    func call(with parameters: CallParameters) throws -> Value {
+        guard parameters.signature == unboundCallSignature else {
+            throw RuntimeError.invalidCallSignature(expected: unboundCallSignature, got: parameters.signature)
         }
 
-        guard arguments.count == 1 else {
-            throw RuntimeError.invalidNumberOfArguments(expected: 1, got: arguments.count)
+        guard parameters.arguments.count == 1 else {
+            throw RuntimeError.invalidNumberOfArguments(expected: 1, got: parameters.arguments.count)
         }
 
-        let arg = arguments[0]
+        let arg = parameters.arguments[0]
 
         guard let instance = typecast<InstanceType>.any(arg.any) else {
             throw RuntimeError.typeError(expected: InstanceType.self, got: arg.typeName)

@@ -7,9 +7,11 @@ extension Instance: VoltStringConvertible {
         if case let .some(.object(callable as Callable)) = try lookupMethod(named: descriptionKey, inClass: klass) {
             return String(
                 describing: try callable.call(
-                    interpreter: interpreter,
-                    signature: .void,
-                    arguments: []
+                    with: .init(
+                        interpreter: interpreter,
+                        signature: .void,
+                        arguments: []
+                    )
                 )
             )
         }

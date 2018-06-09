@@ -42,9 +42,11 @@ extension Instance {
         let getter = try property.getter.bind(to: self)
 
         return try getter.call(
-            interpreter: interpreter,
-            signature: .void,
-            arguments: []
+            with: .init(
+                interpreter: interpreter,
+                signature: .void,
+                arguments: []
+            )
         )
     }
 }

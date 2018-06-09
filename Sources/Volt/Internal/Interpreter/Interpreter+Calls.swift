@@ -6,9 +6,11 @@ extension Interpreter {
         })
 
         return try callable.call(
-            interpreter: self,
-            signature: expression.signature,
-            arguments: arguments
+            with: .init(
+                interpreter: self,
+                signature: expression.signature,
+                arguments: arguments
+            )
         )
     }
 

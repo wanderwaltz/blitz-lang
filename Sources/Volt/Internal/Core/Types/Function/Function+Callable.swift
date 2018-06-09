@@ -3,23 +3,23 @@ extension Function: Callable {
         return [declaration.signature]
     }
 
-    func call(interpreter: Interpreter, signature: CallSignature, arguments: [Value]) throws -> Value {
-        guard signature == declaration.signature else {
-            throw RuntimeError.invalidCallSignature(expected: declaration.signature, got: signature)
+    func call(with parameters: CallParameters) throws -> Value {
+        guard parameters.signature == declaration.signature else {
+            throw RuntimeError.invalidCallSignature(expected: declaration.signature, got: parameters.signature)
         }
 
         var environment = InterpreterEnvironment(parent: closure)
 
-        for i in 0..<arguments.count {
+        for i in 0..<parameters.arguments.count {
             let parameter = declaration.parameters[i]
-            let value = arguments[i]
+            let value = parameters.arguments[i]
 
             try environment.defineVariable(named: parameter.name, value: value, isMutable: false)
         }
 
         environment = InterpreterEnvironment(parent: environment)
 
-        let result = interpreter.executeBlock(declaration.body, environment: environment)
+        let result = parameters.interpreter.executeBlock(declaration.body, environment: environment)
 
         switch result {
         case let .value(value): return value

@@ -24,9 +24,11 @@ extension Instance: Settable {
             }
 
             _ = try setter.bind(to: self).call(
-                interpreter: interpreter,
-                signature: .init(components: [nil]),
-                arguments: [value]
+                with: .init(
+                    interpreter: interpreter,
+                    signature: .init(components: [nil]),
+                    arguments: [value]
+                )
             )
             return
         }

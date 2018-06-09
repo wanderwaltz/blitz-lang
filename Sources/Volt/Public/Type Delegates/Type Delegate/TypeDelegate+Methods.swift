@@ -27,7 +27,7 @@ extension TypeDelegate {
                 let method = getter(object)
 
                 return .object(
-                    AnyCallable(signature: .void, { _, _, _ in
+                    AnyCallable(signature: .void, { _ in
                         .init(try method())
                     })
                 )
@@ -60,8 +60,8 @@ extension TypeDelegate {
                 let method = getter(object)
 
                 return .object(
-                    AnyCallable(signature: selector.signature, { _, _, args in
-                        return try typecheck(args, T0.self) {
+                    AnyCallable(signature: selector.signature, { parameters in
+                        return try typecheck(parameters.arguments, T0.self) {
                             Value(try method($0))
                         }
                     })
@@ -95,8 +95,8 @@ extension TypeDelegate {
                 let method = getter(object)
 
                 return .object(
-                    AnyCallable(signature: selector.signature, { _, _, args in
-                        return try typecheck(args, T0.self, T1.self) {
+                    AnyCallable(signature: selector.signature, { parameters in
+                        return try typecheck(parameters.arguments, T0.self, T1.self) {
                             Value(try method($0, $1))
                         }
                     })
@@ -130,8 +130,8 @@ extension TypeDelegate {
                 let method = getter(object)
 
                 return .object(
-                    AnyCallable(signature: selector.signature, { _, _, args in
-                        return try typecheck(args, T0.self, T1.self, T2.self) {
+                    AnyCallable(signature: selector.signature, { parameters in
+                        return try typecheck(parameters.arguments, T0.self, T1.self, T2.self) {
                             Value(try method($0, $1, $2))
                         }
                     })
@@ -165,8 +165,8 @@ extension TypeDelegate {
                 let method = getter(object)
 
                 return .object(
-                    AnyCallable(signature: selector.signature, { _, _, args in
-                        return try typecheck(args, T0.self, T1.self, T2.self, T3.self) {
+                    AnyCallable(signature: selector.signature, { parameters in
+                        return try typecheck(parameters.arguments, T0.self, T1.self, T2.self, T3.self) {
                             Value(try method($0, $1, $2, $3))
                         }
                     })
@@ -200,8 +200,8 @@ extension TypeDelegate {
                 let method = getter(object)
 
                 return .object(
-                    AnyCallable(signature: selector.signature, { _, _, args in
-                        return try typecheck(args, T0.self, T1.self, T2.self, T3.self, T4.self) {
+                    AnyCallable(signature: selector.signature, { parameters in
+                        return try typecheck(parameters.arguments, T0.self, T1.self, T2.self, T3.self, T4.self) {
                             Value(try method($0, $1, $2, $3, $4))
                         }
                     })
@@ -235,8 +235,8 @@ extension TypeDelegate {
                 let method = getter(object)
 
                 return .object(
-                    AnyCallable(signature: selector.signature, { _, _, args in
-                        return try typecheck(args, T0.self, T1.self, T2.self, T3.self, T4.self, T5.self) {
+                    AnyCallable(signature: selector.signature, { parameters in
+                        return try typecheck(parameters.arguments, T0.self, T1.self, T2.self, T3.self, T4.self, T5.self) {
                             Value(try method($0, $1, $2, $3, $4, $5))
                         }
                     })
@@ -270,8 +270,8 @@ extension TypeDelegate {
                 let method = getter(object)
 
                 return .object(
-                    AnyCallable(signature: selector.signature, { _, _, args in
-                        return try typecheck(args, T0.self, T1.self, T2.self, T3.self, T4.self, T5.self, T6.self) {
+                    AnyCallable(signature: selector.signature, { parameters in
+                        return try typecheck(parameters.arguments, T0.self, T1.self, T2.self, T3.self, T4.self, T5.self, T6.self) {
                             Value(try method($0, $1, $2, $3, $4, $5, $6))
                         }
                     })
@@ -305,8 +305,8 @@ extension TypeDelegate {
                 let method = getter(object)
 
                 return .object(
-                    AnyCallable(signature: selector.signature, { _, _, args in
-                        return try typecheck(args, T0.self, T1.self, T2.self, T3.self, T4.self, T5.self, T6.self, T7.self) {
+                    AnyCallable(signature: selector.signature, { parameters in
+                        return try typecheck(parameters.arguments, T0.self, T1.self, T2.self, T3.self, T4.self, T5.self, T6.self, T7.self) {
                             Value(try method($0, $1, $2, $3, $4, $5, $6, $7))
                         }
                     })
@@ -340,8 +340,8 @@ extension TypeDelegate {
                 let method = getter(object)
 
                 return .object(
-                    AnyCallable(signature: selector.signature, { _, _, args in
-                        return try typecheck(args, T0.self, T1.self, T2.self, T3.self, T4.self, T5.self, T6.self, T7.self, T8.self) {
+                    AnyCallable(signature: selector.signature, { parameters in
+                        return try typecheck(parameters.arguments, T0.self, T1.self, T2.self, T3.self, T4.self, T5.self, T6.self, T7.self, T8.self) {
                             Value(try method($0, $1, $2, $3, $4, $5, $6, $7, $8))
                         }
                     })
@@ -375,8 +375,8 @@ extension TypeDelegate {
                 let method = getter(object)
 
                 return .object(
-                    AnyCallable(signature: selector.signature, { _, _, args in
-                        return try typecheck(args, T0.self, T1.self, T2.self, T3.self, T4.self, T5.self, T6.self, T7.self, T8.self, T9.self) {
+                    AnyCallable(signature: selector.signature, { parameters in
+                        return try typecheck(parameters.arguments, T0.self, T1.self, T2.self, T3.self, T4.self, T5.self, T6.self, T7.self, T8.self, T9.self) {
                             Value(try method($0, $1, $2, $3, $4, $5, $6, $7, $8, $9))
                         }
                     })
