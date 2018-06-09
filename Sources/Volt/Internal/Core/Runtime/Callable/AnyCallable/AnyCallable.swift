@@ -1,9 +1,9 @@
 struct AnyCallable {
-    let signature: CallSignature
+    let validCallSignatures: [CallSignature]
 
-    init(signature: CallSignature,
+    init(validCallSignatures: [CallSignature],
          _ call: @escaping (Interpreter, CallSignature, [Value]) throws -> Value) {
-            self.signature = signature
+            self.validCallSignatures = validCallSignatures
             _call = call
     }
 
@@ -13,8 +13,8 @@ struct AnyCallable {
 
 extension AnyCallable: Callable {
     func call(interpreter: Interpreter, signature: CallSignature, arguments: [Value]) throws -> Value {
-        guard signature == self.signature else {
-            throw RuntimeError.invalidCallSignature(expected: self.signature, got: signature)
+        guard validCallSignatures.contains(signature) else {
+            throw RuntimeError.invalidCallSignature(expected: validCallSignatures, got: signature)
         }
 
         return try _call(interpreter, signature, arguments)

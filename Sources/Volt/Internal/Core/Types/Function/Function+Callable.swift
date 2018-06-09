@@ -1,4 +1,8 @@
 extension Function: Callable {
+    var validCallSignatures: [CallSignature] {
+        return [declaration.signature]
+    }
+
     func call(interpreter: Interpreter, signature: CallSignature, arguments: [Value]) throws -> Value {
         guard signature == declaration.signature else {
             throw RuntimeError.invalidCallSignature(expected: declaration.signature, got: signature)
