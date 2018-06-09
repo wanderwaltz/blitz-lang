@@ -22,13 +22,24 @@
 // print foo.intArray = foo.intArray.inserting(5, at: 2)
 // print foo.intArray.removing(at: 2)
 
-var arr = [1, "qwerty", true] + [nil, "asdg"]
+// var arr = [1, "qwerty", true] + [nil, "asdg"]
+//
+// arr += ["zcvb"]
+//
+// print arr
+//
+// print type(of: arr)
+// print arr[0]
+// print arr[1]
+// print arr[2]
 
-arr += ["zcvb"]
+func overloaded(first arg) {
+    print ">>> " + arg
+}
 
-print arr
+func overloaded(second arg) {
+    print "]]] " + arg
+}
 
-print type(of: arr)
-print arr[0]
-print arr[1]
-print arr[2]
+overloaded(first: 123)
+overloaded(second: 123)

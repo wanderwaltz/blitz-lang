@@ -52,11 +52,11 @@ extension GenericError where _Code == RuntimeErrorCode {
             return invalidCallSignature(expected: expected[0], got: got)
         }
 
-        let expectations = expected.map({ "'\($0)'" }).joined(separator: ", ")
+        let expectations = expected.map({ $0.selectorDescription }).joined(separator: ", ")
 
         return .init(
             code: .invalidCallSignature,
-            message: "invalid call signature: expected one of the following: \(expectations); got: '\(got)'"
+            message: "invalid call signature \(got.selectorDescription); expected one of the following: \(expectations)"
         )
     }
 
@@ -104,6 +104,13 @@ extension GenericError where _Code == RuntimeErrorCode {
         return .init(
             code: .invalidSuperclass,
             message: "inheritance from non-class type \(superclass.typeName)"
+        )
+    }
+
+    static func overloadAlreadyExists(with signature: CallSignature) -> GenericError {
+        return .init(
+            code: .invalidCallOverload,
+            message: "overload with signature \(signature) already exists"
         )
     }
 

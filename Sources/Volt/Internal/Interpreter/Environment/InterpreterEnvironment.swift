@@ -15,11 +15,33 @@ final class InterpreterEnvironment {
 // MARK: - working with variables
 extension InterpreterEnvironment {
     func defineVariable(named name: Token, value: Value, isMutable: Bool) throws {
-        guard values[name.lexeme] == nil else {
+        switch value {
+        case let .object(function as Function):
+            try defineOverloadedFunction(named: name, with: function)
+
+        default:
+            guard values[name.lexeme] == nil else {
+                throw error(.invalidRedefenition, "'\(name)' is already defined", name.location)
+            }
+
+            forceDefineVariable(named: name, value: value, isMutable: isMutable)
+        }
+    }
+
+    func defineOverloadedFunction(named name: Token, with callable: Callable) throws {
+        guard let existingValue = values[name.lexeme] else {
+            // just define a variable if there is no values with the same name
+            forceDefineVariable(named: name, value: .object(callable), isMutable: false)
+            return
+        }
+
+        guard case let .object(existingFunction as Callable) = existingValue.value else {
+            // it is only allowed to overload functions with functions
             throw error(.invalidRedefenition, "'\(name)' is already defined", name.location)
         }
 
-        forceDefineVariable(named: name, value: value, isMutable: isMutable)
+        let overloaded = try OverloadedCallable(existingFunction, callable)
+        forceDefineVariable(named: name, value: .object(overloaded), isMutable: false)
     }
 
     /// Force version does not throw if the variable is already defined;
