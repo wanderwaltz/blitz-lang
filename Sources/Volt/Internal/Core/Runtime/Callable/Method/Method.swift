@@ -1,7 +1,14 @@
 struct Method<_InstanceType> {
     typealias InstanceType = _InstanceType
 
-    init(_ bind: @escaping (InstanceType) throws -> Callable) {
+    let unboundCallSignature = CallSignature(components: [nil])
+    let unboundArity = 1
+
+    let validBoundCallSignatures: [CallSignature]
+
+    init(validBoundCallSignatures: [CallSignature], bind: @escaping (InstanceType) throws -> Callable) {
+        precondition(validBoundCallSignatures.count > 0)
+        self.validBoundCallSignatures = validBoundCallSignatures
         _bind = bind
     }
 

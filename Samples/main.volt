@@ -34,15 +34,22 @@
 // print arr[2]
 
 class Bar {
-    func overloaded(first arg) {
-        print ">>> " + arg
-    }
+    var x = 123
 
-    func overloaded(second arg) {
-        print "]]] " + arg
+    func method() {
+        return self.x
     }
 }
 
+let b1 = Bar()
+let b2 = Bar()
 
-Bar().overloaded(first: 123)
-Bar().overloaded(second: 123)
+b2.x = 456
+
+let m = Bar.method
+
+print m
+print type(of: m)
+
+print m(b1)
+print m(b1)()
