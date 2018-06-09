@@ -9,7 +9,7 @@ extension Method: Callable {
         }
 
         guard arguments.count == 1 else {
-            throw RuntimeError.invalidNumberOfArguments(expected: unboundArity, got: arguments.count)
+            throw RuntimeError.invalidNumberOfArguments(expected: 1, got: arguments.count)
         }
 
         let arg = arguments[0]

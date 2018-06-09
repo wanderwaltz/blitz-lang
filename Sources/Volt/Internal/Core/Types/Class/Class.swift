@@ -23,10 +23,3 @@ final class Class {
              self.methods = methods
     }
 }
-
-
-extension Class {
-    var arity: Int {
-        return initializer.arity
-    }
-}

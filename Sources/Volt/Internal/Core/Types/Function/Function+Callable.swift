@@ -8,13 +8,9 @@ extension Function: Callable {
             throw RuntimeError.invalidCallSignature(expected: declaration.signature, got: signature)
         }
 
-        guard arguments.count == arity else {
-            throw RuntimeError.invalidNumberOfArguments(expected: arity, got: arguments.count)
-        }
-
         var environment = InterpreterEnvironment(parent: closure)
 
-        for i in 0..<arity {
+        for i in 0..<arguments.count {
             let parameter = declaration.parameters[i]
             let value = arguments[i]
 

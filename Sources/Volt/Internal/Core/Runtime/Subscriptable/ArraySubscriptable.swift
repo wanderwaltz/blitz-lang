@@ -1,6 +1,5 @@
 struct ArraySubscriptable {
     let signature = CallSignature(components: [nil])
-    let arity = 1
 
     init(_ array: [Value]) {
         self.array = array
@@ -21,7 +20,7 @@ extension ArraySubscriptable: Subscriptable {
         }
 
         guard arguments.count == 1 else {
-            throw RuntimeError.invalidNumberOfArguments(expected: arity, got: arguments.count)
+            throw RuntimeError.invalidNumberOfArguments(expected: 1, got: arguments.count)
         }
 
         let index = arguments[0]
