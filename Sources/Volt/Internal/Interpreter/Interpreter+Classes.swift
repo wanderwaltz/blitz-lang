@@ -113,36 +113,40 @@ extension Interpreter {
         )
     }
 
-    private func getter(for computedProperty: ComputedPropertyDeclarationStatement) -> Function {
-        return .init(
-            declaration: .init(
-                name: computedProperty.name,
-                parameters: [],
-                body: computedProperty.getter
-            ),
-            closure: environment
+    private func getter(for computedProperty: ComputedPropertyDeclarationStatement) -> Class.Method {
+        return Class.Method(
+            Function(
+                declaration: .init(
+                    name: computedProperty.name,
+                    parameters: [],
+                    body: computedProperty.getter
+                ),
+                closure: environment
+            )
         )
     }
 
-    private func setter(for computedProperty: ComputedPropertyDeclarationStatement) -> Function? {
+    private func setter(for computedProperty: ComputedPropertyDeclarationStatement) -> Class.Method? {
         return computedProperty.setter.map({ setter in
             let location = computedProperty.name.location
-            return Function(
-                declaration: .init(
-                    name: computedProperty.name,
-                    parameters: .singleParameterWithoutLabel(named: .newValue(at: location)),
-                    body: setter
-                ),
-                closure: environment
+            return Class.Method(
+                Function(
+                    declaration: .init(
+                        name: computedProperty.name,
+                        parameters: .singleParameterWithoutLabel(named: .newValue(at: location)),
+                        body: setter
+                    ),
+                    closure: environment
+                )
             )
         })
     }
 
-    private func methods(for classDeclaration: ClassDeclarationStatement) -> [String: Function] {
+    private func methods(for classDeclaration: ClassDeclarationStatement) -> [String: Class.Method] {
         return .init(
             uniqueKeysWithValues: classDeclaration.methods.map({ methodDeclaration in
                 let methodName = methodDeclaration.name.lexeme
-                let method = Function(declaration: methodDeclaration, closure: environment)
+                let method = Class.Method(Function(declaration: methodDeclaration, closure: environment))
                 return (methodName, method)
             })
         )

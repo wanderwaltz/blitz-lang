@@ -10,7 +10,7 @@ extension Class: Callable {
 
         let instance = Instance(klass: self)
 
-        _ = try initializer
+        _ = try Method(initializer)
             .bind(to: instance)
             .call(
                 interpreter: interpreter,

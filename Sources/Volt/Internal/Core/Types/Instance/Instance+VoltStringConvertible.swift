@@ -4,7 +4,7 @@ extension Instance: VoltStringConvertible {
             return String(describing: value)
         }
 
-        if case let .some(.object(callable as Callable)) =  lookupMethod(named: descriptionKey, inClass: klass) {
+        if case let .some(.object(callable as Callable)) = try lookupMethod(named: descriptionKey, inClass: klass) {
             return String(
                 describing: try callable.call(
                     interpreter: interpreter,

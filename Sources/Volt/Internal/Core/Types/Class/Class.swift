@@ -1,17 +1,19 @@
 final class Class {
+    typealias Method = Volt.Method<Instance>
+
     let name: String
     let superclass: Class?
     let initializer: Function
     let storedProperties: [String: StoredProperty]
     let computedProperties: [String: ComputedProperty]
-    let methods: [String: Function]
+    let methods: [String: Method]
 
     init(name: String,
          superclass: Class?,
          initializer: Function,
          storedProperties: [String: StoredProperty],
          computedProperties: [String: ComputedProperty],
-         methods: [String: Function]) {
+        methods: [String: Method]) {
              self.name = name
              self.superclass = superclass
              self.initializer = initializer

@@ -1,5 +1,5 @@
 extension Class {
-    func lookupMethod(named name: String) -> Function? {
+    func lookupMethod(named name: String) -> Method? {
         if let method = methods[name] {
             return method
         }

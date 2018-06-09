@@ -39,7 +39,7 @@ extension Instance {
             return nil
         }
 
-        let getter = property.getter.bind(to: self)
+        let getter = try property.getter.bind(to: self)
 
         return try getter.call(
             interpreter: interpreter,
@@ -51,11 +51,11 @@ extension Instance {
 
 
 extension Instance {
-    func lookupMethod(named name: String, inClass lookupClass: Class) -> Value? {
+    func lookupMethod(named name: String, inClass lookupClass: Class) throws -> Value? {
         guard let method = lookupClass.lookupMethod(named: name) else {
             return nil
         }
 
-        return .object(method.bind(to: self))
+        return .object(try method.bind(to: self))
     }
 }

@@ -1,5 +1,5 @@
 struct ComputedProperty {
     let name: String
-    let getter: Function
-    let setter: Function?
+    let getter: Class.Method
+    let setter: Class.Method?
 }
