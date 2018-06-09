@@ -34,7 +34,15 @@
 // print arr[2]
 
 class Bar {
-    var x = 123
+    var x
+
+    init(x arg) {
+        self.x = arg
+    }
+
+    init() {
+        self.x = 123
+    }
 
     func overloaded(type1 arg) {
         return ">>> " + self.x + " " + arg
@@ -46,9 +54,7 @@ class Bar {
 }
 
 let b1 = Bar()
-let b2 = Bar()
-
-b2.x = 456
+let b2 = Bar(x: 456)
 
 let m = Bar.overloaded
 

@@ -1,6 +1,6 @@
 extension Class: Callable {
     var validCallSignatures: [CallSignature] {
-        return initializer.validCallSignatures
+        return initializer.validBoundCallSignatures
     }
 
     func call(interpreter: Interpreter, signature: CallSignature, arguments: [Value]) throws -> Value {
@@ -10,7 +10,7 @@ extension Class: Callable {
 
         let instance = Instance(klass: self)
 
-        _ = try Method(initializer)
+        _ = try initializer
             .bind(to: instance)
             .call(
                 interpreter: interpreter,

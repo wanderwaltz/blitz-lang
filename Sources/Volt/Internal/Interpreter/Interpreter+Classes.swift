@@ -7,7 +7,7 @@ extension Interpreter {
             Class(
                 name: className.lexeme,
                 superclass: superclass,
-                initializer: initializer(for: classDeclaration),
+                initializer: try initializer(for: classDeclaration),
                 storedProperties: try storedProperties(for: classDeclaration),
                 computedProperties: computedProperties(for: classDeclaration),
                 methods: try methods(for: classDeclaration)
@@ -67,11 +67,28 @@ extension Interpreter {
         return result
     }
 
-    private func initializer(for classDeclaration: ClassDeclarationStatement) -> Function {
-        return .init(
-            declaration: classDeclaration.initializer,
-            closure: environment
-        )
+    private func initializer(for classDeclaration: ClassDeclarationStatement) throws -> Class.Method {
+        precondition(classDeclaration.initializers.count > 0)
+        guard classDeclaration.initializers.count > 1 else {
+            return Class.Method(
+                Function(
+                    declaration: classDeclaration.initializers[0],
+                    closure: environment
+                )
+            )
+        }
+
+        let initializerFunctions = classDeclaration.initializers.map({
+            Function(
+                declaration: $0,
+                closure: environment
+            )
+        })
+
+        let initializerMethods = initializerFunctions.map(Method.init)
+        let overloadedInitializer = try overload(initializerMethods)
+
+        return overloadedInitializer
     }
 
     private func storedProperties(for classDeclaration: ClassDeclarationStatement) throws -> [String: StoredProperty] {

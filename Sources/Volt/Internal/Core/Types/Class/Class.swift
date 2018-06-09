@@ -4,17 +4,17 @@ final class Class {
 
     let name: String
     let superclass: Class?
-    let initializer: Function
+    let initializer: Method
     let storedProperties: [String: StoredProperty]
     let computedProperties: [String: ComputedProperty]
     let methods: [String: Method]
 
     init(name: String,
          superclass: Class?,
-         initializer: Function,
+         initializer: Method,
          storedProperties: [String: StoredProperty],
          computedProperties: [String: ComputedProperty],
-        methods: [String: Method]) {
+         methods: [String: Method]) {
              self.name = name
              self.superclass = superclass
              self.initializer = initializer

@@ -265,7 +265,9 @@ extension Resolver: ASTVisitor {
             scopes.last?.classContext = (statement.superclass != nil) ? .subclass : .rootClass
             scopes.last?.define(.self(at: statement.name.location))
 
-            try resolveFunction(statement.initializer, .initializer)
+            for initializer in statement.initializers {
+                try resolveFunction(initializer, .initializer)
+            }
 
             for property in statement.storedProperties {
                 try resolve(property)

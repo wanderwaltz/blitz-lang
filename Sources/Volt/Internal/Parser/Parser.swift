@@ -65,7 +65,7 @@ private final class ParserImpl {
         var storedProperties: [String: VariableDeclarationStatement] = [:]
         var computedProperties: [String: ComputedPropertyDeclarationStatement] = [:]
         var methods: [FunctionDeclarationStatement] = []
-        var initializer: FunctionDeclarationStatement? = nil
+        var initializers: [FunctionDeclarationStatement] = []
 
         func alreadyDefined(_ name: String) -> Bool {
             return storedProperties[name] != nil
@@ -74,13 +74,11 @@ private final class ParserImpl {
 
         while !check(.rightBrace) && !isAtEnd {
             if try match(.initKeyword) {
-                guard initializer == nil else {
-                    throw error("a class can have only one initializer")
-                }
-
-                initializer = try parseFunctionDeclaration(
-                    kind: "initializer",
-                    named: initializerName
+                initializers.append(
+                    try parseFunctionDeclaration(
+                        kind: "initializer",
+                        named: initializerName
+                    )
                 )
             }
             else if try match(.var, .let) {
@@ -139,10 +137,16 @@ private final class ParserImpl {
 
         try consume(.rightBrace, "expected } after class body")
 
+        if initializers.isEmpty {
+            initializers.append(
+                .voidDoNothing(named: initializerName, at: name.location)
+            )
+        }
+
         return ClassDeclarationStatement(
             name: name,
             superclass: superclass,
-            initializer: initializer ?? .voidDoNothing(named: initializerName, at: name.location),
+            initializers: initializers,
             storedProperties: Array(storedProperties.values).sorted(by: { $0.identifier.lexeme < $1.identifier.lexeme }),
             computedProperties: Array(computedProperties.values).sorted(by: { $0.name.lexeme < $1.name.lexeme }),
             methods: methods.sorted(by: { $0.name.lexeme < $1.name.lexeme })
