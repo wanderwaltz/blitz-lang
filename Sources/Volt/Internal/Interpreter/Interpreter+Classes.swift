@@ -10,7 +10,7 @@ extension Interpreter {
                 initializer: initializer(for: classDeclaration),
                 storedProperties: try storedProperties(for: classDeclaration),
                 computedProperties: computedProperties(for: classDeclaration),
-                methods: methods(for: classDeclaration)
+                methods: try methods(for: classDeclaration)
             )
         }
 
@@ -142,13 +142,40 @@ extension Interpreter {
         })
     }
 
-    private func methods(for classDeclaration: ClassDeclarationStatement) -> [String: Class.Method] {
-        return .init(
-            uniqueKeysWithValues: classDeclaration.methods.map({ methodDeclaration in
-                let methodName = methodDeclaration.name.lexeme
-                let method = Class.Method(Function(declaration: methodDeclaration, closure: environment))
-                return (methodName, method)
+    private func methods(for classDeclaration: ClassDeclarationStatement) throws -> [String: Class.Method] {
+        let declarations = overloadedMethodDeclarations(for: classDeclaration)
+
+        let methods: [(String, Class.Method)] = try declarations.map({ element in
+            let (name, overloads) = element
+
+            let overloadedMethods = overloads.map({
+                Class.Method(Function(declaration: $0, closure: environment))
             })
-        )
+
+            precondition(overloadedMethods.count > 0)
+
+            if overloadedMethods.count > 1 {
+                return (name, try overload(overloadedMethods))
+            }
+            else {
+                return (name, overloadedMethods[0])
+            }
+        })
+
+        return .init(uniqueKeysWithValues: methods)
     }
+
+    private func overloadedMethodDeclarations(for classDeclaration: ClassDeclarationStatement)
+        -> [String: [FunctionDeclarationStatement]] {
+            var declarations: [String: [FunctionDeclarationStatement]] = [:]
+
+            for methodDeclaration in classDeclaration.methods {
+                let methodName = methodDeclaration.name.lexeme
+                var overloadedDeclarations = declarations[methodName] ?? []
+                overloadedDeclarations.append(methodDeclaration)
+                declarations[methodName] = overloadedDeclarations
+            }
+
+            return declarations
+        }
 }

@@ -40,7 +40,7 @@ extension InterpreterEnvironment {
             throw error(.invalidRedefenition, "'\(name)' is already defined", name.location)
         }
 
-        let overloaded = try OverloadedCallable(existingFunction, callable)
+        let overloaded = try OverloadedCallable([existingFunction, callable])
         forceDefineVariable(named: name, value: .object(overloaded), isMutable: false)
     }
 

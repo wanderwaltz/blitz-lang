@@ -36,8 +36,12 @@
 class Bar {
     var x = 123
 
-    func method() {
-        return self.x
+    func overloaded(type1 arg) {
+        return ">>> " + self.x + " " + arg
+    }
+
+    func overloaded(type2 arg) {
+        return "]]] " + self.x + " " + arg
     }
 }
 
@@ -46,10 +50,12 @@ let b2 = Bar()
 
 b2.x = 456
 
-let m = Bar.method
+let m = Bar.overloaded
 
 print m
 print type(of: m)
 
+print m(b1)(type1: "q")
+print m(b2)(type2: "w")
+
 print m(b1)
-print m(b1)()

@@ -64,13 +64,12 @@ private final class ParserImpl {
 
         var storedProperties: [String: VariableDeclarationStatement] = [:]
         var computedProperties: [String: ComputedPropertyDeclarationStatement] = [:]
-        var methods: [String: FunctionDeclarationStatement] = [:]
+        var methods: [FunctionDeclarationStatement] = []
         var initializer: FunctionDeclarationStatement? = nil
 
         func alreadyDefined(_ name: String) -> Bool {
             return storedProperties[name] != nil
                 || computedProperties[name] != nil
-                || methods[name] != nil
         }
 
         while !check(.rightBrace) && !isAtEnd {
@@ -134,13 +133,7 @@ private final class ParserImpl {
             else {
                 try consume(.func, "expected method")
                 let method = try parseFunctionDeclaration(kind: "method")
-                let methodName = method.name.lexeme
-
-                guard !alreadyDefined(methodName) else {
-                    throw error("invalid redefenition of method '\(methodName)'")
-                }
-
-                methods[methodName] = method
+                methods.append(method)
             }
         }
 
@@ -152,7 +145,7 @@ private final class ParserImpl {
             initializer: initializer ?? .voidDoNothing(named: initializerName, at: name.location),
             storedProperties: Array(storedProperties.values).sorted(by: { $0.identifier.lexeme < $1.identifier.lexeme }),
             computedProperties: Array(computedProperties.values).sorted(by: { $0.name.lexeme < $1.name.lexeme }),
-            methods: Array(methods.values).sorted(by: { $0.name.lexeme < $1.name.lexeme })
+            methods: methods.sorted(by: { $0.name.lexeme < $1.name.lexeme })
         )
     }
 

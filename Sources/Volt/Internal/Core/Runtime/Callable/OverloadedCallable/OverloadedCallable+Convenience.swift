@@ -1,5 +1,5 @@
 extension OverloadedCallable {
-    init(_ callables: Callable...) throws {
+    init(_ callables: [Callable]) throws {
         var overloads: [CallSignature: Callable] = [:]
 
         for (signature, callable) in callables.map({ $0.unwrapped }).joined() {
