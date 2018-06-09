@@ -15,7 +15,8 @@ extension ASTPrinter: ASTVisitor {
     typealias ReturnValue = String
 
     func visitArrayLiteralExpression(_ expression: ArrayLiteralExpression) -> String {
-        return parenthesize(expression.elements.map(print))
+        let elements = expression.elements.map(print).joined(separator: ", ")
+        return parenthesize("array_literal", "[" + elements + "]")
     }
 
     func visitAssignmentExpression(_ expression: AssignmentExpression) -> String {
