@@ -7,3 +7,4 @@ TODOs:
    - для массива должно работать removing(at:) и removing(_:)
 - тесты для Value+Interpreter
 - добавить CallSignature к протоколу Callable
+- метаметоды а-ля Squirrel
