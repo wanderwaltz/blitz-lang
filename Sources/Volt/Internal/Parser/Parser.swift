@@ -518,7 +518,7 @@ private final class ParserImpl {
         var expr = try parsePrimary()
 
         while true {
-            if try match(.leftParen) {
+            if try match(.leftParen, .leftBracket) {
                 expr = try parseCallCompletion(expr)
             }
             else if try match(.dot) {
@@ -534,6 +534,8 @@ private final class ParserImpl {
     }
 
     private func parseCallCompletion(_ callee: Expression) throws -> Expression {
+        let leftParen = previous()
+
         var arguments: [CallExpression.Argument] = []
 
         if !check(.rightParen) {
@@ -551,12 +553,17 @@ private final class ParserImpl {
             } while try match(.comma)
         }
 
-        let paren = try consume(.rightParen, "expected ) after call arguments")
+        guard try match(.rightParen, .rightBracket) else {
+            throw error("expected ) after call arguments")
+        }
+
+        let rightParen = previous()
 
         return CallExpression(
             callee: callee,
-            paren: paren,
-            arguments: arguments
+            leftParen: leftParen,
+            arguments: arguments,
+            rightParen: rightParen
         )
     }
 

@@ -36,7 +36,11 @@ extension ASTPrinter: ASTVisitor {
         })
         .joined(separator: ", ")
 
-        return parenthesize("call", print(expression.callee), "arguments: [", arguments, "]")
+        return parenthesize(
+            String(describing: expression.kind),
+            print(expression.callee),
+            "arguments: [", arguments, "]"
+        )
     }
 
     func visitLiteralExpression(_ expression: LiteralExpression) -> String {
