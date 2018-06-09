@@ -1,4 +1,4 @@
-extension Instantiator where _InstanceType == Instance {
+extension Instantiator where _Class == Class {
     init(_ initializer: Method) {
         self.init(
             initializer: initializer,

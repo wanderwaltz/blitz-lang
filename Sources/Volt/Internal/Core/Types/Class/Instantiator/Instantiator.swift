@@ -1,7 +1,7 @@
-struct Instantiator<_InstanceType> {
-    typealias InstanceType = _InstanceType
-    typealias Class = Volt.Class
-    typealias Method = Class.Method
+struct Instantiator<_Class: Instantiatable> {
+    typealias Class = _Class
+    typealias InstanceType = Class.InstanceType
+    typealias Method = Volt.Method<InstanceType>
 
     init(initializer: Method, instantiate: @escaping (Class, Method, CallParameters) throws -> InstanceType) {
         self.initializer = initializer

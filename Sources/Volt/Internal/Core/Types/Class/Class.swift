@@ -1,7 +1,8 @@
-final class Class {
-    typealias Instantiator = Volt.Instantiator<Instance>
-    typealias Method = Volt.Method<Instance>
-    typealias ComputedProperty = Volt.ComputedProperty<Instance>
+final class Class: Instantiatable {
+    typealias InstanceType = Instance
+    typealias Instantiator = Volt.Instantiator<Class>
+    typealias Method = Volt.Method<InstanceType>
+    typealias ComputedProperty = Volt.ComputedProperty<InstanceType>
 
     let name: String
     let superclass: Class?

@@ -1,0 +1,3 @@
+protocol Instantiatable {
+    associatedtype InstanceType
+}
