@@ -85,6 +85,13 @@ extension GenericError where _Code == RuntimeErrorCode {
         )
     }
 
+    static func invalidSubscriptee(_ subscriptee: Value) -> GenericError {
+        return .init(
+            code: .invalidSubscriptee,
+            message: "cannot subscript \(subscriptee)"
+        )
+    }
+
     static func invalidSuperclass(_ superclass: Value) -> GenericError {
         return .init(
             code: .invalidSuperclass,

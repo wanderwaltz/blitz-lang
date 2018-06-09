@@ -142,16 +142,13 @@ extension Interpreter: ASTVisitor {
 
     func visitCallExpression(_ expression: CallExpression) -> Result {
         return captureValue(at: expression.location) {
-            let callable = try lookupCallable(for: expression.callee)
-            let arguments = try expression.arguments.map({ arg in
-                try evaluate(arg.value)
-            })
+            switch expression.kind {
+            case .call:
+                return try performCall(with: expression)
 
-            return try callable.call(
-                interpreter: self,
-                signature: expression.signature,
-                arguments: arguments
-            )
+            case .subscript:
+                return try performSubscript(with: expression)
+            }
         }
     }
 

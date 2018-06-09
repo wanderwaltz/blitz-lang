@@ -22,7 +22,7 @@
 // print foo.intArray = foo.intArray.inserting(5, at: 2)
 // print foo.intArray.removing(at: 2)
 
-let arr = [1, "qwerty", true]
+let arr = [1, "qwerty", true] + [nil, "asdg"]
 
 print type(of: arr)
 print arr[0]
