@@ -33,6 +33,7 @@ extension Value {
         case let (.number(ln), .number(rn)): return .value(.number(ln + rn))
         case let (.string(ls), _): return .value(.string(ls + other.stringValue))
         case let (_, .string(rs)): return .value(.string(self.stringValue + rs))
+        case let (.array(la), .array(ra)): return .value(.array(la + ra))
         default:
             return binaryOperator("+", isNotApplicableTo: self.typeName, and: other.typeName, location)
         }

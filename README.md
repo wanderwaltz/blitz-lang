@@ -1,9 +1,9 @@
 # Volt
 
 TODOs:
-- парсинг литералов массивов
-- операторы для массивов: +, += и т.д.
 - VoltEquatable
 - поддержка Dictionary
 - учитывать signature при лукапе методов (overload)
+   - для массива должно работать removing(at:) и removing(_:)
 - тесты для Value+Interpreter
+- добавить CallSignature к протоколу Callable
