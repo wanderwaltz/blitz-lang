@@ -1,4 +1,8 @@
 extension Instantiator where _Class == Class {
+    /// A convenience initializer for instantiating Volt class instances.
+    /// - Parameter initializer: an initializer method which is called
+    ///                          after instantiating a Volt Instance.
+    ///                          Can be overloaded.
     init(_ initializer: Method) {
         self.init(
             initializer: initializer,

@@ -1,3 +1,5 @@
+/// An abstraction, which is used to instantiate a given class
+/// conforming to Instantiatable protocol.
 struct Instantiator<_Class: Instantiatable> {
     typealias Class = _Class
     typealias InstanceType = Class.InstanceType
