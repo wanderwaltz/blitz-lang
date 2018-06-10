@@ -6,7 +6,7 @@ extension Interpreter {
         let klass = try definingSuperIfNeeded(for: superclass, at: location) {
             Class(
                 name: className.lexeme,
-                superclass: superclass,
+                supertype: superclass,
                 instantiator: try instantiator(for: classDeclaration),
                 storedProperties: try storedProperties(for: classDeclaration),
                 computedProperties: computedProperties(for: classDeclaration),

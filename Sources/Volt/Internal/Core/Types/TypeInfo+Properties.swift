@@ -1,7 +1,7 @@
-extension Class {
+extension TypeInfo {
     func enumerateStoredProperties(with block: (StoredProperty) -> Void) {
-        if let superclass = self.superclass {
-            superclass.enumerateStoredProperties(with: block)
+        if let supertype = self.supertype {
+            supertype.enumerateStoredProperties(with: block)
         }
 
         for property in storedProperties.values {
@@ -14,8 +14,8 @@ extension Class {
             return property
         }
 
-        if let superclass = self.superclass {
-            return superclass.lookupStoredProperty(named: name)
+        if let supertype = self.supertype {
+            return supertype.lookupStoredProperty(named: name)
         }
 
         return nil
@@ -26,8 +26,8 @@ extension Class {
             return property
         }
 
-        if let superclass = self.superclass {
-            return superclass.lookupComputedProperty(named: name)
+        if let supertype = self.supertype {
+            return supertype.lookupComputedProperty(named: name)
         }
 
         return nil
