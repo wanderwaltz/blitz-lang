@@ -11,3 +11,5 @@ TODOs:
    - Class станет генериком от InstanceType
 - validCallSignatures можно сделать сетом
 - тесты на Array
+- VoltStringConvertible работает только с print, нужно научить работать всегда
+   - для этого ConvertibleFromVoltValue должен уметь выполнять код
