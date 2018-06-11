@@ -1,6 +1,6 @@
 /// Conforming `Value` to `ConvertibleToBlitzValue` allows automatically unwrapping
 /// `Values` contained in `Value.object` instances, which may occur when
-/// interacting with native functions returning `Values`.
+/// interacting with foreign functions returning `Values`.
 extension Value: ConvertibleToBlitzValue {
     public var blitzValue: Value {
         switch self {

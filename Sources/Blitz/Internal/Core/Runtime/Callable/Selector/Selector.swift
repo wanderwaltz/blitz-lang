@@ -1,5 +1,5 @@
 /// Selector represents a method name and its arguments signature and
-/// is used for registering native closures as Blitz methods.
+/// is used for registering foreign closures as Blitz methods.
 ///
 /// Usually Selector is represented as a string in a following format:
 ///
