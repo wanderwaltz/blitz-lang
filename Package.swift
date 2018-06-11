@@ -4,16 +4,16 @@
 import PackageDescription
 
 let package = Package(
-    name: "Volt",
+    name: "Blitz",
     products: [
         // Products define the executables and libraries produced by a package, and make them visible to other packages.
         .executable(
-            name: "vsh",
-            targets: ["vsh"]
+            name: "bsh",
+            targets: ["bsh"]
         ),
         .library(
-            name: "Volt",
-            targets: ["Volt"]
+            name: "Blitz",
+            targets: ["Blitz"]
         ),
     ],
     dependencies: [
@@ -24,16 +24,16 @@ let package = Package(
         // Targets are the basic building blocks of a package. A target can define a module or a test suite.
         // Targets can depend on other targets in this package, and on products in packages which this package depends on.
         .target(
-            name: "Volt",
+            name: "Blitz",
             dependencies: []
         ),
         .target(
-            name: "vsh",
-            dependencies: ["Volt"]
+            name: "bsh",
+            dependencies: ["Blitz"]
         ),
         .testTarget(
-            name: "VoltTests",
-            dependencies: ["Volt"]
+            name: "BlitzTests",
+            dependencies: ["Blitz"]
         ),
     ]
 )

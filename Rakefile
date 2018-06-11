@@ -2,10 +2,10 @@ BIN_DIR = "bin"
 SOURCERY_ZIP = "#{BIN_DIR}/sourcery.zip"
 SOURCERY_BINARY = "#{BIN_DIR}/bin/sourcery"
 
-desc "run vsh with Samples/main.volt"
+desc "run bsh with Samples/main.blitz"
 task :default do
     sh "swift --version"
-    sh "swift run -Xswiftc \"-target\" -Xswiftc \"x86_64-apple-macosx10.12\" vsh Samples/main.volt"
+    sh "swift run -Xswiftc \"-target\" -Xswiftc \"x86_64-apple-macosx10.12\" bsh Samples/main.blitz"
 end
 
 desc "run tests"

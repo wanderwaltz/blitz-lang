@@ -1,7 +1,7 @@
-# Volt
+# Blitz
 
 TODOs:
-- VoltEquatable
+- BlitzEquatable
 - поддержка Dictionary
 - учитывать signature при лукапе методов (overload)
    - для массива должно работать removing(at:) и removing(_:)
@@ -11,5 +11,5 @@ TODOs:
    - Class станет генериком от InstanceType
 - validCallSignatures можно сделать сетом
 - тесты на Array
-- VoltStringConvertible работает только с print, нужно научить работать всегда
-   - для этого ConvertibleFromVoltValue должен уметь выполнять код
+- BlitzStringConvertible работает только с print, нужно научить работать всегда
+   - для этого ConvertibleFromBlitzValue должен уметь выполнять код

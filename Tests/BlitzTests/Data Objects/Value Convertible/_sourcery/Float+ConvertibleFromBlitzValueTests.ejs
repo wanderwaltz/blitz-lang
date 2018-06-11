@@ -1,0 +1,37 @@
+import XCTest
+@testable import Blitz
+
+<% include(argument.common_templates_path + "KnownFloatTypes.ejs") _%>
+<%_
+    for (type of float_types) {
+
+        type_lowercase = type.toLowerCase()
+_%>
+// MARK: - <%= type %>
+final class <%= type _%>ConvertibleFromBlitzValueTests: XCTestCase {
+    func test_<%= type_lowercase %>_from_value() {
+        <%_ for (example of float_examples) { _%>
+        validate_<%= type_lowercase %>_reverse_convertible(<%= example %>)
+        <%_ } _%>
+    }
+
+    private func validate_<%= type_lowercase %>_reverse_convertible(_ <%= type_lowercase %>: <%= type %>, file: StaticString = #file, line: UInt = #line) {
+        let value = Value.number(Number(<%= type_lowercase %>))
+
+        guard let reverse_any = <%= type %>.fromBlitzValue(value) else {
+            XCTFail("failed generating Any? for \(<%= type_lowercase %>)", file: file, line: line)
+            return
+        }
+
+        guard let cast = typecast<<%= type %>>.any(reverse_any) else {
+            XCTFail("failed casting \(<%= type_lowercase %>)", file: file, line: line)
+            return
+        }
+
+        XCTAssertEqual(<%= type_lowercase %>, cast, accuracy: <%= type %>(FLOAT_TOLERANCE), file: file, line: line)
+    }
+}
+
+
+
+<% } _%>

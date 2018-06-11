@@ -1,0 +1,20 @@
+<%_ include(argument.common_templates_path + "KnownFloatTypes.ejs") _%>
+<%_ for (type of float_types) { _%>
+// MARK: - <%= type %>
+extension <%= type _%>: ConvertibleToBlitzValue {
+    public var blitzValue: Value {
+        return .number(Number(self))
+    }
+}
+
+extension <%= type _%>: ConvertibleFromBlitzValue {
+    public static func fromBlitzValue(_ value: Value) -> Any? {
+        switch value {
+        case let .number(value): return <%= type _%>(value)
+        default: return typecast<<%= type _%>>.any(value.any)
+        }
+    }
+}
+
+
+<% } _%>

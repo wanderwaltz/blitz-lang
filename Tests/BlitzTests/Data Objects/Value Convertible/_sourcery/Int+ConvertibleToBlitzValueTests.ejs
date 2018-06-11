@@ -1,0 +1,39 @@
+import XCTest
+@testable import Blitz
+
+<% include(argument.common_templates_path + "KnownIntegerTypes.ejs") _%>
+<%_
+    for (type in integer_types) {
+
+        type_lowercase = type.toLowerCase()
+        examples = integer_types[type]
+
+        if (type[0] != "U") {
+            examples = examples.concat(examples.map(x => -x))
+        }
+_%>
+// MARK: - <%= type %>
+final class <%= type _%>ConvertibleToBlitzValueTests: XCTestCase {
+    func test_<%= type_lowercase %>_to_value() {
+        validate_<%= type_lowercase %>_convertible(0)
+        <%_ for (example of examples) { _%>
+        validate_<%= type_lowercase %>_convertible(<%= example %>)
+        <%_ } _%>
+    }
+
+    private func validate_<%= type_lowercase %>_convertible(_ <%= type_lowercase %>: <%= type %>, file: StaticString = #file, line: UInt = #line) {
+        let value = <%= type_lowercase %>.blitzValue
+
+        switch value {
+        case let .number(numberValue):
+            XCTAssertEqual(<%= type_lowercase %>, <%= type %>(numberValue), file: file, line: line)
+
+        default:
+            XCTFail("expected <%= type %> to be convertible to .number")
+        }
+    }
+}
+
+
+
+<% } _%>
