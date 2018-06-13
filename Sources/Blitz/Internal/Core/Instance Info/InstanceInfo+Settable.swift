@@ -1,4 +1,5 @@
-extension Instance: Settable {
+/// MARK: - <Settable> default implementation
+extension InstanceInfo {
     func setProperty(named name: String,
                      value: Value,
                      interpreter: Interpreter) throws {
@@ -7,14 +8,14 @@ extension Instance: Settable {
 
     func setProperty(named name: String,
                      value: Value,
-                     inClass lookupClass: Class,
+                     inClass lookupClass: Klass,
                      interpreter: Interpreter) throws {
         if let property = lookupClass.lookupStoredProperty(named: name) {
             guard property.isMutable else {
                 throw RuntimeError.settingReadonlyProperty(named: name)
             }
 
-            storedProperties[name] = value
+            try setStoredProperty(named: name, newValue: value)
             return
         }
 

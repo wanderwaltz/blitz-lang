@@ -1,4 +1,5 @@
-extension Instance: BlitzStringConvertible {
+/// MARK: - <BlitzStringConvertible> default implementation
+extension InstanceInfo {
     func blitzDescription(interpreter: Interpreter) throws -> String? {
         if let value = try lookupProperty(named: descriptionKey, inClass: klass, interpreter: interpreter) {
             return String(describing: value)
