@@ -348,7 +348,7 @@ extension Interpreter: ASTVisitor {
                 closure: environment
             )
 
-            let value: Value = .object(function)
+            let value = Value(function)
             try environment.defineVariable(named: statement.name, value: value, isMutable: false)
             return value
         }

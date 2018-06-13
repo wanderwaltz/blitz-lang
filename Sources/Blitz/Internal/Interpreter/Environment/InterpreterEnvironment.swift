@@ -41,7 +41,7 @@ extension InterpreterEnvironment {
         }
 
         let overloaded = try OverloadedCallable([existingFunction, callable])
-        forceDefineVariable(named: name, value: .object(overloaded), isMutable: false)
+        forceDefineVariable(named: name, value: .init(overloaded), isMutable: false)
     }
 
     /// Force version does not throw if the variable is already defined;

@@ -7,7 +7,7 @@ extension Method where _InstanceType == Instance {
 
                 environment.forceDefineVariable(
                     named: .self(at: function.declaration.location),
-                    value: .object(instance),
+                    value: .init(instance),
                     isMutable: false
                 )
 

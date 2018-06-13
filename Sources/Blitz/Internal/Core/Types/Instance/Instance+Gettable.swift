@@ -58,6 +58,6 @@ extension Instance {
             return nil
         }
 
-        return .object(try method.bind(to: self))
+        return .init(try method.bind(to: self))
     }
 }

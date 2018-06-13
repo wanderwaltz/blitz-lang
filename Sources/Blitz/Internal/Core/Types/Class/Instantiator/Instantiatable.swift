@@ -24,6 +24,6 @@ extension Instantiatable {
     }
 
     func call(with parameters: CallParameters) throws -> Value {
-        return .object(try instantiator.instantiate(klass: self, with: parameters))
+        return .init(try instantiator.instantiate(klass: self, with: parameters))
     }
 }

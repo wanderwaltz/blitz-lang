@@ -18,6 +18,6 @@ extension Method: Callable {
             throw RuntimeError.typeError(expected: InstanceType.self, got: arg.typeName)
         }
 
-        return .object(try bind(to: instance))
+        return .init(try bind(to: instance))
     }
 }

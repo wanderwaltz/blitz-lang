@@ -14,7 +14,7 @@ extension Interpreter {
             )
         }
 
-        let value = Value.object(klass)
+        let value = Value(klass)
         try environment.defineVariable(named: className, value: value, isMutable: false)
         return value
     }
@@ -50,7 +50,7 @@ extension Interpreter {
                 lexeme: "super",
                 location: location
             ),
-            value: .object(superclass),
+            value: .init(superclass),
             isMutable: false
         )
 
