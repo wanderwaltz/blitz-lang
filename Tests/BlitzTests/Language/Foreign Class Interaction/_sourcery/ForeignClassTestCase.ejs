@@ -1,0 +1,60 @@
+import XCTest
+@testable import Blitz
+
+<%_
+    property_definitions = [
+        { "type": "Int",    "value": "1" },
+        { "type": "Int8",   "value": "2" },
+        { "type": "Int16",  "value": "3" },
+        { "type": "Int32",  "value": "4" },
+        { "type": "Int64",  "value": "5" },
+        { "type": "UInt",   "value": "6" },
+        { "type": "UInt8",  "value": "7" },
+        { "type": "UInt16", "value": "8" },
+        { "type": "UInt32", "value": "9" },
+        { "type": "UInt64", "value": "10" },
+
+        { "type": "Float",  "value": "123.456" },
+        { "type": "Double", "value": "789.012" },
+
+        { "type": "String", "value": "\"qwerty\"" },
+
+        { "type": "Bool",      "name": "pTrue",        "value": "true" },
+        { "type": "Bool",      "name": "pFalse",       "value": "false" },
+        { "type": "[Int]",     "name": "pIntArray",    "value": "[1, 2, 3]" },
+        { "type": "[String]",  "name": "pStringArray", "value": "[\"a\", \"b\", \"c\"]" },
+        { "type": "[String]?", "name": "pNilArray",    "value": "nil" },
+    ]
+
+    function name(property) {
+        return property.name || ("p" + property.type)
+    }
+_%>
+class ForeignClassTestCase: BlitzVMTestCase {
+    final class ImmutableWithVariousProperties {
+        <%_ for (property of property_definitions) { _%>
+        let <%= name(property) _%>: <%= property.type %> = <%- property.value %>
+        <%_ } _%>
+    }
+
+    final class MutableWithVariousProperties {
+        <%_ for (property of property_definitions) { _%>
+        var <%= name(property) _%>: <%= property.type %> = <%- property.value %>
+        <%_ } _%>
+    }
+
+    override func setUp() {
+        super.setUp()
+
+        let immutable = vm.defineClass0(initializer: ImmutableWithVariousProperties.init)
+        let mutable = vm.defineClass0(initializer: MutableWithVariousProperties.init)
+
+        <%_ for (property of property_definitions) { _%>
+        immutable.registerProperty(named: "<%= name(property) _%>", keyPath: \.<%= name(property) _%>)
+        <%_ } _%>
+
+        <%_ for (property of property_definitions) { _%>
+        mutable.registerMutableProperty(named: "<%= name(property) _%>", keyPath: \.<%= name(property) _%>)
+        <%_ } _%>
+    }
+}
